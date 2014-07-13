@@ -1,0 +1,15 @@
+Functions in this directory:
+1. ach
+	Shannon FBL achievability
+	power constraint: maximal (aka short term)
+	probability of error: maximal 
+
+	comments: This is RCU bound with purging to get maximal Pe.
+
+2. conv
+	metaconverse with Q_Y = N(0, 1+P). Maximal prob. of error
+	power constraint: equal (all codewords on the sphere)
+	probability of error: average
+
+3. normapx
+	normal approximation nC-sqrt{nV}Qinv + 1/2 log n

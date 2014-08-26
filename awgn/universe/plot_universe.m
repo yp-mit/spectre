@@ -4,7 +4,7 @@
 %	universe_only = 1 -- one figure with all codes (universe_*.eps plot)
 %
 % For this script to work you need to compile me_ldpc/compute_ab. For this call (from Matlab):
-% > cd me_ldps; mex compute_ab
+% > cd me_ldpc; mex compute_ab.c
 % 
 
 % Universe only

@@ -132,16 +132,16 @@ CODES = [CODES c];
 % Note: the k is the actual number of information bits (thus the actual polar code operates with k = 1024+16 bits of CRC)
 % 
 %c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 1.519, 'n', 2048, 'k', 1024, 'pe', 1e-3, 'fname', 'polar1', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
-c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 1.59, 'n', 4096, 'k', 2048, 'pe', 1e-4, 'fname', 'polar1', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
+c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 1.59, 'n', 4096, 'k', 2048, 'pe', 1e-4, 'fname', 'polar4', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
 CODES = [CODES c];
 
-c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 1.8283, 'n', 2048, 'k', 1024, 'pe', 1e-4, 'fname', 'polar1', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
+c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 1.8283, 'n', 2048, 'k', 1024, 'pe', 1e-4, 'fname', 'polar2', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
 CODES = [CODES c];
 
-c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 2.09063, 'n', 1024, 'k', 512, 'pe', 1e-4, 'fname', 'polar2', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
+c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 2.09063, 'n', 1024, 'k', 512, 'pe', 1e-4, 'fname', 'polar1', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
 CODES = [CODES c];
 
-c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 1.83, 'n', 512, 'k', 256, 'pe', 1e-4, 'fname', 'polar2', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
+c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 1.83, 'n', 512, 'k', 256, 'pe', 1e-4, 'fname', 'polar0', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
 CODES = [CODES c];
 
 

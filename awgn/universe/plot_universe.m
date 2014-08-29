@@ -12,7 +12,7 @@ universe_only = 1;
 skip_cc48 = 1;
 
 % Can be AWGN or BIAWGN
-channel = 'AWGN';
+channel = 'BIAWGN';
 
 load_awgncodes
 

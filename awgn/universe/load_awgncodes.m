@@ -141,7 +141,7 @@ CODES = [CODES c];
 c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 2.09063, 'n', 1024, 'k', 512, 'pe', 1e-4, 'fname', 'polar1', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
 CODES = [CODES c];
 
-c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 1.83, 'n', 512, 'k', 256, 'pe', 1e-4, 'fname', 'polar0', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
+c = struct('name', 'Polar+CRC R=1/2 (List dec.)', 'ebno', 2.5, 'n', 512, 'k', 256, 'pe', 1e-4, 'fname', 'polar0', 'comment', 'The exact code: Vardy-Tal list-decoded polar+CRC');
 CODES = [CODES c];
 
 

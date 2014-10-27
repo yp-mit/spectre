@@ -71,7 +71,7 @@ for k = 1:K %do K montecarlo runs
             Sigma = abs(eig(Z'*D*Z));
             Sigma=sort(Sigma,1,'descend');
             vanderTerm = det(vander(Sigma)); %get the determinant of the vandermode matrix
-            TraceZ=Trace(Z'*Z);
+            TraceZ=trace(Z'*Z);
             
             a1=gammainc(lambda2*Sigma(1),T-2);
             a2=gammainc(lambda2*Sigma(2),T-2);

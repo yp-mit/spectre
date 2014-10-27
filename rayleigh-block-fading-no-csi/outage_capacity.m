@@ -12,7 +12,7 @@ function [Cout,current_eps]=outage_capacity(snrdb,epsilon,mt,mr,tfdiv,pow_all,pr
 % pow_all: power allocation matrix. A mt-1 x tfdiv matrices containing the
 % eigenvalues of the input covariance matrix Q_k/snr, k=1,...,tfdiv, apart from
 % the last one, whose value is determined by the  power constraint
-% tr(Q_k)/snr=1
+% tr(Q_k)/snr=1. For the case mt=1, just pass a 1 x tfdiv all zero matrix 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,10 +21,12 @@ function [Cout,current_eps]=outage_capacity(snrdb,epsilon,mt,mr,tfdiv,pow_all,pr
 
 K = 2^prec; % number of monte carlo simulations (it should be at least 100 x 1/epsilon)
 rho = 10.^(snrdb/10); % SNR in linear scale
+const=sqrt(0.5);
 
-CLUSTER=0;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Generate input covariance matrix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-norm=sqrt(0.5);
 
 D=zeros(mt,mt,tfdiv);
 
@@ -44,35 +46,16 @@ D=D*rho;
 % MONTECARLO: generation of samples of instantaneous mutual information
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if (CLUSTER==1),
-    [~, tmpdir] = system('echo $TMPDIR');
-    matlabpool close force;
-    sched = findResource('scheduler', 'configuration', 'local');
-    sched.DataLocation = tmpdir(1:end-1);
-    matlabpool open local;
-end
-
 mi=zeros(1,K);
 
-parfor ii=1:K,
-    
-    H=(randn(mt,mr,tfdiv)+1i*randn(mt,mr,tfdiv))*norm;
-    
+for ii=1:K,    
+    H=(randn(mt,mr,tfdiv)+1i*randn(mt,mr,tfdiv))*const;
     for k=1:tfdiv
-    
-        mi(ii)=mi(ii)+log2(abs(det(eye(mr)+(H(:,:,k)*D(:,:,k)*H(:,:,k)'))));
-       
-       %mi(ii)=mi(ii)+log2(abs(det(eye(mr)+(rho/mt)*(H(:,:,k)*H(:,:,k)'))));
+        mi(ii)=mi(ii)+log2(abs(det(eye(mr)+(H(:,:,k)')*D(:,:,k)*H(:,:,k))));
     end
-    
 end
 
 mi=mi/tfdiv;
-
-
-if (CLUSTER==1),
-    matlabpool close;
-end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Computation outage capacity

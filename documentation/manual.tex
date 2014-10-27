@@ -1,0 +1,62 @@
+\documentclass[a4paper,11p]{memoir}
+
+\pdfoutput=1
+
+\newlength{\figwidth}
+% FINAL
+%\setlength{\figwidth}{88mm}
+% DRAFT
+\setlength{\figwidth}{0.65\textwidth}
+
+
+\usepackage{color}
+\definecolor{links}{rgb}{0.7,0,0}   % red
+\definecolor{urls}{rgb}{0,0,0.8}    % blue
+\definecolor{cites}{rgb}{0,0,0.8}   % blue
+
+\usepackage[colorlinks,hyperindex,linkcolor=links,citecolor=cites,urlcolor=urls]{hyperref} % generates colored links in pdf file
+ 
+%---------------------------------------------------------
+% styles and other macros
+\usepackage[nosort]{cite}        
+\usepackage{url} 
+\usepackage[intlimits]{amsmath}
+\usepackage{bbm}
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage[stretch=16,shrink=16,step=4]{microtype}
+% \usepackage{vmr-symbols-vecbold}
+% \usepackage{standard-macros}
+
+
+
+%*******************************************************************************
+%!TEX encoding =  
+\begin{document}
+
+
+\title{SPeCTrE\\
+Short Packet Communication Toolbox for Wireless Engineers\\[1cm]
+Version 0.0}
+
+\author{Giuseppe Durisi and Yury Polyanskiy}
+\maketitle
+
+\begin{abstract}
+  
+\end{abstract}
+\newpage
+\tableofcontents
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Motivation}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{AWGN channel}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Fading channels}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,publishers,confs-jrnls,giubib}
+\end{document}
+

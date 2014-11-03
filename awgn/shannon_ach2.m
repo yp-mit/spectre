@@ -316,3 +316,23 @@ if any(k0(:))
    end
    p(k0) = min(1, max(0, p(k0) + subtotal/2));
 end
+
+function f = logfntheta(n, theta)
+%
+%  function that works as follows (for going from theta to log M)
+%
+%   1/fn(theta)	<= M(theta) <= 1/fn(theta) / (1-tan(theta)^2/n)
+%
+
+if(theta >= pi/2)
+	f = +Inf;
+end
+
+if(theta <= 0)
+	f = -Inf;
+end
+
+f = gammaln(n/2 + 1) - gammaln(n/2 + 1/2) - log(n) - log(pi)/2 + ...
+	(n-2)*log(sin(theta)) + log(tan(theta));
+f = log2(exp(1)) * f;
+

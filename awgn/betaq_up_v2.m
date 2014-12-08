@@ -1,4 +1,4 @@
-function [lbeta lgamma method] = betaq_up_v2(q, n, A)
+function [lbeta lgamma method] = betaq_up_v2(q, n, P)
 % computes the _UPPER_ bound (as good as it can find) for the beta_q function:
 %   beta_q = min Q(B), s.t. P(B) >= q
 %
@@ -22,6 +22,10 @@ function [lbeta lgamma method] = betaq_up_v2(q, n, A)
 %
 % Idea for the upper bound: take any \gamma s.t. P_\gamma >= q. Then Q_\gamma >= \beta_q
 % Or for high gamma: \beta_q <= 1/gamma;
+
+
+% conversion A->P. Old versions are all in terms of ``amplitude'' A.
+A = sqrt(P);
 
 pp0 = ncx2inv(q, n, n/A^2);
 iter = 1;

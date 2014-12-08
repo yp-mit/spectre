@@ -113,10 +113,32 @@ Definition:
 Function computes Shannon's cone-packing achievability bound, see~\cite[(41)]{PPV08}.
 
 \cprotect\section{Achievability: \verb|kappabeta_ach()|}
+Format:
+\begin{verbatim}
+	function Lms = kappabeta_ach(Ns, epsil, P, hack)
+\end{verbatim}
 
-\cprotect\section{Converse: \verb|betaq_low_v2()|}
+This computes the $\kappa\beta$ achievability bound, see left-hand inequality in~\cite[(218)]{PPV08}. If $hack\neq 0$, then we
+use asymptotic approximation for $\kappa$. This increases the speed dramatically and is very precise already at $n=10$,
+see~\cite[(217)]{PPV08}. If $hack$ is not set, it defaults to $1$.
 
-\cprotect\section{Converse: \verb|wolfowitz()|}
+\cprotect\section{Achievability: \verb|gallager_ach()|}
+
+Format:
+\begin{verbatim}
+	function lm = gallager_ach(n, epsil, P)
+\end{verbatim}
+
+Computes Gallager's achievability bound, see~\cite[(44)]{PPV08}.
+
+\cprotect\section{Converse: \verb|converse()|}
+Format:
+\begin{verbatim}
+	function Lms = converse(Ns, epsil, P)
+\end{verbatim}
+
+This computes the meta-converse lower bound with $Q_{Y^n} = \matn(0, 1+P)^n$, see right-hand inequality in~\cite[(218)]{PPV08}. 
+
 
 \cprotect\section{Normal approximation: \verb|normapx_awgn()|, \verb|normapx_biawgn()|}
 

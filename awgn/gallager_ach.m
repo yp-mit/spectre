@@ -1,4 +1,4 @@
-function lm = gallager_ach(n, epsil, A)
+function lm = gallager_ach(n, epsil, P)
 % returns log M achievable by gallager's random coding.
 %
 % Note: In the case of uncostrained input gallager's bound can be written as
@@ -24,11 +24,11 @@ function lm = gallager_ach(n, epsil, A)
 %
 % Note epsil/2 and also that we should subtract one bit.
 
-R_up = cap_awgn(A);
+R_up = cap_awgn(P);
 R_down = 0;
 
 % Check if for this n gallager works at all
-Pe = gallager_pe(A, R_down, n);
+Pe = gallager_pe(P, R_down, n);
 if Pe > epsil;
     lm = 0;
     return;
@@ -42,7 +42,7 @@ while 1;
 	end
 	R = (R_up + R_down) / 2;
 
-	Pe = gallager_pe(A, R, n);
+	Pe = gallager_pe(P, R, n);
 	if( Pe < epsil)
 		R_down = R;
 	else
@@ -53,13 +53,16 @@ end
 lm = n * R_down;
 
 
-function [pe Er] = gallager_pe(A, R, n, deltap_force)
+function [pe Er] = gallager_pe(P, R, n, deltap_force)
 %
 % This function returns upper bound (achievability) on P_e using
 % Gallager's random coding error exponents
 %
 % TODO: use expurgated exponent for low rates!
 %
+
+% conversion A->P. Old versions are all in terms of ``amplitude'' A.
+A = sqrt(P);
 
 if (nargin < 4)
 	deltap_force = [];

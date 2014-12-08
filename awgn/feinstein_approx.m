@@ -1,8 +1,12 @@
-function lm = feinstein_approx(n, epsil, A)
+function lm = feinstein_approx(n, epsil, P)
 %
 % 	This function computes ** APPROXIMATE ** value of Feinstein's achievability
 %	bound. The normal approximation is used instead of a true distribution.
 %
+
+
+% conversion A->P. Old versions are all in terms of ``amplitude'' A.
+A = sqrt(P);
 
 ceps = epsil * chi2cdf(n, n);
 

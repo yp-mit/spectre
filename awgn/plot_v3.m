@@ -1,4 +1,4 @@
-function [Ns lb ub feinst gal wlfz] = plot_v3(A, epsil, hack, Ns)
+function [Ns lb ub feinst gal wlfz] = plot_v3(P, epsil, hack, Ns)
 
 if (nargin < 3) || (sum(size(hack)) == 0)
 	hack = 0;
@@ -41,18 +41,18 @@ for n = Ns
 	disp(sprintf('--------------------- n=%d -----------------------', n));
 	temp_lbs = []; 
 	for tau = taus; 
-		temp_lb = log2(kappa_inf(tau, A)) - betaq_up_v2(1-epsil+tau, n, A); 
+		temp_lb = log2(kappa_inf(tau, P)) - betaq_up_v2(1-epsil+tau, n, P); 
 		temp_lbs = [temp_lbs temp_lb]; 
 	end;
 	[bb ind] = max(temp_lbs);
 	tau = taus(ind);
 	if (hack) || (auto_hack)
-		kap = log2(kappa_inf(tau, A));
+		kap = log2(kappa_inf(tau, P));
 	else
-		kap = log2(kappa(tau, n, A));
+		kap = log2(kappa(tau, n, P));
 	end
-	clb = kap - betaq_up_v2(1 - epsil + tau, n, A);
-	cub = -betaq_low_v2(1 - epsil, n, A);
+	clb = kap - betaq_up_v2(1 - epsil + tau, n, P);
+	cub = -betaq_low_v2(1 - epsil, n, P);
 
 	dif_bounds = 2*(clb - bb)/(clb + bb);
 	
@@ -67,14 +67,14 @@ for n = Ns
 		cycles_with_autohack = 0;
 	end
 
-	fst = feinstein_approx(n, epsil, A);
+	fst = feinstein_approx(n, epsil, P);
 
 	feinst = [feinst fst/n];
 
 	lb = [lb clb/n];
 	ub = [ub cub/n];
-	gal = [gal gallager_ach(n, epsil, A)/n];
-	wlfz = [wlfz wolfowitz(n, epsil, A)/n];
+	gal = [gal gallager_ach(n, epsil, P)/n];
+	wlfz = [wlfz wolfowitz(n, epsil, P)/n];
 
 	if (auto_hack)
 		cycles_with_autohack = cycles_with_autohack + 1;
@@ -88,19 +88,19 @@ end
 
 Nsall = floor(linspace(Ns(1), Ns(end), 1000));
 Ns_cap = [Ns(1) Ns(end)];
-K = k_awgn(A, epsil);
-Kapr = cap_awgn(A) + K ./ sqrt(Nsall);
-Capr = cap_awgn(A) + 0 .* Ns_cap;
+K = k_awgn(P, epsil);
+Kapr = cap_awgn(P) + K ./ sqrt(Nsall);
+Capr = cap_awgn(P) + 0 .* Ns_cap;
 
 heps = -(1-epsil)*log2(1-epsil) - epsil*log2(epsil);
-fano = (cap_awgn(A) + heps ./ Ns) ./ (1-epsil);
+fano = (cap_awgn(P) + heps ./ Ns) ./ (1-epsil);
 
-if A == 1
+if P == 1
 	ymax = 0.55;
-elseif A == 10
+elseif P == 10
 	ymax = 3.5;
 else
-	ymax = 1.1*cap_awgn(A);
+	ymax = 1.1*cap_awgn(P);
 end;
 
 %% Converses
@@ -108,7 +108,7 @@ figure;
 
 plot(Ns_cap, Capr, 'r--', Ns, fano, 'k--', Ns, wlfz, 'k', Ns, ub, 'r');
 xlabel('Blocklen, n'); ylabel('Rate, R'); ylim([0 ymax]);
-title(sprintf('Converse bounds for AWGN (|X|^2=nP), SNR = %g dB, P_e = %g', 20*log10(A), epsil));
+title(sprintf('Converse bounds for AWGN (|X|^2=nP), SNR = %g dB, P_e = %g', 10*log10(P), epsil));
 legend('Capacity', 'Fano', 'Wolfowitz', 'Converse', 'Location', 'Best');
 grid on
 
@@ -117,7 +117,7 @@ grid on
 figure;
 plot(Ns_cap, Capr, 'r--', Ns, lb, 'b', Ns, gal, 'b--', Ns, feinst, 'k--');
 xlabel('Blocklen, n'); ylabel('Rate, R'); ylim([0 ymax]);
-title(sprintf('Achievability bounds for AWGN, SNR = %g dB, P_e = %g', 20*log10(A), epsil));
+title(sprintf('Achievability bounds for AWGN, SNR = %g dB, P_e = %g', 10*log10(P), epsil));
 legend('Capacity', 'New achievability', 'Gallager', 'Feinstein', 'Location', 'Best');
 grid on
 
@@ -125,7 +125,7 @@ grid on
 figure;
 plot(Ns_cap, Capr, 'r--', Ns, ub, 'r', Nsall, Kapr, 'k-', Ns, lb, 'b', Ns, gal, 'b--');
 xlabel('Blocklen, n'); ylabel('Rate, R'); ylim([0 ymax]);
-title(sprintf('Bounds for AWGN, SNR = %g dB, P_e = %g', 20*log10(A), epsil));
+title(sprintf('Bounds for AWGN, SNR = %g dB, P_e = %g', 10*log10(P), epsil));
 legend('Capacity', 'Converse (|X|^2 = nP)',  'K-approximation', 'New achievability', ...
 	'Gallager random coding', 'Location', 'Best' );
 grid on

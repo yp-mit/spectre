@@ -38,9 +38,9 @@ for idx = 1:N_codes;
 	epsil = CODES(idx).pe;
 	code_rate = (CODES(idx).k)/(CODES(idx).n);
 	ebno = 10^((CODES(idx).ebno)/10);
-	A = sqrt(2*code_rate*ebno);
-	C = cap_awgn(A);
-	K = k_awgn(A, epsil);
+	P = 2*code_rate*ebno;
+	C = cap_awgn(P);
+	K = k_awgn(P, epsil);
 	Ns_cap = floor(linspace(0, Nmax, 9));
 	Capr = C + 0 .* Ns_cap;
 	
@@ -94,7 +94,7 @@ for cc=1:last_class;
 		epsil = CODES(idx).pe;
 		code_rate = (CODES(idx).k)/(CODES(idx).n);
 		ebno = 10^((CODES(idx).ebno)/10);
-		A = sqrt(2*code_rate*ebno);
+		P = 2*code_rate*ebno;
 		if(epsil ~= base_pe)
 			disp(sprintf('ERROR: epsil != base_pe for the code with idx=%d\n', idx));
 			error('plot_universe');

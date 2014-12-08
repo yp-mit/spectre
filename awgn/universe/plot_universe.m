@@ -48,12 +48,12 @@ for idx = 1:N_codes;
 	epsil = CODES(idx).pe;
 	code_rate = (CODES(idx).k)/(CODES(idx).n);
 	ebno = 10^((CODES(idx).ebno)/10);
-	A = sqrt(2*code_rate*ebno);
+	P = 2*code_rate*ebno;
 	if (strcmp(channel,'AWGN'))
-		C = cap_awgn(A);
-		K = k_awgn(A, epsil);
+		C = cap_awgn(P);
+		K = k_awgn(P, epsil);
 	elseif (strcmp(channel,'BIAWGN'))
-		[C V] = biawgn_stats(A^2);
+		[C V] = biawgn_stats(P);
 		K = sqrt(V)*norminv(epsil, 0, 1);
 	end
 	Ns_cap = floor(linspace(0, Nmax, 9));
@@ -140,11 +140,11 @@ fprintf(ftex, [	' Here is a list of all figures and the codes that appear on the
 for idx=1:N_codes;	
 	code_rate = (CODES(idx).k)/(CODES(idx).n);
 	ebno = 10^((CODES(idx).ebno)/10);
-	A = sqrt(2*code_rate*ebno);
+	P = 2*code_rate*ebno;
 	fprintf(ftex, ['\\item Fig.~\\ref{fig:dol%d}: code: %s $(%d, %d)$, ' ...
 				'channel: ' channel '($%.2f$ dB), Eb/No=$%.2f$ dB, Pe = $%g$. %s\n'], ...
 				 idx, CODES(idx).name, CODES(idx).n, CODES(idx).k, ...
-					20*log10(A), CODES(idx).ebno, CODES(idx).pe, CODES(idx).comment);
+					10*log10(P), CODES(idx).ebno, CODES(idx).pe, CODES(idx).comment);
 end
 fprintf(ftex, '\\end{enumerate}\n\n');
 
@@ -163,12 +163,12 @@ for cc=1:last_class;
 		code_rate = (CODES(idx).k)/(CODES(idx).n);
 		ebno = 10^((CODES(idx).ebno)/10);
 
-		A = sqrt(2*code_rate*ebno);
+		P = 2*code_rate*ebno;
 		if (strcmp(channel,'AWGN'))
-			C = cap_awgn(A);
-			K = k_awgn(A, epsil);
+			C = cap_awgn(P);
+			K = k_awgn(P, epsil);
 		elseif (strcmp(channel,'BIAWGN'))
-			[C V] = biawgn_stats(A^2);
+			[C V] = biawgn_stats(P);
 			K = sqrt(V)*norminv(epsil, 0, 1);
 		end
 		if(epsil ~= base_pe)
@@ -226,7 +226,7 @@ fprintf(ftex,[	'\\begin{figure}[t]\n'...
 for idx=1:N_codes;
 	code_rate = (CODES(idx).k)/(CODES(idx).n);
 	ebno = 10^((CODES(idx).ebno)/10);
-	A = sqrt(2*code_rate*ebno);
+	P = 2*code_rate*ebno;
 	fprintf(ftex,[	'\\begin{figure}[p]\n'...
 			'\\centering\n' ...
 			'\\vskip -10pt\n' ...
@@ -236,7 +236,7 @@ for idx=1:N_codes;
 			'\\label{fig:dol%d}\n' ...
 			'\\end{figure}\n'], ...
 			CODES(idx).fname, CODES(idx).name, CODES(idx).n, CODES(idx).k, ...
-				20*log10(A), CODES(idx).pe, idx);
+				10*log10(P), CODES(idx).pe, idx);
 	if( (idx/2) == floor(idx/2) )
 		fprintf(ftex, '\\clearpage\n\n');
 	else

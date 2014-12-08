@@ -1,4 +1,4 @@
-function [lbeta lgamma] = betaq_low_v2(q, n, A)
+function [lbeta lgamma] = betaq_low_v2(q, n, P)
 %
 % This a version 2 of betaq_low. See comment in betaq_low.m for the idea.
 %
@@ -36,6 +36,9 @@ function [lbeta lgamma] = betaq_low_v2(q, n, A)
 %   that is constructed from any point (Fp, Fq) and knowing that the slope at this point 1/gamma.
 
 
+% conversion A->P. Old versions are all in terms of ``amplitude'' A.
+A = sqrt(P);
+
 %
 % First we try to compute betaq precisely (almost)
 %
@@ -57,9 +60,9 @@ term2 = (delta - 2*q*eps) * 2^(-lgamma);
 if (term1 > 0)
 	lbeta_prec = log2(term1+term2);
 
-	disp(sprintf(['betaq_low_v2(q=%g, n=%d, A=%g): PRECISE: '...
+	disp(sprintf(['betaq_low_v2(q=%g, n=%d, P=%g): PRECISE: '...
 		'term2/term1 = %.1g, delta=%.1g, lgamma = %.3g, lbeta = %.1f'], ...
-		q,n,A, abs(term2/term1), delta, lgamma, lbeta_prec));
+		q,n,P, abs(term2/term1), delta, lgamma, lbeta_prec));
 
 	lbeta = lbeta_prec;
 else
@@ -83,9 +86,9 @@ else
 			error('betaq_low_v2');
 		end
 
-		disp(sprintf(['betaq_low_v2(q=%g, n=%d, A=%g): LOG_PRECISE: '...
+		disp(sprintf(['betaq_low_v2(q=%g, n=%d, P=%g): LOG_PRECISE: '...
 			'term2/term1 = %.1g, delta=%.1g, lgamma = %.3g, lbeta = %.1f'], ...
-		q,n,A, 2^(logterm2 - logterm1), delta, lgamma, lbeta));
+		q,n,P, 2^(logterm2 - logterm1), delta, lgamma, lbeta));
 		return;
 	end
 
@@ -121,8 +124,8 @@ else
 		delta_last = delta;
 		lbeta_last = lbeta_est;
 	end
-	disp(sprintf(['betaq_low_v2(q=%g, n=%d, A=%g): WOLFOWITZ: '...
+	disp(sprintf(['betaq_low_v2(q=%g, n=%d, P=%g): WOLFOWITZ: '...
 			'delta_best = %.2f, lbeta = %.1f'], ...
-		q,n,A, delta_last / (1-q), lbeta_last));
+		q,n,P, delta_last / (1-q), lbeta_last));
 	lbeta = lbeta_last;
 end

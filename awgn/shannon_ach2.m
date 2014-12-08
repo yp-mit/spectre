@@ -1,4 +1,4 @@
-function [lm theta1] = shannon_ach2(n, epsil, A)
+function [lm theta1] = shannon_ach2(n, epsil, P)
 %	returns Shannon's achievability bound for fixed-power code of SNR A^2
 %	(maximal prob. of error)
 %
@@ -8,6 +8,9 @@ function [lm theta1] = shannon_ach2(n, epsil, A)
 %	This is done approximately with the use of normal approximation.
 %
 % Note: qn_low, qn_up and nctcdf0 are helper functions defined below.
+
+% conversion A->P. Old versions are all in terms of ``amplitude'' A.
+A = sqrt(P);
 
 V = A./sqrt(2) .* sqrt(A.^2 + 2)./(A.^2 + 1) *log2(exp(1));
 
@@ -95,8 +98,8 @@ fn_th = fn_hi;
 lm = -fn_th + log2(1-tau) ;
 
 
-disp(sprintf('--- shannon_ach(n=%d, eps=%.3g, A=%g): log M >= %.4g   (%d iters)', ...
-			n, epsil, A, lm, iter));
+disp(sprintf('--- shannon_ach(n=%d, eps=%.3g, P=%g): log M >= %.4g   (%d iters)', ...
+			n, epsil, P, lm, iter));
 disp(sprintf('         precision: tau*eps - Qup(theta) = %g ', ...
 			tau*epsil - F_hi));
 disp(sprintf('         logM precision: %.4f (%.4f %%)', ...

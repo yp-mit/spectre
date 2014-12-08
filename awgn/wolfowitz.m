@@ -1,6 +1,8 @@
-function lm = wolfowitz(n, epsil, A)
+function lm = wolfowitz(n, epsil, P)
 % returns wolfowitz' upper bound on Log M
 
+% conversion A->P. Old versions are all in terms of ``amplitude'' A.
+A = sqrt(P);
 q = 1 - epsil;
 
 
@@ -37,8 +39,8 @@ for qc = Qs;
 		lbeta_last = lbeta_est;
 end
 
-    disp(sprintf(['wolfowitz(n=%d, epsil = %g, A=%g): WOLFOWITZ: '...
+    disp(sprintf(['wolfowitz(n=%d, epsil = %g, P=%g): WOLFOWITZ: '...
 	'delta_best = %.2f, log M = %.1f'], ...
-	n, epsil, A, delta_last / (1-q), -lbeta_last));
+	n, epsil, P, delta_last / (1-q), -lbeta_last));
 
 lm = -lbeta_last;

@@ -1,4 +1,4 @@
-function f = kappa(tau, n, A)
+function f = kappa(tau, n, P)
 % computes:
 %	kappa(tau) = min Q(B), s.t. P(B) \ge tau 
 %
@@ -6,6 +6,9 @@ function f = kappa(tau, n, A)
 %
 %
 % TODO: kappa(1e-7, 93, 10) doesn't work...  Can it be fixed?
+
+% conversion A->P. Old versions are all in terms of ``amplitude'' A.
+A = sqrt(P);
 
 posval = @(x) (abs(x) + x)./2;
 negval = @(x) (abs(x) - x)./2;
@@ -109,7 +112,7 @@ if (2*(kappa2 - kappa1)/(kappa2+kappa1) > 1e-5)
 end
 kappa = (kappa2 + kappa1)/2;
 
-kapinf = kappa_inf(tau, A);
+kapinf = kappa_inf(tau, P);
 
 delta = 200 * (kappa - kapinf) / (kappa + kapinf);
 	

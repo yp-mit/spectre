@@ -24,6 +24,8 @@
 \usepackage{bbm}
 \usepackage{graphicx}
 \usepackage{paralist}
+\usepackage{verbatim}
+\usepackage{cprotect} %For using \cprotect\section{\verb|aaa|}
 \usepackage[stretch=16,shrink=16,step=4]{microtype}
 % \usepackage{vmr-symbols-vecbold}
 % \usepackage{standard-macros}
@@ -32,6 +34,7 @@
 
 %*******************************************************************************
 %!TEX encoding =  
+
 \begin{document}
 
 
@@ -39,7 +42,6 @@
 Short Packet Communication Toolbox for Wireless Engineers\\[1cm]
 Version 0.0}
 
-\author{Giuseppe Durisi and Yury Polyanskiy}
 \maketitle
 
 \begin{abstract}
@@ -53,10 +55,59 @@ Version 0.0}
 \chapter{Motivation}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{AWGN channel}
+
+
+\begin{itemize}
+\item Code author: Y. Polyanskiy \url{<yp@mit.edu>}
+
+\item Main references: \cite{PPV08,PPV10eneff}
+
+\item Example: See Fig.~\ref{fig:awgn_example} 
+\end{itemize}
+
+
+\begin{figure}
+\caption{Code and resulting picture for AWGN bounds}\label{fig:awgn_example}
+\begin{verbatim}
+	> plot_v3(....)
+\end{verbatim}
+\end{figure}
+
+%\def\fname{\bgroup\cat
+
+\cprotect\section{Summary plot: \verb|plot_v3()|}
+
+Header:
+\begin{verbatim}
+....
+\end{verbatim}
+
+
+Inputs:
+\begin{enumerate}
+\item $P$
+\item $\epsilon$
+\end{enumerate}
+
+\cprotect\section{Achievability: \verb|shannon_ach2()|}
+
+\cprotect\section{Achievability: \verb|kbeta_ach()|}
+
+\cprotect\section{Converse: \verb|betaq_low_v2()|}
+
+\cprotect\section{Converse: \verb|wolfowitz()|}
+
+\cprotect\section{Normal approximation: \verb|normapx()|}
+
+\cprotect\section{Code database: \verb|plot_universe()|}
+
+\cprotect\section{Zero-rate (aka energy per bit, aka wideband regime)}
+\textbf{TODO.}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Fading channels}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{IEEEtran}
-\bibliography{IEEEabrv,publishers,confs-jrnls,giubib}
+\bibliography{IEEEabrv,refs}
 \end{document}
 

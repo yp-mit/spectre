@@ -40,14 +40,13 @@ for idx = 1:N_codes;
 	ebno = 10^((CODES(idx).ebno)/10);
 	P = 2*code_rate*ebno;
 	C = cap_awgn(P);
-	K = k_awgn(P, epsil);
 	Ns_cap = floor(linspace(0, Nmax, 9));
 	Capr = C + 0 .* Ns_cap;
 	
 	Ns_norm = floor(linspace(80, Nmax));
-	nrm = C*Ns_norm + K*sqrt(Ns_norm);
+	nrm = normapx_awgn(Ns_norm, epsil, P);
 	Ns_norm_add = floor(linspace(10,80));
-	nrm_add= C*Ns_norm_add + K*sqrt(Ns_norm_add);
+	nrm_add= normapx_awgn(Ns_norm_add, epsilon, P);
 
 	found = 0;
 

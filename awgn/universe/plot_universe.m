@@ -51,18 +51,18 @@ for idx = 1:N_codes;
 	P = 2*code_rate*ebno;
 	if (strcmp(channel,'AWGN'))
 		C = cap_awgn(P);
-		K = k_awgn(P, epsil);
+		nrmfunc = @(Ns) normapx_awgn(Ns, epsil, P);
 	elseif (strcmp(channel,'BIAWGN'))
 		[C V] = biawgn_stats(P);
-		K = sqrt(V)*norminv(epsil, 0, 1);
+		nrmfunc = @(Ns) normapx_biawgn(Ns, epsil, P);
 	end
 	Ns_cap = floor(linspace(0, Nmax, 9));
 	Capr = C + 0 .* Ns_cap;
 	
 	Ns_norm = floor(linspace(80, Nmax));
-	nrm = C*Ns_norm + K*sqrt(Ns_norm) + log2(Ns_norm)/2;
+	nrm = nrmfunc(Ns_norm); 
 	Ns_norm_add = floor(linspace(10,80));
-	nrm_add= C*Ns_norm_add + K*sqrt(Ns_norm_add) + log2(Ns_norm)/2;
+	nrm_add= nrmfunc(Ns_norm_add);
 
 	found = 0;
 
@@ -166,17 +166,17 @@ for cc=1:last_class;
 		P = 2*code_rate*ebno;
 		if (strcmp(channel,'AWGN'))
 			C = cap_awgn(P);
-			K = k_awgn(P, epsil);
+			nrmfunc = @(Ns) normapx_awgn(Ns, epsil, P);
 		elseif (strcmp(channel,'BIAWGN'))
 			[C V] = biawgn_stats(P);
-			K = sqrt(V)*norminv(epsil, 0, 1);
+			nrmfunc = @(Ns) normapx_biawgn(Ns, epsil, P);
 		end
 		if(epsil ~= base_pe)
 			disp(sprintf('ERROR: epsil != base_pe for the code with idx=%d\n', idx));
 			error('plot_universe');
 		end
 		bllen = CODES(idx).n;
-		normrate = CODES(idx).k/(bllen*C + K*sqrt(bllen) + log2(bllen)/2);
+		normrate = CODES(idx).k/nrmfunc(bllen);
 		blocklens = [blocklens bllen];
 		normrates = [normrates normrate];
 	end

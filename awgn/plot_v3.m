@@ -24,7 +24,6 @@ lb = [];
 ub = [];
 feinst = [];
 gal = [];
-wlfz = [];
 taus = linspace(0,1,20).*epsil; taus = taus(3:end-2);
 
 auto_hack = 0;
@@ -74,7 +73,6 @@ for n = Ns
 	lb = [lb clb/n];
 	ub = [ub cub/n];
 	gal = [gal gallager_ach(n, epsil, P)/n];
-	wlfz = [wlfz wolfowitz(n, epsil, P)/n];
 
 	if (auto_hack)
 		cycles_with_autohack = cycles_with_autohack + 1;
@@ -88,8 +86,7 @@ end
 
 Nsall = floor(linspace(Ns(1), Ns(end), 1000));
 Ns_cap = [Ns(1) Ns(end)];
-K = k_awgn(P, epsil);
-Kapr = cap_awgn(P) + K ./ sqrt(Nsall);
+Kapr = normapx_awgn(Nsall, epsil, P)./Nsall;
 Capr = cap_awgn(P) + 0 .* Ns_cap;
 
 heps = -(1-epsil)*log2(1-epsil) - epsil*log2(epsil);
@@ -106,10 +103,10 @@ end;
 %% Converses
 figure;
 
-plot(Ns_cap, Capr, 'r--', Ns, fano, 'k--', Ns, wlfz, 'k', Ns, ub, 'r');
+plot(Ns_cap, Capr, 'r--', Ns, fano, 'k--', Ns, ub, 'r');
 xlabel('Blocklen, n'); ylabel('Rate, R'); ylim([0 ymax]);
 title(sprintf('Converse bounds for AWGN (|X|^2=nP), SNR = %g dB, P_e = %g', 10*log10(P), epsil));
-legend('Capacity', 'Fano', 'Wolfowitz', 'Converse', 'Location', 'Best');
+legend('Capacity', 'Fano', 'Converse', 'Location', 'Best');
 grid on
 
 

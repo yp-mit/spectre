@@ -31,6 +31,7 @@
 % \usepackage{standard-macros}
 
 
+\def\matn{\mathcal{N}}
 
 %*******************************************************************************
 %!TEX encoding =  
@@ -65,7 +66,21 @@ General info:
 
 \item Example: See Fig.~\ref{fig:awgn_example} 
 
-\item All functions return values in base-2 units, e.g. $\log_2 M$.
+\item Channel model:
+	$$ Y_j = X_j + Z_j, \quad j=1,\ldots,n $$
+	Noise: $Z_j \sim \matn(0,1)$ iid.\\
+	Power constraints: Each codeword $x^n$ satisfies
+			$$ \sum_{j=1}^n |x_j|^2 \le n P $$
+
+\item Common input/output arguments:
+\begin{enumerate}
+\item \verb|P| -- input argument; parameter of the power constraint (so $P=10$ is $SNR=10~dB$).
+\item \verb|epsil| -- block probability of block error.
+\item \verb|lm| or \verb|Lms| -- output argument; $\log_2 M$, log-size of codebook (base-2 information units). 
+\item \verb|n| -- input argument; blocklength.\\
+		For slow functions that do not support vectorized arguments.
+\item \verb|Ns| -- input argument; vector of blocklengths.
+\end{enumerate}
 \end{itemize}
 
 
@@ -80,21 +95,24 @@ General info:
 
 \cprotect\section{Summary plot: \verb|plot_v3()|}
 
-Header:
+Definition:
 \begin{verbatim}
-....
+	function [Ns lb ub feinst gal wlfz] = plot_v3(P, epsil)
 \end{verbatim}
 
+This function plots various bounds on the same figure. See Fig.~\ref{fig:awgn_example}.
 
-Inputs:
-\begin{enumerate}
-\item $P$
-\item $\epsilon$
-\end{enumerate}
 
 \cprotect\section{Achievability: \verb|shannon_ach2()|}
 
-\cprotect\section{Achievability: \verb|kbeta_ach()|}
+Definition:
+\begin{verbatim}
+	function lm = shannon_ach2(n, epsil, P)
+\end{verbatim}
+
+Function computes Shannon's cone-packing achievability bound, see~\cite[(41)]{PPV08}.
+
+\cprotect\section{Achievability: \verb|kappabeta_ach()|}
 
 \cprotect\section{Converse: \verb|betaq_low_v2()|}
 
@@ -102,7 +120,17 @@ Inputs:
 
 \cprotect\section{Normal approximation: \verb|normapx_awgn()|, \verb|normapx_biawgn()|}
 
+Format:
+\begin{verbatim}
+	function Lms = normapx_awgn(Ns, epsil, P);
+\end{verbatim}
+
+Fast and frequently very precise approximation to both achievability and converse:
+	$$ \log M \approx n C - \sqrt{nV} Q^{-1}(\epsilon) + {1\over2} \log n $$
+
+
 \cprotect\section{Code database: \verb|plot_universe()|}
+
 
 \cprotect\section{Zero-rate (aka energy per bit, aka wideband regime)}
 \textbf{TODO.}

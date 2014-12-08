@@ -115,7 +115,7 @@ figure;
 plot(Ns_cap, Capr, 'r--', Ns, lb, 'b', Ns, gal, 'b--', Ns, feinst, 'k--');
 xlabel('Blocklen, n'); ylabel('Rate, R'); ylim([0 ymax]);
 title(sprintf('Achievability bounds for AWGN, SNR = %g dB, P_e = %g', 10*log10(P), epsil));
-legend('Capacity', 'New achievability', 'Gallager', 'Feinstein', 'Location', 'Best');
+legend('Capacity', 'kappa-beta achievability', 'Gallager', 'Feinstein', 'Location', 'Best');
 grid on
 
 %% K-approximation
@@ -123,7 +123,7 @@ figure;
 plot(Ns_cap, Capr, 'r--', Ns, ub, 'r', Nsall, Kapr, 'k-', Ns, lb, 'b', Ns, gal, 'b--');
 xlabel('Blocklen, n'); ylabel('Rate, R'); ylim([0 ymax]);
 title(sprintf('Bounds for AWGN, SNR = %g dB, P_e = %g', 10*log10(P), epsil));
-legend('Capacity', 'Converse (|X|^2 = nP)',  'K-approximation', 'New achievability', ...
+legend('Capacity', 'Converse (|X|^2 = nP)',  'Normal approximation', 'kappa-beta achievability', ...
 	'Gallager random coding', 'Location', 'Best' );
 grid on
 

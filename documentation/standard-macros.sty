@@ -1,0 +1,311 @@
+% standard-macros.tex
+% 
+% Commonly used LaTeX macros.
+% 
+% (c) 2002 by Moritz Borgmann
+% major changes by Ulrich Schuster, 12/03-11/06
+
+
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{xspace}
+\usepackage{bm}
+%\usepackage{fancyref}
+\usepackage{textcomp} 
+\usepackage{color}
+
+%%%% macros for latex editing
+
+\newcommand{\todo}[1]{{\noindent\small\sffamily\slshape\color{red}[#1]}}
+
+
+%%%%% New environments %%%%%%%
+
+% tighter spacing for a inline matrix 
+\newenvironment{textbmatrix}{	\setlength{\arraycolsep}{2.5pt}%
+								\big[\begin{matrix}}{\end{matrix}\big]%
+								\raisebox{0.08ex}{\vphantom{M}}}   
+								
+%%%%%% Comments on Latex %%%%%%%%%%%%%%%
+%\newcommand{\marginnote}[1]{\marginpar{\framebox{\framebox{#1}}}}
+% Comment macro: Usage \comment{Author}{Comment}
+%\newcommand{\comment}[2]{[\marginnote{#1}\textit{#1}:\ \textit{#2}]}
+%\newcommand{\comment}[1]{[\marginnote{$\star$}\textit{#1}]}								
+								
+
+%%%%% Short forms for environments %%%%%
+
+\def\be{\begin{equation}}
+\def\ee{\end{equation}}
+\def\een{\nonumber \end{equation}}
+\def\mat{\begin{bmatrix}}
+\def\emat{\end{bmatrix}}
+\def\btm{\begin{textbmatrix}}
+\def\etm{\end{textbmatrix}}
+
+\def\ba#1\ea{\begin{align}#1\end{align}}
+\def\bas#1\eas{\begin{align*}#1\end{align*}}
+\def\bs#1\es{\begin{split}#1\end{split}} 
+\def\bg#1\eg{\begin{gather}#1\end{gather}}
+\def\bml#1\eml{\begin{multline}#1\end{multline}}
+\def\bi#1\ei{\begin{itemize}#1\end{itemize}} 
+
+
+%%%%% Useful abbreviations %%%%%
+
+%\newcommand{\safemath}[2]{\newcommand{#1}{\ensuremath{#2}\xspace}}
+% now in vmr-symbols-*.tex
+\newcommand{\subtext}[1]{\text{\fontfamily{cmr}\fontshape{n}\fontseries{m}\selectfont{}#1}}
+\newcommand{\lefto}{\mathopen{}\left}
+\newcommand{\Disp}{\displaystyle}
+\newcommand{\sub}[1]{\ensuremath{_{\subtext{#1}}}} % for text mode subscripts
+
+
+%%%%% Operators %%%%%
+
+\DeclareMathOperator{\tr}{tr}				% trace
+\DeclareMathOperator{\Tr}{\opT r}			% Trace
+\DeclareMathOperator{\dg}{\opD}				% diagonal matrix
+\DeclareMathOperator{\rank}{rank}			% rank of a matrix
+\DeclareMathOperator{\adj}{adj}				% adjunct matrix
+\DeclareMathOperator{\vt}{\opV}				% vectorization
+\newcommand{\vectorize}[1]{\ensuremath{\text{vec}(#1)}} % vec(X)
+\DeclareMathOperator{\rect}{rect}			% rect function
+\DeclareMathOperator{\sign}{sign}			% signum
+\DeclareMathOperator{\sinc}{sinc}			% sinc function
+\DeclareMathOperator{\elem}{\in}				% element of
+\DeclareMathOperator{\interior}{int}			% interior of a set
+\DeclareMathOperator*{\argmin}{arg\;min}		% arg min
+\DeclareMathOperator*{\argmax}{arg\;max}		% arg max
+\DeclareMathOperator*{\limm}{l.i.m.\,}		% limit in the mean
+\DeclareMathOperator{\kron}{\otimes}			% Kroneker Product
+\DeclareMathOperator{\had}{\odot}			% Hadamard Product
+\DeclareMathOperator{\Prob}{\opP}			% probability of an event
+\DeclareMathOperator{\four}{\opF}			% Fourier transform
+\DeclareMathOperator{\Exop}{\opE}			% expectation operator
+\DeclareMathOperator{\Varop}{\opV\!\mathrm{ar}} % variance operator
+\DeclareMathOperator{\Covop}{\opC\!\mathrm{ov}}% covariance operator
+\DeclareMathOperator{\conv}{\star}			% convolution operator
+\DeclareMathOperator{\spn}{span}			 	% span of a set of vectors
+\DeclareMathOperator{\chull}{co}			 	% convex hull
+\DeclareMathOperator{\grad}{\nabla}			% gradient
+\DeclareMathOperator{\dvg}{\nabla\cdot}		% divergence
+\DeclareMathOperator{\rot}{\nabla\times}		% curl
+\DeclareMathOperator{\curl}{\rot}			% alternate
+\DeclareMathOperator{\erf}{erf}				% error function
+\DeclareMathOperator{\erfc}{erfc}			% complementary error function
+\DeclareMathOperator{\esssup}{esssup}			% essential supremum
+
+%%% Asymptotic notation
+
+\DeclareMathOperator{\landauo}{\mathit{o}}
+\DeclareMathOperator{\landauO}{\mathcal{O}}
+
+\DeclareMathOperator{\landauTheta}{\Theta}
+\DeclareMathOperator{\landauOmega}{\Omega}
+
+%%%%%% General Math Macros %%%%%%%%%%%%%%
+\newcommand{\nullspace}{\setN}	 			% nullspace
+\newcommand{\rng}{\setR}		 				% range
+\newcommand{\dom}{\setD}						% domain
+\newcommand{\orth}{\perp}					% orthogonal
+\newcommand{\Ex}[2]{\ensuremath{\Exop_{#1}\lefto[#2\right]}} 	% expectation
+%\newcommand{\Ex}[1]{\ensuremath{\Exop\lefto[#1\right]}} 	% expectation
+\newcommand{\Var}[1]{\ensuremath{\Varop\lefto[#1\right]}} % variance
+\newcommand{\Cov}[1]{\ensuremath{\Covop\lefto[#1\right]}} % covariance
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}		% absolute value
+\newcommand{\card}[1]{\lvert#1\rvert}			% cardinality of a set
+\newcommand{\comp}[1]{\ensuremath{#1^{c}}}	% set complement
+\newcommand{\union}{\cup}					% set union
+\newcommand{\Union}{\bigcup}
+\newcommand{\intersect}{\cap}				% set intersection
+\newcommand{\Intersect}{\bigcap}
+\newcommand{\pset}[1]{\mathscr{P}(#1)} 		% power set
+\newcommand{\ind}[1]{\matI(#1)}				% indicator function
+%\safemath{\interior}{\mathrm{Int}}			% interior of a set
+%\newcommand{\domain}[1]{\mathscr{D}(#1)}	 	% domain of a mapping
+\newcommand{\vecnorm}[1]{\lVert#1\rVert}		% vector norm
+\newcommand{\frobnorm}[1]{\vecnorm{#1}_{\text{F}}}	% Frobenius norm
+\newcommand{\opnorm}[1]{\lVert#1\rVert}		% operator norm
+\newcommand{\conj}[1]{\ensuremath{#1^{*}}} 	% conjugate 		
+\newcommand{\tp}[1]{\ensuremath{#1^{T}}} 		% transpose
+\newcommand{\herm}[1]{\ensuremath{#1^{H}}} 	% hermitian transpose
+\newcommand{\inv}[1]{\ensuremath{#1^{-1}}} 	% inverse
+\newcommand{\pinv}[1]{\ensuremath{#1^{\dagger}}} 	% Moore-Penrose pseudo-inverse
+\newcommand{\opt}[1]{\ensuremath{#1^{*}}} 	% optimum parameter
+\newcommand{\est}[1]{\ensuremath{\hat{#1}}} 	% estimate
+\newcommand{\west}[1]{\ensuremath{\widehat{#1}}} % estimate
+\newcommand{\avg}[1]{\ensuremath{\bar{#1}}}
+\safemath{\dirac}{\delta}					% Dirac delta
+\safemath{\krond}{\dirac}					% Kronecker delta
+\newcommand{\allz}[2]{\ensuremath{#1=0,1,\ldots,#2-1}}% all definition by Moritz
+\newcommand{\allzinf}[1]{\ensuremath{#1=0,1,\ldots}}% all definition by Moritz
+\newcommand{\allo}[2]{\ensuremath{#1=1,2,\ldots,#2}}% all definition by Moritz
+\newcommand{\sumz}[2]{\ensuremath{\sum_{#1=0}^{#2-1}}}
+\newcommand{\sumo}[2]{\ensuremath{\sum_{#1=1}^{#2}}}
+\newcommand{\suminf}[1]{\ensuremath{\sum_{#1=-\infty}^{\infty}}}
+\newcommand{\logdet}[1]{\log \det\lefto(#1\right)} % log det function
+\newcommand{\set}[1]{\left\{#1\right\}}		% set notation
+\newcommand{\clos}[1]{\overline{#1}}			% set closure
+\newcommand{\besselI}[1]{I_{#1}}				% mod. Bessel fun. first kind
+\safemath{\upto}{\uparrow}
+\safemath{\downto}{\downarrow}
+\safemath{\iu}{j}							% imaginary unit
+\safemath{\ev}{\lambda}						% eigenvalue
+\safemath{\hilseqspace}{l^{2}}				% Hilbert sequence space
+\newcommand{\banachfunspace}[1]{\setL^{#1}}	% Banach function space
+\safemath{\hilfunspace}{\banachfunspace{2}}	% Hilbert function space
+\newcommand{\hadj}[1]{#1^{\star}}			% Hilbert adjoint operator
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}  % Floor operator
+\newcommand{\ceil}[1]{\lceil #1 \rceil}  	% Ceil operator
+     
+\DeclareMathOperator{\diag}{diag}      		   % operator that transform a vector into a diagonal matrix
+
+
+%%%%%% Special Symbols for Communications %%%%%%%
+\safemath{\snr}{\rho} 				% signal to noise ratio
+\safemath{\No}{N_0}							% noise spectral density
+\safemath{\Es}{E_s}							% energy per symbol
+\safemath{\Eb}{E_b}							% energy per bit
+\safemath{\EbNo}{\frac{\Eb}{\No}}
+\safemath{\EsNo}{\frac{\Es}{\No}}
+
+% Time-frequency notation
+\DeclareMathOperator{\CHop}{\ensuremath{\opH}} % channel operator
+\safemath{\tvir}{\rndh_{\CHop}}				% time-varying impulse response
+\safemath{\tvtf}{\rndl_{\CHop}}				% 	-''- transfer function
+\safemath{\spf}{\rnds_{\CHop}}				% spreading function
+\safemath{\bff}{H_{\CHop}}					% bi-freuqency function
+
+% correlation functions
+\safemath{\ircf}{r_{h}}						% impulse response correlation fn.
+\safemath{\tftvcf}{r_{s}}					% scattering function
+\safemath{\tfcf}{r_{l}}						% time-frequency correlation fn.
+\safemath{\bfcf}{r_{H}}						% bi-frequency correlation fn.
+
+% WSSUS correlation functions
+\safemath{\tcorr}{c_h}						% time-correlation function
+\safemath{\scf}{c_{s}}						% spreading function
+\safemath{\tfcorr}{c_{l}}					% transfer-function correlation
+\safemath{\fcorr}{c_{H}}						% frequency-correlation function
+
+
+\safemath{\mi}{I}							% mutual information
+\safemath{\capacity}{C}						% capacity  
+\safemath{\difent}{h}						% differential entropy     
+\newcommand{\relent}[2]{D(#1\,||\,#2)} % relative entropy 
+
+
+\newcommand{\iid}{i.i.d.\@\xspace}
+
+
+%%%%%% probability theory stuff %%%%%%
+\newcommand{\pdf}[1]{q_{#1}}				% probability density function
+\newcommand{\altpdf}[1]{g_{#1}}			% alternative pdf
+\newcommand{\pmf}[1]{f_{#1}}				% probability mass function
+\newcommand{\altpmf}[1]{g_{#1}}			% alternative pmf
+\newcommand{\cdf}[1]{Q_{#1}} 			% probability distribution function
+\newcommand{\altcdf}[1]{P_{#1}}			% alternative cdf
+\newcommand{\mgf}[1]{g_{#1}}				% moment generating function
+\newcommand{\entropy}{H}					% entropy
+%\newcommand{\diffent}{h}					% differential entropy
+%
+\safemath{\normal}{\mathcal{N}}			% normal distribution
+\safemath{\jpg}{\mathcal{CN}}			% jointly proper Gaussian
+\safemath{\mchain}{\leftrightarrow}		% Markov chain
+\newcommand{\chisq}[1]{\chi_{#1}}		% Chi-square RV
+\newcommand{\given}{\,\vert\,}				% conditioning
+\newcommand{\AIC}{\ensuremath{\text{AIC}}} % Akaike's Information Criterion
+\newcommand{\AICc}{\ensuremath{\AIC_{\mathrm{c}}}}  
+\safemath{\wpone}{\text{w.p.1}}		% with probability 1   
+
+%%%%% Unit Denominators %%%%%%%%%%
+\safemath{\dB}{\,\mathrm{dB}}
+\safemath{\dBm}{\,\mathrm{dBm}}
+\safemath{\Hz}{\,\mathrm{Hz}}
+\safemath{\kHz}{\,\mathrm{kHz}}
+\safemath{\MHz}{\,\mathrm{MHz}}
+\safemath{\GHz}{\,\mathrm{GHz}}
+\safemath{\s}{\,\mathrm{s}}
+\safemath{\ms}{\,\mathrm{ms}}
+\safemath{\mus}{\,\mathrm{\text{\textmu}s}}
+\safemath{\ns}{\,\mathrm{ns}}
+\safemath{\ps}{\,\mathrm{ps}}
+\safemath{\meter}{\,\mathrm{m}}
+\safemath{\mm}{\,\mathrm{mm}}
+\safemath{\cm}{\,\mathrm{cm}}
+\safemath{\m}{\,\mathrm{m}}
+\safemath{\W}{\,\mathrm{W}}
+\safemath{\mW}{\, \mathrm{mW}}
+\safemath{\J}{\,\mathrm{J}}
+\safemath{\K}{\,\mathrm{K}}
+\safemath{\bit}{\,\mathrm{bit}}
+\safemath{\nat}{\,\mathrm{nat}} 
+\safemath{\kg}{\,\mathrm{kg}} 
+
+%%%%% Binary Relations %%%%%
+
+\safemath{\define}{\triangleq}			% definition
+\newcommand{\sameev}{\stackrel{\scriptscriptstyle{\lambda}}{\equiv}}
+\newcommand{\sothat}{\,:\,}				% set notation
+\newcommand{\composition}{\circ}			% composition of mappings
+\providecommand{\inner}[2]{\ensuremath{\langle#1,#2\rangle}}% inner product <.,.>
+\safemath{\equivalent}{\sim}
+\safemath{\distas}{\sim}					% distributed according to
+\newcommand{\AND}{\,\mathbf{and}\,}		% logical AND
+\newcommand{\OR}{\,\mathbf{or}\,}		% logical OR
+\safemath{\sdiff}{\Delta}				% symmetric set difference
+
+
+% sets
+\safemath{\reals}{\amsbb{R}}
+\safemath{\positivereals}{\reals_{+}}
+\safemath{\integers}{\amsbb{Z}}
+\safemath{\posint}{\integers_{+}}
+\safemath{\naturals}{\mathbb{N}}
+\safemath{\posnaturals}{\naturals_{+}}
+\safemath{\complexset}{\amsbb{C}}
+\safemath{\rationals}{\amsbb{Q}}
+
+%%% definitions for the fancyref  package
+% prefixes
+% \newcommand*{\fancyrefapplabelprefix}{app}    % Appendix
+% \newcommand*{\fancyrefthmlabelprefix}{thm}    % Theorem
+% \newcommand*{\fancyreflemlabelprefix}{lem}    % Lemma
+% \newcommand*{\fancyrefcorlabelprefix}{cor}    % Corolary
+% \newcommand*{\fancyrefdeflabelprefix}{def}    % Definition
+% \newcommand*{\fancyrefproplabelprefix}{prop}    % Property
+% \newcommand*{\fancyrefexelabelprefix}{exe}    % Exercise
+% \newcommand*{\fancyrefpropolabelprefix}{propo}    % Proposition
+% label names
+% \frefformat{vario}{\fancyrefseclabelprefix}{Section~#1}
+% \frefformat{vario}{\fancyrefthmlabelprefix}{Theorem~#1}
+% \frefformat{vario}{\fancyreflemlabelprefix}{Lemma~#1}
+% \frefformat{vario}{\fancyrefcorlabelprefix}{Corollary~#1}
+% \frefformat{vario}{\fancyrefdeflabelprefix}{Definition~#1}
+% \frefformat{vario}{\fancyreffiglabelprefix}{Fig.~#1}
+% \frefformat{vario}{\fancyrefapplabelprefix}{Appendix~#1}
+% \frefformat{vario}{\fancyrefeqlabelprefix}{(#1)}
+% \frefformat{vario}{\fancyrefproplabelprefix}{Property~#1}
+% \frefformat{vario}{\fancyrefexelabelprefix}{Exercise~#1}
+%  \frefformat{vario}{\fancyrefpropolabelprefix}{Propo~#1}
+
+
+%%%% Marking pdf with colors
+\newcommand{\markred}[1]{{\color{red}#1}}   
+\newcommand{\markblue}[1]{{\color{blue}#1}}    
+
+% theorems, lemmata, etc.
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{rem}{Remark}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{dfn}[thm]{Definition}
+\newtheorem{prop}{Property} 
+\newtheorem{propo}[thm]{Proposition}
+
+
+
+
+

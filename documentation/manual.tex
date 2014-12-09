@@ -25,10 +25,10 @@
 \usepackage{paralist}
 \usepackage{verbatim}
 \usepackage[stretch=16,shrink=16,step=4]{microtype}
-% \usepackage{vmr-symbols-vecbold}
-% \usepackage{standard-macros}
+\usepackage{vmr-symbols-rndbold}
+\usepackage{standard-macros}
+\input{defs_giuseppe.tex}
 
-\newcommand{\todo}[1]{{\noindent\small\sffamily\slshape\color{red}[#1]}}
 \def\matn{\mathcal{N}}
 
 %*******************************************************************************
@@ -208,7 +208,8 @@ General info:
 
   \item Example: See Fig. \ref{fig:snr6eps03M2}
   
-  \item Channel model:
+  \item Channel model: Rayleigh block-fading channel with~$\txant$ transmit antennas and~$\rxant$ receive antennas that stays constant for $\cohtime$ channel uses.
+  The blocklength $\bl$ is an integer multiple of the coherence time $\cohtime$, i.e., $\bl=\tfdiv\cohtime$; here $\tfdiv$ denotes the number of independent time-frequency branches.
   
   \item Common input, output arguments: 
   

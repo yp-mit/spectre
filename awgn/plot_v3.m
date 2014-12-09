@@ -92,13 +92,7 @@ Capr = cap_awgn(P) + 0 .* Ns_cap;
 heps = -(1-epsil)*log2(1-epsil) - epsil*log2(epsil);
 fano = (cap_awgn(P) + heps ./ Ns) ./ (1-epsil);
 
-if P == 1
-	ymax = 0.55;
-elseif P == 10
-	ymax = 3.5;
-else
-	ymax = 1.1*cap_awgn(P);
-end;
+ymax = 1.1*cap_awgn(P);
 
 %% Converses
 figure;

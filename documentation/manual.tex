@@ -53,6 +53,9 @@ Version 0.0}
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Motivation}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{AWGN channel}
 
@@ -84,6 +87,7 @@ General info:
 
 
 \begin{figure}
+\centering
 \begin{verbatim}
 	> plot_v3(10, 0.001, 1, 100:20:1000)
 \end{verbatim}
@@ -157,7 +161,16 @@ See~\cite[Section IV.D]{PPV08}.
 
 \section{Energy-per-bit bounds}
 
-\textbf{TODO}.
+Format:
+\begin{verbatim}
+	function En0 = ach_nofb(Lms, epsil);
+	function lm = converse_nofb(en0, epsil);
+	function lm = normapx_nofb(en0, epsil);
+\end{verbatim}
+
+These functions return achievability/converse/normal approximation for the problem of minimal achievable ratio ${E\over
+N_0 \cdot \log_2 M}$, where $E$ is the total expended energy over infinite channel uses of AWGN channel with noise
+$N_0\over 2$.  These are bounds from~\cite[Theorems 2 and 3]{PPV10eneff}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %\chapter{Fading channels}

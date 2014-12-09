@@ -25,7 +25,6 @@
 \usepackage{graphicx}
 \usepackage{paralist}
 \usepackage{verbatim}
-\usepackage{cprotect} %For using \cprotect\section{\verb|aaa|}
 \usepackage[stretch=16,shrink=16,step=4]{microtype}
 % \usepackage{vmr-symbols-vecbold}
 % \usepackage{standard-macros}
@@ -85,15 +84,15 @@ General info:
 
 
 \begin{figure}
-\caption{Code and resulting picture for AWGN bounds}\label{fig:awgn_example}
 \begin{verbatim}
-	> plot_v3(....)
+	> plot_v3(10, 0.001, 1, 100:20:1000)
 \end{verbatim}
+\includegraphics[height=5cm]{plots/awgn_plot3_ex.pdf}
+\caption{Code and resulting picture for AWGN bounds}\label{fig:awgn_example}
 \end{figure}
 
-%\def\fname{\bgroup\cat
 
-\cprotect\section{Summary plot: \verb|plot_v3()|}
+\section{Summary plot: \texttt{plot\_v3()}}
 
 Definition:
 \begin{verbatim}
@@ -103,7 +102,7 @@ Definition:
 This function plots various bounds on the same figure. See Fig.~\ref{fig:awgn_example}.
 
 
-\cprotect\section{Achievability: \verb|shannon_ach2()|}
+\section{Achievability: \texttt{shannon\_ach2()}}
 
 Definition:
 \begin{verbatim}
@@ -112,7 +111,7 @@ Definition:
 
 Function computes Shannon's cone-packing achievability bound, see~\cite[(41)]{PPV08}.
 
-\cprotect\section{Achievability: \verb|kappabeta_ach()|}
+\section{Achievability: \texttt{kappabeta\_ach()}}
 Format:
 \begin{verbatim}
 	function Lms = kappabeta_ach(Ns, epsil, P, hack)
@@ -122,8 +121,7 @@ This computes the $\kappa\beta$ achievability bound, see left-hand inequality in
 use asymptotic approximation for $\kappa$. This increases the speed dramatically and is very precise already at $n=10$,
 see~\cite[(217)]{PPV08}. If $hack$ is not set, it defaults to $1$.
 
-\cprotect\section{Achievability: \verb|gallager_ach()|}
-
+\section{Achievability: \texttt{gallager\_ach()}}
 Format:
 \begin{verbatim}
 	function lm = gallager_ach(n, epsil, P)
@@ -131,7 +129,7 @@ Format:
 
 Computes Gallager's achievability bound, see~\cite[(44)]{PPV08}.
 
-\cprotect\section{Converse: \verb|converse()|}
+\section{Converse: \texttt{converse()}}
 Format:
 \begin{verbatim}
 	function Lms = converse(Ns, epsil, P)
@@ -140,7 +138,7 @@ Format:
 This computes the meta-converse lower bound with $Q_{Y^n} = \matn(0, 1+P)^n$, see right-hand inequality in~\cite[(218)]{PPV08}. 
 
 
-\cprotect\section{Normal approximation: \verb|normapx_awgn()|, \verb|normapx_biawgn()|}
+\section{Normal approximation: \texttt{normapx\_awgn(), normapx\_biawgn()}}
 
 Format:
 \begin{verbatim}
@@ -151,14 +149,18 @@ Fast and frequently very precise approximation to both achievability and convers
 	$$ \log M \approx n C - \sqrt{nV} Q^{-1}(\epsilon) + {1\over2} \log n $$
 
 
-\cprotect\section{Code database: \verb|plot_universe()|}
+\section{Code database: \texttt{plot\_universe()}}
+
+Code in \verb|universe/plot_universe()| compiles a comparative plot of normalized rate for different codes.
+See~\cite[Section IV.D]{PPV08}.
 
 
-\cprotect\section{Zero-rate (aka energy per bit, aka wideband regime)}
-\textbf{TODO.}
+\section{Energy-per-bit bounds}
+
+\textbf{TODO}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Fading channels}
+%\chapter{Fading channels}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,refs}

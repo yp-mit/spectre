@@ -1,6 +1,6 @@
 \documentclass[a4paper,11p]{memoir}
 
-\pdfoutput=1
+%\pdfoutput=1
 
 \newlength{\figwidth}
 % FINAL
@@ -15,7 +15,6 @@
 \definecolor{cites}{rgb}{0,0,0.8}   % blue
 
 \usepackage[colorlinks,hyperindex,linkcolor=links,citecolor=cites,urlcolor=urls]{hyperref} % generates colored links in pdf file
- 
 %---------------------------------------------------------
 % styles and other macros
 \usepackage[nosort]{cite}        
@@ -29,7 +28,7 @@
 % \usepackage{vmr-symbols-vecbold}
 % \usepackage{standard-macros}
 
-
+\newcommand{\todo}[1]{{\noindent\small\sffamily\slshape\color{red}[#1]}}
 \def\matn{\mathcal{N}}
 
 %*******************************************************************************
@@ -40,12 +39,20 @@
 
 \title{SPeCTrE\\
 Short Packet Communication Toolbox for Wireless Engineers\\[1cm]
-Version 0.0}
+Version 0.1}
+
+\author{Contributors (alphabetic order):\\
+Giuseppe Durisi, Johan \"Ostman, Yury Polyanskiy, Wei Yang,\dots}
+
 
 \maketitle
 
 \begin{abstract}
-  
+
+In his 1948 landmark paper, Claude E. Shannon demonstrated that communication with arbitrarily small probability of error is feasible if, and only if, the communication rate is below the so called channel capacity. To achieve this result, codes with large packet size (blocklength) must be employed. 
+In the nonasymptotic regime of finite packet size, the interplay between packet error probability, communication rate, and packet size can be described through closed-form achievability and converse bounds.
+The SPeCTrE toolbox provides numerical routines to evaluate these bounds for some channel models that occur in wireless communication applications. 
+The toolbox is under development and the participation of additional members of the information and communication theory communities in this endevour is warmly welcomed!
 \end{abstract}
 \newpage
 \tableofcontents
@@ -53,9 +60,22 @@ Version 0.0}
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Motivation}
+%
+  In his 1948 landmark paper, Claude E. Shannon demonstrated that communication with arbitrarily small probability of error is feasible if, and only if, the communication rate is below the so called channel capacity. 
+  To achieve this result, codes with large packet size (blocklength) must be employed. 
+ Shannon's channel capacity has served as a useful guideline to design wireless communication systems.
+
+In some applications, however, a more refined analysis of the interplay between packet-error probability, communication rate, and packet size is required.
+  This may occur in emerging applications, such as massive machine-to-machine communication for metering, traffic safety, and telecontrol of industrial plants, together with real-time data transfer to enable remote wireless control (tactile internet), which may require the exchange of short packets, sometimes under stringent latency and reliability constraints.
+  
+Finite-blocklength information theory, a subfield of information theory that benefitted from seminal contributions from Shannon, Strassen, and Dobrushin, among others, is currently a very active field of research. 
+Nonasymptotic achievability and converse bounds on the \emph{maximum coding rate} achievable for a given packet size and packet error probability are now available for several channel models that are relevant for wireless communication systems, such as the AWGN channel, the quasi-static Rayleigh fading channel, and the Rayleigh block-fading channel.
+The purpose of this toolbox is to provide numerical routines for the computation of these bounds.
+In the next chapters, we provide a bare-bone manual on the routines available in this toolbox.
 
 
 
+% subsection contributors (end)
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{AWGN channel}
 
@@ -91,7 +111,7 @@ General info:
 \begin{verbatim}
 	> plot_v3(10, 0.001, 1, 100:20:1000)
 \end{verbatim}
-\includegraphics[height=5cm]{plots/awgn_plot3_ex.pdf}
+\includegraphics[height=5cm]{plots/awgn_plot3_ex}
 \caption{Code and resulting picture for AWGN bounds}\label{fig:awgn_example}
 \end{figure}
 
@@ -173,7 +193,37 @@ N_0 \cdot \log_2 M}$, where $E$ is the total expended energy over infinite chann
 $N_0\over 2$.  These are bounds from~\cite[Theorems 2 and 3]{PPV10eneff}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-%\chapter{Fading channels}
+\chapter{Fading channels}
+
+
+\section{Rayleigh block-fading channel with no a priori channel state information} % (fold)
+\label{sec:rayleigh_block_fading_channel_with_no_channel_state_information}
+General info:
+\begin{itemize}
+  \item Maintainer: G. Durisi \url{<durisi@chalmers.se>}
+  
+  \item Contributors: G. Durisi, J. \"Ostman, W. Yang
+
+  \item Main reference: \cite{durisi14-12a} 
+
+  \item Example: See Fig. \ref{fig:snr6eps03M2}
+  
+  \item Channel model:
+  
+  \item Common input, output arguments: 
+  
+\end{itemize}
+% section rayleigh_block_fading_channel_with_no_channel_state_information (end)
+
+   \begin{figure}[t]
+    \centering
+      \includegraphics[width=.9\textwidth]{./plots/snr6eps03M2.pdf}
+    \caption{Maximum coding rate $R^\ast(n_c,l,\epsilon,\rho)$ for $2\times 2$ MIMO system operating over a Rayleigh block-fading channel with coherence time $n_c$.
+    Each packet spans~$l$ coherence intervals. The packet size is $168$ channel uses. The packet error rate is $\epsilon=10^{-3}$.
+    The SNR is $\rho=6$ dB.}
+    \label{fig:snr6eps03M2}
+  \end{figure}
+` '
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,refs}

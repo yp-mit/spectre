@@ -5,7 +5,7 @@ function [R,current_eps]=DT_USTM_MxM(snrdB,T,L,Mant,epsilon,prec,filename)
 % channel with no CSI at transmitter and receiver. The bound assumes that
 % USTM is chosen as input distribution 
 % snrdB: SNR in dB
-% Mant: number of transmit antennas and number of receive antennas (Mant x Mant setting)
+% Mant: number of transmit antennas and number of receive antennas (square setting)
 % T: size of coherence interval 
 % L: number of independent coherence intervals; L*T is the blocklength
 % epsilon: maximal block error probability
@@ -20,7 +20,9 @@ function [R,current_eps]=DT_USTM_MxM(snrdB,T,L,Mant,epsilon,prec,filename)
 %                       SET-UP PARAMETERS
 %-------------------------------------------------------------------
 
-SAVE=1; % if this flag is active the samples of the information density are saved for possibe further refinemes
+SAVE=0; % if this flag is active the samples of the information density are saved for possibe further refinemes
+CLUSTER=0;
+MAT=0;
 
 Mt=Mant; %number of transmit antennas
 Mr=Mant; %number of receive antennas
@@ -35,8 +37,12 @@ I = zeros(K,1); %allocate for the montecarlo runs
 %                       CONSTANTS
 %-------------------------------------------------------------------
 rho_tilde = T*rho/Mt; 
-D= [(1+rho_tilde)*eye(Mt), zeros(Mt,T-Mt);
+% D= [(1+rho_tilde)*eye(Mt), zeros(Mt,T-Mt);
+%     zeros(T-Mt,Mt), eye(T-Mt)]; % D matrix (covariance matrix of equivalent noise)
+D= [sqrt(1+rho_tilde)*eye(Mt), zeros(Mt,T-Mt);
     zeros(T-Mt,Mt), eye(T-Mt)]; % D matrix (covariance matrix of equivalent noise)
+
+
 
 lambda=1+rho_tilde;
 lambda1=1/lambda;
@@ -52,32 +58,31 @@ P=max(Mt,Mr);
 %                       MONTE CARLO
 %-------------------------------------------------------------------
 
-   
+if (CLUSTER==1),
+    [~, tmpdir] = system('echo $TMPDIR');
+    matlabpool close force;
+    sched = findResource('scheduler', 'configuration', 'local');
+    sched.DataLocation = tmpdir(1:end-1);
+    matlabpool open local;
+end  
 
-for k = 1:K %do K montecarlo runs
-    
+tic
+
+for k = 1:K %do K montecarlo runs 
 
         i_L = 0;   
   
         for l = 1:L %Create each realization
             %GENERATE Z
             Z = randn(T,Mr)*sqrt(.5)+1i*randn(T,Mr)*sqrt(.5);
-            
-            %COMPUTE EVERYTHING THAT HAS TO DO WITH SINGULAR VALUES
-            Sigma = abs(eig(Z'*D*Z));
-            Sigma=sort(Sigma,1,'descend');
+            Sigma=svd(D*Z).^2; 
             M = createM(Mt,Mr,P,T,Sigma,lambda2); %create  matrix
             detM = det(M); %get the determinant
             vanderTerm = det(vander(Sigma)); %get the determinant of the vandermode matrix
-            TraceZ=trace(Z'*Z);
-         
-        
+            TraceZ=trace(Z'*Z);      
             logDetSigma = (T-Mr)*sum(log(Sigma));% compute det(Sigma^(T-M))
-            
             logdetM=log(detM);
-
-            % GET INFORMATION DENSITY
-            i = const- TraceZ  + lambda1*sum(Sigma) - log(detM) + log(vanderTerm) + logDetSigma;%Information density for time l (i(x_l, y_l)
+            i = const- TraceZ  + lambda1*sum(Sigma) - log(detM) + log(vanderTerm) + logDetSigma;
             i_L = i_L + i; %add it to the total i_L 
             
         end
@@ -86,17 +91,31 @@ for k = 1:K %do K montecarlo runs
         
 end
 
+actual_time=toc/60;
 
-if (SAVE==1)
+msg=sprintf('time needed to generate samples: %f min', actual_time);
+disp(msg); 
 
+%disp('samples generated')
+
+if (SAVE==1) 
+  if (MAT==1)
+    save(filename,'I')
+  else
     save(filename,'I','-ascii','-append')
+  end
 end
 
+%disp('samples saved')
+
+if (CLUSTER==1),
+    matlabpool close;
+end
 
 %---------------------------------------
 %   START SEARCHING FOR THE RATE
 %---------------------------------------  
-if (SAVE==1)
+if (SAVE==1 && MAT==0)
 
     I=load(filename);
 end

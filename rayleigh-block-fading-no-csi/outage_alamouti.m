@@ -13,8 +13,7 @@ function [Cout,current_eps]=outage_capacity_alamouti(snrdb,epsilon,tfdiv,prec,fi
 % SET-UP parameters
 %%%%%%%%%%%%%%%%%%%%%%%%
 
-SAVE=0;
-CLUSTER=1;
+SAVE=1;
 
 mt=2; %number of transmit antennas
 
@@ -35,18 +34,11 @@ norm=sqrt(0.5);
 % MONTECARLO: generation of samples of instantaneous mutual information
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if (CLUSTER==1),
-    [~, tmpdir] = system('echo $TMPDIR');
-    matlabpool close force;
-    sched = findResource('scheduler', 'configuration', 'local');
-    sched.DataLocation = tmpdir(1:end-1);
-    matlabpool open local;
-end
+
 
 mi=zeros(K,1);
 
-%parfor ii=1:K,
-parfor ii=1:K,
+for ii=1:K,
     
     H=(randn(mt,mr,tfdiv)+1i*randn(mt,mr,tfdiv))*norm;
     
@@ -54,7 +46,6 @@ parfor ii=1:K,
     
         mi(ii)=mi(ii)+log2(1+rho*abs(trace(H(:,:,k)*H(:,:,k)')));
        
-       %mi(ii)=mi(ii)+log2(abs(det(eye(mr)+(rho/mt)*(H(:,:,k)*H(:,:,k)'))));
     end
     
 end
@@ -62,9 +53,6 @@ end
 mi=mi/tfdiv;
 
 
-if (CLUSTER==1),
-    matlabpool close;
-end
 
 if (SAVE==1)
     save(filename,'mi','-ascii','-append')

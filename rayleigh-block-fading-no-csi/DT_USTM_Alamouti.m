@@ -1,4 +1,3 @@
-
 function [R,current_eps]=DT_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
 %
 % Function to compute the DT lower bound for a 2x2 Rayleigh block-fading
@@ -19,20 +18,11 @@ function [R,current_eps]=DT_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
 
 SAVE=1;
 MAT=1;
-CLUSTER=1;
-
 
 K=2^prec;
-
 rho = 10.^(snrdB/10); % SNR in linear scale
 
-%     N = M; % receive antennas 
-%     Lmax = n/(N+M); %find the largest number of coherence times to simulate
-%     L =  1:Lmax; %all # coherence times of interest
-%     Ttmp = n./L; %get corresponding coherence times
-%     indx = find((rem(Ttmp,1) == 0) == 1); %only take integer T
-%     L=L(indx);
-%     coherence_times = n./L;% coherence times
+%   
 %-------------------------------------------------------------------
 %                       MONTE CARLO SIMULATION
 %-------------------------------------------------------------------
@@ -57,17 +47,8 @@ norm=sqrt(.5);
 %                       MONTE CARLO
 %-------------------------------------------------------------------
 
-tic
-
-if (CLUSTER==1),
-    [~, tmpdir] = system('echo $TMPDIR');
-    matlabpool close force;
-    sched = findResource('scheduler', 'configuration', 'local');
-    sched.DataLocation = tmpdir(1:end-1);
-    matlabpool open local;
-end
     
-parfor k = 1:K %do K montecarlo runs
+for k = 1:K %do K montecarlo runs
 
         Z = randn(T,Mr,L)*norm+1i*randn(T,Mr,L)*norm;
         
@@ -95,33 +76,6 @@ parfor k = 1:K %do K montecarlo runs
             
             Sigma=Sigma*lambda2;
             
-            % now compute the singular values of the Y_tilde matrix and keep only first and third
-            
-            %%% Wei's implementation
-            % M1=[gammainc(Sigma(1), T-5,'scaledlower')/Sigma(1) ,  gammainc(Sigma(1), T-4,'scaledlower')/(T-4), gammainc(Sigma(2), T-5,'scaledlower')/Sigma(2), gammainc(Sigma(2), T-4,'scaledlower')/(T-4) ;
-   %                          (T-2)*Sigma(1), Sigma(1)^2,(T-2)*Sigma(2), Sigma(2)^2 ;
-   %                          T-3, Sigma(1),T-3, Sigma(2);
-   %                          (T-4)/Sigma(1),1,(T-4)/Sigma(2),1];
-   %
-   %          d1=det(M1);
-   %
-   %          log_exp_sum=log(d1)- 4*log(Sigma(1)-Sigma(2));  
-   
-   %          i = - TraceZ  +sum(Sigma_alt) - log(T-1)-log(T-2)-log(T-3)-log(T-4) - log_exp_sum; 
-               
-
-            %%% Giuseppe's implementation 1
-            
-            % norm=1;
-     %
-     %        M=[exp(Sigma(1)-norm*Sigma(1))*gammainc(Sigma(1), T-5)/Sigma(1)^(T-4) ,  exp(Sigma(1)-norm*Sigma(1))*gammainc(Sigma(1), T-4)/Sigma(1)^(T-4), exp(Sigma(2)-norm*Sigma(1))*gammainc(Sigma(2), T-5)/Sigma(2)^(T-4), exp(Sigma(2)-norm*Sigma(1))*gammainc(Sigma(2), T-4)/Sigma(2)^(T-4) ;
-     %                (T-2)*Sigma(1), Sigma(1)^2,(T-2)*Sigma(2), Sigma(2)^2 ;
-     %                T-3, Sigma(1),T-3, Sigma(2);
-     %                (T-4)/Sigma(1),1,(T-4)/Sigma(2),1]
-     
-             %log_exp_sum = log(d) -4*log(Sigma(1)-Sigma(2))-(T-4)*log(Sigma(1))+Sigma(1);
-   
-             % Giuseppe's implementation 2
              
           if (T>4),  
                
@@ -152,28 +106,11 @@ parfor k = 1:K %do K montecarlo runs
             
             i_L = i_L + i; %add it to the total i_L 
             
-%             if isnan(i)
-%                 sprintf('i error')
-%             end
-%             if isnan(det(M))
-%                 sprintf('error')
-%             end
         end
 
         I(k) =  i_L; %put all computations on a pile to compute the average later
         
         
-end
-
-actual_time=toc/60;
-
-msg=sprintf('time needed to generate samples: %f min', actual_time);
-disp(msg); 
-
-if (CLUSTER==0)
-  est_time=actual_time*2^(23-prec)/6;
-  msg=sprintf('expected cluster time: %f min', est_time);
-  disp(msg);
 end
   
 
@@ -186,9 +123,6 @@ if (SAVE==1)
   end
 end
 
-if (CLUSTER==1),
-    matlabpool close;
-end
 
 
 %---------------------------------------

@@ -1,18 +1,18 @@
-function [Cout,current_eps]=outage_capacity(snrdb,epsilon,mt,mr,tfdiv,pow_all,prec)
+function [Cout,current_eps]=outage_capacity(snrdb,epsilon,Mt,Mr,L,pow_all,prec)
 %
 %
 % compute outage capacity of a block-memoryless MIMO Rayleigh fading
 % channel
 % snrdb: snr in dB
 % epsilon: outage probability
-% mt: number of transmit antennas
-% mr: number of receive antennas
-% tfdiv: number of time_frequency diversity branches
+% Mt: number of transmit antennas
+% Mr: number of receive antennas
+% L: number of time_frequency diversity branches
 % prec: it controls the number of samples for the Monte Carlo simulation; Note nsamples=2^prec; One should have nsamples>> 100 x 1/epsilon
-% pow_all: power allocation matrix. A mt-1 x tfdiv matrices containing the
-% eigenvalues of the input covariance matrix Q_k/snr, k=1,...,tfdiv, apart from
+% pow_all: power allocation matrix. A Mt-1 x L matrices containing the
+% eigenvalues of the input covariance matrix Q_k/snr, k=1,...,L, apart from
 % the last one, whose value is determined by the  power constraint
-% tr(Q_k)/snr=1. For the case mt=1, just pass a 1 x tfdiv all zero matrix 
+% tr(Q_k)/snr=1. For the case Mt=1, just pass a 1 x L all zero matrix 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -28,13 +28,13 @@ const=sqrt(0.5);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-D=zeros(mt,mt,tfdiv);
+D=zeros(Mt,Mt,L);
 
-for k=1:tfdiv,
+for k=1:L,
     
-    D(1:mt-1,1:mt-1,k)=diag(pow_all(:,k));
+    D(1:Mt-1,1:Mt-1,k)=diag(pow_all(:,k));
     
-    D(mt,mt,k)=1-sum(pow_all(:,k));
+    D(Mt,Mr,k)=1-sum(pow_all(:,k));
     
 end
 
@@ -49,13 +49,13 @@ D=D*rho;
 mi=zeros(1,K);
 
 for ii=1:K,    
-    H=(randn(mt,mr,tfdiv)+1i*randn(mt,mr,tfdiv))*const;
-    for k=1:tfdiv
-        mi(ii)=mi(ii)+log2(abs(det(eye(mr)+(H(:,:,k)')*D(:,:,k)*H(:,:,k))));
+    H=(randn(Mt,Mr,L)+1i*randn(Mt,Mr,L))*const;
+    for k=1:L
+        mi(ii)=mi(ii)+log2(abs(det(eye(Mr)+(H(:,:,k)')*D(:,:,k)*H(:,:,k))));
     end
 end
 
-mi=mi/tfdiv;
+mi=mi/L;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Computation outage capacity

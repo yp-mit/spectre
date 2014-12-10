@@ -212,19 +212,101 @@ General info:
   The blocklength $\bl$ is an integer multiple of the coherence time $\cohtime$, i.e., $\bl=\tfdiv\cohtime$; here $\tfdiv$ denotes the number of independent time-frequency branches.
   
   \item Common input, output arguments: 
+  \begin{itemize}
+    \item \verb|snrdB| -- SNR in dB
+    \item \verb|T| -- channel coherence time (expressed in channel uses)
+    \item \verb|L| -- number of independent fading realizations spanned by each codeword
+    \item \verb|Mt| -- number of tranmsmit antennas
+    \item \verb|Mr| -- number of receve antennas
+    \item \verb|epsilon| -- packet error rate (block error rate)
+    \item \verb|prec| -- $\log_2$ of the number of samples used in the Monte-Carlo step; one should have $2^{\verb|prec|} \gg 100 / \verb|epsilon|$
+    \item \verb|filename| data file where the samples of the information density are saved for possible future refinements (provided that the flag \verb|SAVE| is set)
+    \item \verb|R| -- estimate of the maximum coding rate
+    \item \verb|current_eps| actual bound on the packet error rate (it may  deviate from |epsilon| if \verb|prec| is not chosen appropriately)
+  \end{itemize}
+%  [R,current_eps]=DT_USTM_NxM(snrdB,T,L,Mt,Mr,epsilon,prec,filename)
   
 \end{itemize}
 % section rayleigh_block_fading_channel_with_no_channel_state_information (end)
 
    \begin{figure}[t]
     \centering
-      \includegraphics[width=.9\textwidth]{./plots/snr6eps03M2.pdf}
+      \includegraphics[width=.9\textwidth]{./plots/snr6eps03M2}
     \caption{Maximum coding rate $R^\ast(n_c,l,\epsilon,\rho)$ for $2\times 2$ MIMO system operating over a Rayleigh block-fading channel with coherence time $n_c$.
     Each packet spans~$l$ coherence intervals. The packet size is $168$ channel uses. The packet error rate is $\epsilon=10^{-3}$.
     The SNR is $\rho=6$ dB.}
     \label{fig:snr6eps03M2}
   \end{figure}
-` '
+  
+\subsection{Achievability bounds: \texttt{DT\_USTM\_NxM()}, \texttt{DT\_USTM\_MxM()}} % (fold)
+\label{sec:achievability_bound_dt_ustm_nxm}
+%
+Format:
+\begin{verbatim}
+function [R,current_eps]
+=DT_USTM_NxM(snrdB,T,L,Mt,Mr,epsilon,prec,filename);
+
+function [R,current_eps]
+=DT_USTM_MxM(snrdB,T,L,Mt,epsilon,prec,filename);
+\end{verbatim}
+
+These two functions compute the USTM-DT achievability bound~\cite[Th.~3]{durisi14-12a} for the case $\txant< \rxant$ and $\txant=\rxant$, respectively. These two cases are distinguished because different normalizations are used to avoid numerical instabilities.
+
+\subsection{Converse bounds: \texttt{MC\_USTM\_2x2\_q1x2()}, \texttt{MC\_USTM\_2x2\_q\_2x2()}, \texttt{MC\_USTM\_4x4\_q\_Mx4}} % (fold)
+\label{sec:converse_bounds__texttt}
+
+Format
+
+\begin{verbatim}
+
+function [R,current_eps,current_prec]
+=MC_USTM_2x2_q1x2(snrdB,T,L,epsilon,prec,pow_all,filename)
+
+function [R,current_eps,current_prec]
+=MC_USTM_2x2_q2x2(snrdB,T,L,Mt,epsilon,prec,pow_all,filename)
+
+function [R,current_eps,current_prec]
+=MC_USTM_4x4_qMx4(snrdB,Mt,T,L,epsilon,prec,pow_all,filename)
+\end{verbatim}
+
+These three functions compute the right-hand side of~\cite[Eq.~(41)]{durisi14-12a} for fixed input diagonal matrices $\{\matSigma_k\}_{k=1}^{\tfdiv}$ and fixed number of effectively used antennas $\txantalt$, for the case $\txant=\rxant=2$ and $\txant=\rxant=4$. 
+To obtain the actual converse bound, a further optimization over these parameters need to be performed. In the function, the parameter \verb|pow_all| is related to the diagonal entries of the matrices $\{\matSigma_k\}_{k=1}^{\tfdiv}$. For the $\txant=\rxant=2$ case, \verb|pow_all| is an $\tfdiv$-dimensional vector, whose entries are in $[0,0.5]$. Indeed, the particular formulation of the power constraint in~\cite[Eq.~(41)]{durisi14-12a} implies that the other entry is uniquely determined from the first one.
+For the $4\times 4$ case, the code provided assume that the optimization in~\cite[Eq.~(41)]{durisi14-12a} is restricted only to $\{\matSigma_k\}_{k=1}^{\tfdiv}$ of the form $\matSigma_1=\dots=\matSigma_\tfdiv=\matSigma$. In this case, \verb|pow_all| is a $4$-dimensional vector that contains the diagonal entries of $\matSigma$.
+
+
+\subsection{Alamouti: DT\_USTM\_Alamouti(), MC\_USTM\_Alamouti()} % (fold)
+\label{sec:alamouti}
+
+Format
+
+\begin{verbatim}
+function [R,current_eps]=MC_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
+
+function [R,current_eps]=DT_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
+
+\end{verbatim}
+
+Compute achievability and converse bounds for a $2\times 2$ MIMO system with Alamouti used as inner code
+
+
+\subsection{Outage: \texttt{outage\_capacity()}, \texttt{outage\_capacity\_alamouti()} } % (fold)
+\label{sec:outage}
+
+\begin{verbatim}
+  function [Cout,current_eps]=outage_capacity_alamouti(snrdb,epsilon,L,prec,filename)
+  
+  [Cout,current_eps]=outage_capacity(snrdB,epsilon,Mt,Mr,L,pow_all,prec)
+  
+\end{verbatim}
+
+Functions that compute the outage capacity and the outage rate with Alamouti. In the second function, \verb|pow_all| is a power-allocation matrix, i.e.,  \verb|Mt-1 x L| matrix containing the
+first \verb|Mt|$-1$ eigenvalues of the input covariance matrices corresponding to each coherent block. The last eigenvalue follows from the power constraint.
+% the last one, whose value is determined by the  power constraint
+% tr(Q_k)/snr=1. For the case Mt=1, just pass a 1 x L all zero matrix 
+
+
+% subsection outage_outage_capacity()_outage_capacity_alamouti()_ (end)
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,refs}

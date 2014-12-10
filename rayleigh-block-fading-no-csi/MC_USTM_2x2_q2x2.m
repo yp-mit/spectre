@@ -1,45 +1,20 @@
-function [R,current_eps,current_prec]=MC_USTM_2x2_Qmimo(snrdB,T,L,M,epsilon,prec,pow_all,filename)
+function [R,current_eps,current_prec]=MC_USTM_2x2_q2x2(snrdB,T,L,Mt,epsilon,prec,pow_all,filename)
 %
-% Metaconverse upper bound based on an auxiliary output distribution induced by a 2xT USTM input distribution
-%
-%
-% %
-%   snrdB: SNR in dB
-%
-%   T: size of coherence interval
-%
-%   L: number of independent coherence intervals
-%
-%   epsilon: average block error probability
-%
-%   prec: it controls the number of samples for the Monte Carlo simulation; Note nsamples=2^prec; One should have nsamples>> 100 x 1/epsilon
-%
-%   lpow_all: L-dimensional power allocation vector: 0.5 means equal power on
-% each antenna; 0 means no power on the second antenna; Note that each entry of pow_all can be taken
-% to be between 0 and 0.5 without loss of generality.
-%
-%   filename: data file where the samples of the information density are saved for possible future refinements. 
-%
-% The outputs of the program are
-% R: R^*(T,L,current_eps,snrdB)
-% current_eps: actual upper bound on the error probability for the given
-% code
-% current_prec: returns log2 of the number of samples used to determine R.
+
 %-------------------------------------------------------------------
 %                       SET-UP PARAMETERS
 %-------------------------------------------------------------------
-
-SAVE=1; % append samples of information density to the file "filename"
-
+SAVE=1;
+MAT=0; % if set, the .mat extension is used to save the file
 
 K = 2^prec; % number of monte carlo simulations (at least 100 x 1/epsilon)
 rho = 10.^(snrdB/10); % SNR in linear scale
-Mt=M;
-Mr=M;
+Mr=Mt;
 %-------------------------------------------------------------------
 %                       MONTE CARLO SIMULATION
 %-------------------------------------------------------------------
 Ip = zeros(K,1); %allocate for the montecarlo runs
+% Iq = zeros(K,1); %allocate for the montecarlo runs
 %-------------------------------------------------------------------
 %                       CONSTANTS
 %-------------------------------------------------------------------
@@ -57,35 +32,43 @@ P=max(Mt,Mr);
 %                       MONTE CARLO
 %-------------------------------------------------------------------
 
+noise_norm=sqrt(.5);
 
-for k=1:K
+%parfor k = 1:K %do K montecarlo runs
+% tic
+parfor k=1:K
     
 
-        i_Lp = 0;   
+        i_Lp = 0;  
+        
+        Z = randn(T,Mr,L)*noise_norm+1i*randn(T,Mr,L)*noise_norm; 
 
         for l = 1:L %Create each realization
             
             x1=rho_tilde*(2*pow_all(l));
             x2=rho_tilde*2*(1-pow_all(l));
 
-            D= [diag([1+x1, 1+x2]), zeros(Mt,T-Mt);
+            D= [diag([sqrt(1+x1), sqrt(1+x2)]), zeros(Mt,T-Mt);
     zeros(T-Mt,Mt), eye(T-Mt)]; % D matrix (covariance matrix of equivalent noise)
-
             
             c1 = Mt*(T-Mt)*log(lambda2)+Mr*log(lambda/(1+x1))+Mr*log(lambda/(1+x2)); % SNR constant
             const = c1+c2;
 
             
             % compute samples of information density log dPy|x/dQy for y~ Py|x
-            Z = randn(T,Mr)*sqrt(.5)+1i*randn(T,Mr)*sqrt(.5);
-            Sigma = abs(eig(Z'*D*Z));
-            Sigma=sort(Sigma,1,'descend');
-            M = createM(Mt,Mr,P,T,Sigma,lambda2); %create  matrix
+            
+            Sigma=svd(D*Z(:,:,l)).^2; 
+            SigmaAlt=Sigma*lambda2;
+           % M = createM(Mt,Mr,P,T,Sigma,lambda2); %create  matrix
+            
+            M=[Sigma(1)*gammainc(SigmaAlt(1),T-3), gammainc(SigmaAlt(1),T-2); ...
+            Sigma(2)*gammainc(SigmaAlt(2),T-3), gammainc(SigmaAlt(2),T-2)];
+            
             detM = det(M); %get the determinant
             vanderTerm = det(vander(Sigma)); %get the determinant of the vandermode matrix
             logdetM=log(detM);
 
-            TraceZ=trace(Z'*Z);
+            TraceZ=abs(trace(Z(:,:,l)'*Z(:,:,l)));
             logDetSigma = (T-Mr)*sum(log(Sigma));% compute det(Sigma^(T-M))
             
             ip = const- TraceZ  + lambda1*sum(Sigma) - logdetM + log(vanderTerm) + logDetSigma;%Information density for time l (i(x_l, y_l)
@@ -96,13 +79,19 @@ for k=1:K
 
         Ip(k) =  i_Lp; %put all computations on a pile to compute the average later
 end
+  
 
 
-
-if (SAVE==1)
-
+if (SAVE==1) 
+  if (MAT==1)
+    save(filename,'Ip')
+  else
     save(filename,'Ip','-ascii','-append')
+  end
 end
+
+
+
 
 
 %---------------------------------------
@@ -110,7 +99,7 @@ end
 %--------------------------------------- 
 
 % load saved data (to account for append possibilities)
-if (SAVE==1)
+if (SAVE==1 && MAT==0)
 
     Ip=load(filename);
 end
@@ -157,20 +146,46 @@ if(current_eps<epsilon)
 end
 
 % now perform linear search
-Rvect=zeros(1,K-index+1);
+%Rvect=zeros(1,K-index+1);
+
+% if (CLUSTER==1),
+%     [~, tmpdir] = system('echo $TMPDIR');
+%     matlabpool close force;
+%     sched = findResource('scheduler', 'configuration', 'local');
+%     sched.DataLocation = tmpdir(1:end-1);
+%     matlabpool open local;
+% end
 
 
-for ii=1:K-index+1,
+%exact search
+% for ii=1:K-index+1,
+%
+%     current_rate=Ip(ii+index-1)-log(sum(Ip<=Ip(ii+index-1))/K-epsilon);
+%
+%     Rvect(ii)=current_rate;
+%
+% end
+% R=min(Rvect)/(L*T*log(2));
     
-    current_rate=Ip(ii+index-1)-log(sum(Ip<=Ip(ii+index-1))/K-epsilon);
-    
-    Rvect(ii)=current_rate;
-    
+%faster search (potentially less tight)
+
+count=0;
+
+R=Ip(index)-log(sum(Ip<=Ip(index))/K-epsilon);
+
+for ii=1:K-index+1, 
+    current_rate=Ip(ii+index-1)-log(sum(Ip<=Ip(ii+index-1))/K-epsilon);  
+    if current_rate<= R
+        R=current_rate;
+     else
+       count=count+1;
+    end
+     
+    if count==20,
+      break
+    end
 end
-    
-
-
-R=min(Rvect)/(L*T*log(2));
+R=R/(L*T*log(2)); 
 
 end
 

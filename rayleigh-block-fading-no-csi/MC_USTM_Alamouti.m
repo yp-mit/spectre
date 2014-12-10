@@ -6,7 +6,6 @@ function [R,current_eps]=MC_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
 %-------------------------------------------------------------------
 
 SAVE=1;
-CLUSTER=1;
 MAT=1;
 
 K = 2^prec; % number of monte carlo simulations (at least 100 x 1/epsilon)
@@ -40,17 +39,10 @@ zeros(T-Mt,Mt), eye(T-Mt)]; % D matrix (covariance matrix of equivalent noise)
 
 %tic
 
-if (CLUSTER==1),
-    [~, tmpdir] = system('echo $TMPDIR');
-    matlabpool close force;
-    sched = findResource('scheduler', 'configuration', 'local');
-    sched.DataLocation = tmpdir(1:end-1);
-    matlabpool open local;
-end
 
 norm=sqrt(.5);
-tic
-parfor k=1:K
+
+for k=1:K
     
 
         i_L = 0; 
@@ -81,16 +73,6 @@ parfor k=1:K
           
           Sigma=Sigma*lambda2;
       
-           % Giuseppe's implementation 2
-             
-           % M=[gammainc(Sigma(1), T-5),  gammainc(Sigma(1), T-4), exp(Sigma(2)-Sigma(1))*gammainc(Sigma(2), T-5)/(Sigma(2)/Sigma(1))^(T-4), exp(Sigma(2)-Sigma(1))*gammainc(Sigma(2), T-4)/(Sigma(2)/Sigma(1))^(T-4) ;
- %           (T-2)*Sigma(1), Sigma(1)^2,(T-2)*Sigma(2), Sigma(2)^2 ;
- %           T-3, Sigma(1),T-3, Sigma(2);
- %           (T-4)/Sigma(1),1,(T-4)/Sigma(2),1];
- %
- %          d=det(M);
- %
- %          log_exp_sum = log(d) -4*log(Sigma(1)-Sigma(2))-(T-4)*log(Sigma(1))+Sigma(1);
         
            if (T>4),  
       
@@ -122,23 +104,6 @@ parfor k=1:K
 
         Ip(k) =  i_L; %put all computations on a pile to compute the average later
 end
-
-actual_time=toc/60;
-
-msg=sprintf('time needed to generate samples: %f min', actual_time);
-disp(msg); 
-
-if (CLUSTER==0)
-  est_time=actual_time*2^(23-prec)/6;
-  msg=sprintf('expected cluster time: %f min', est_time);
-  disp(msg);
-end
-
-if (CLUSTER==1),
-    matlabpool close;
-end
-  
-
 
 if (SAVE==1) 
   if (MAT==1)
@@ -237,9 +202,6 @@ end
 R=R/(L*T*log(2)); 
 
     
-%toc
-
-%R=min(Rvect)/(L*T*log(2));
 
 end
 

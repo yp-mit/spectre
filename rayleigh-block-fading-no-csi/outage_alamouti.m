@@ -1,7 +1,7 @@
-function [Cout,current_eps]=outage_capacity_alamouti(snrdb,epsilon,tfdiv,prec,filename)
+function [Cout,current_eps]=outage_alamouti(snrdb,epsilon,tfdiv,prec,filename)
 %
 %
-% compute outage capacity of a 2x2 block-memoryless MIMO Rayleigh fading
+% compute outage mutual information of a 2x2 block-memoryless MIMO Rayleigh fading
 % channel when an Alamouti inner code is used
 % snrdb: snr in dB
 % epsilon: outage probability

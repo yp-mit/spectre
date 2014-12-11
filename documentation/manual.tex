@@ -20,16 +20,27 @@
 \usepackage[nosort]{cite}        
 \usepackage{url} 
 \usepackage[intlimits]{amsmath}
-\usepackage{bbm}
+%\usepackage{bbm}
 \usepackage{graphicx}
 \usepackage{paralist}
 \usepackage{verbatim}
+\usepackage{amsfonts}
 \usepackage[stretch=16,shrink=16,step=4]{microtype}
-\usepackage{vmr-symbols-rndbold}
-\usepackage{standard-macros}
-\input{defs_giuseppe.tex}
+%\usepackage{vmr-symbols-rndbold}
+%\usepackage{standard-macros}
+%\input{defs_giuseppe.tex}
 
 \def\matn{\mathcal{N}}
+%\newcommand{\safemath}[2]{\newcommand{#1}{\ensuremath{#2}\xspace}}
+\def\txant{m_{\mathrm{t}}} %number of transmit antennas
+\def\txantalt{\widetilde{m}_{\mathrm{t}}}
+\def\rxant{m_{\mathrm{r}}} %number of receive antennas
+\def\cohtime{n_{\mathrm{c}}} %time-frequency coherence length (in symbol times)
+\def\bl{n} %blocklength
+\def\err{\epsilon} %error rate
+\def\snr{\rho} %snr
+\def\tfdiv{l}  %amount of time-frequency diversity available (number of independent fading realizations observed over a codeword)]
+\def\ncod{M}
 
 %*******************************************************************************
 %!TEX encoding =  
@@ -193,11 +204,8 @@ N_0 \cdot \log_2 M}$, where $E$ is the total expended energy over infinite chann
 $N_0\over 2$.  These are bounds from~\cite[Theorems 2 and 3]{PPV10eneff}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Fading channels}
+\chapter{Block-memoryless fading channels: no CSI, Rayleigh}
 
-
-\section{Rayleigh block-fading channel with no a priori channel state information} % (fold)
-\label{sec:rayleigh_block_fading_channel_with_no_channel_state_information}
 General info:
 \begin{itemize}
   \item Maintainer: G. Durisi \url{<durisi@chalmers.se>}
@@ -206,10 +214,26 @@ General info:
 
   \item Main reference: \cite{durisi14-12a} 
 
-  \item Example: See Fig. \ref{fig:snr6eps03M2}
+  \item Example: See Fig. \ref{fig:snr6eps03M2}.
   
-  \item Channel model: Rayleigh block-fading channel with~$\txant$ transmit antennas and~$\rxant$ receive antennas that stays constant for $\cohtime$ channel uses.
-  The blocklength $\bl$ is an integer multiple of the coherence time $\cohtime$, i.e., $\bl=\tfdiv\cohtime$; here $\tfdiv$ denotes the number of independent time-frequency branches.
+  \item Channel model: Rayleigh block-fading channel with~$\txant$ 
+  transmit antennas and~$\rxant$ receive antennas that stays constant for
+   $\cohtime$ channel uses.
+  The blocklength $\bl$ is an integer multiple of the coherence time $\cohtime$, i.e., $\bl=\tfdiv\cohtime$; here $\tfdiv$ denotes the number of independent time-frequency branches. The power constraint is defined per coherence interval. 
+  Specifically, let us express each  codeword $C_m \in \mathbb{C}^{\cohtime \times \txant\tfdiv}$, $m=1,\dots,\ncod$, as the concatenation of $l$ subcodewords
+    %
+    \begin{equation*}
+      C_m=\bigl[ C_{m,1}, \cdots, C_{m,l} \bigr].
+    \end{equation*}
+    %
+    We require that each subcodeword $C_{m,k}\in \mathbb{C}^{\cohtime\times\txant}$ satisfies the  power constraint
+    %
+    \begin{equation*}
+      \mathrm{tr}\bigl\{C_{m,k}^H C_{m,k}\bigr\}= \cohtime\snr,\quad m=1,\dots,\ncod,\quad k=1,\dots,\tfdiv. 
+    \end{equation*}
+    %
+    Here, $\snr$ denotes the SNR. Note: the Rayleigh-fading channel is assumed to have unit variance.
+
   
   \item Common input, output arguments: 
   \begin{itemize}
@@ -222,7 +246,7 @@ General info:
     \item \verb|prec| -- $\log_2$ of the number of samples used in the Monte-Carlo step; one should have $2^{\verb|prec|} \gg 100 / \verb|epsilon|$
     \item \verb|filename| data file where the samples of the information density are saved for possible future refinements (provided that the flag \verb|SAVE| is set)
     \item \verb|R| -- estimate of the maximum coding rate
-    \item \verb|current_eps| actual bound on the packet error rate (it may  deviate from |epsilon| if \verb|prec| is not chosen appropriately)
+    \item \verb|current_eps| -- actual bound on the packet error rate (it may  deviate from |epsilon| if \verb|prec| is not chosen appropriately)
   \end{itemize}
 %  [R,current_eps]=DT_USTM_NxM(snrdB,T,L,Mt,Mr,epsilon,prec,filename)
   
@@ -238,71 +262,67 @@ General info:
     \label{fig:snr6eps03M2}
   \end{figure}
   
-\subsection{Achievability bounds: \texttt{DT\_USTM\_NxM()}, \texttt{DT\_USTM\_MxM()}} % (fold)
+\section{Achievability bounds: \texttt{DT\_USTM\_NxM()}, \texttt{DT\_USTM\_MxM()}} % (fold)
 \label{sec:achievability_bound_dt_ustm_nxm}
 %
 Format:
 \begin{verbatim}
 function [R,current_eps]
 =DT_USTM_NxM(snrdB,T,L,Mt,Mr,epsilon,prec,filename);
-
 function [R,current_eps]
 =DT_USTM_MxM(snrdB,T,L,Mt,epsilon,prec,filename);
 \end{verbatim}
 
 These two functions compute the USTM-DT achievability bound~\cite[Th.~3]{durisi14-12a} for the case $\txant< \rxant$ and $\txant=\rxant$, respectively. These two cases are distinguished because different normalizations are used to avoid numerical instabilities.
 
-\subsection{Converse bounds: \texttt{MC\_USTM\_2x2\_q1x2()}, \texttt{MC\_USTM\_2x2\_q\_2x2()}, \texttt{MC\_USTM\_4x4\_q\_Mx4}} % (fold)
+\section{Converse bounds: \texttt{MC\_USTM\_2x2\_q1x2()}, \texttt{MC\_USTM\_2x2\_q\_2x2()}, \texttt{MC\_USTM\_4x4\_q\_Mx4}} % (fold)
 \label{sec:converse_bounds__texttt}
 
 Format
 
 \begin{verbatim}
-
 function [R,current_eps,current_prec]
 =MC_USTM_2x2_q1x2(snrdB,T,L,epsilon,prec,pow_all,filename)
-
 function [R,current_eps,current_prec]
 =MC_USTM_2x2_q2x2(snrdB,T,L,Mt,epsilon,prec,pow_all,filename)
-
 function [R,current_eps,current_prec]
 =MC_USTM_4x4_qMx4(snrdB,Mt,T,L,epsilon,prec,pow_all,filename)
 \end{verbatim}
 
-These three functions compute the right-hand side of~\cite[Eq.~(41)]{durisi14-12a} for fixed input diagonal matrices $\{\matSigma_k\}_{k=1}^{\tfdiv}$ and fixed number of effectively used antennas $\txantalt$, for the case $\txant=\rxant=2$ and $\txant=\rxant=4$. 
-To obtain the actual converse bound, a further optimization over these parameters need to be performed. In the function, the parameter \verb|pow_all| is related to the diagonal entries of the matrices $\{\matSigma_k\}_{k=1}^{\tfdiv}$. For the $\txant=\rxant=2$ case, \verb|pow_all| is an $\tfdiv$-dimensional vector, whose entries are in $[0,0.5]$. Indeed, the particular formulation of the power constraint in~\cite[Eq.~(41)]{durisi14-12a} implies that the other entry is uniquely determined from the first one.
-For the $4\times 4$ case, the code provided assume that the optimization in~\cite[Eq.~(41)]{durisi14-12a} is restricted only to $\{\matSigma_k\}_{k=1}^{\tfdiv}$ of the form $\matSigma_1=\dots=\matSigma_\tfdiv=\matSigma$. In this case, \verb|pow_all| is a $4$-dimensional vector that contains the diagonal entries of $\matSigma$.
+These three functions compute the right-hand side of~\cite[Eq.~(41)]{durisi14-12a} for fixed input diagonal matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$ and fixed number of effectively used antennas $\txantalt$, for the case $\txant=\rxant=2$ and $\txant=\rxant=4$. 
+To obtain the actual converse bound, a further optimization over these parameters need to be performed. In the function, the parameter \verb|pow_all| is related to the diagonal entries of the matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$. For the $\txant=\rxant=2$ case, \verb|pow_all| is an $\tfdiv$-dimensional vector, whose entries are in $[0,0.5]$. Indeed, the particular formulation of the power constraint in~\cite[Eq.~(41)]{durisi14-12a} implies that the other entry is uniquely determined from the first one.
+For the $4\times 4$ case, the code provided assume that the optimization in~\cite[Eq.~(41)]{durisi14-12a} is restricted only to $\{\Sigma_k\}_{k=1}^{\tfdiv}$ of the form $\Sigma_1=\dots=\Sigma_\tfdiv=\Sigma$. In this case, \verb|pow_all| is a $4$-dimensional vector that contains the diagonal entries of $\Sigma$.
 
 
-\subsection{Alamouti: DT\_USTM\_Alamouti(), MC\_USTM\_Alamouti()} % (fold)
+\section{Alamouti: DT\_USTM\_Alamouti(), MC\_USTM\_Alamouti()} % (fold)
 \label{sec:alamouti}
 
 Format
 
 \begin{verbatim}
-function [R,current_eps]=MC_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
-
-function [R,current_eps]=DT_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
-
+function [R,current_eps]
+=MC_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
+function [R,current_eps]
+=DT_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
 \end{verbatim}
 
 Compute achievability and converse bounds for a $2\times 2$ MIMO system with Alamouti used as inner code
 
 
-\subsection{Outage: \texttt{outage\_capacity()}, \texttt{outage\_capacity\_alamouti()} } % (fold)
+\section{Outage: \texttt{outage\_mi()}, \texttt{outage\_capacity\_alamouti()} } % (fold)
 \label{sec:outage}
 
 \begin{verbatim}
-  function [Cout,current_eps]=outage_capacity_alamouti(snrdb,epsilon,L,prec,filename)
-  
-  [Cout,current_eps]=outage_capacity(snrdB,epsilon,Mt,Mr,L,pow_all,prec)
-  
+  [Cout,current_eps]
+  =outage_mi(snrdB,epsilon,Mt,Mr,L,pow_all,prec)  
+  function [Cout,current_eps]
+  =outage_alamouti(snrdb,epsilon,L,prec,filename)  
 \end{verbatim}
 
-Functions that compute the outage capacity and the outage rate with Alamouti. In the second function, \verb|pow_all| is a power-allocation matrix, i.e.,  \verb|Mt-1 x L| matrix containing the
-first \verb|Mt|$-1$ eigenvalues of the input covariance matrices corresponding to each coherent block. The last eigenvalue follows from the power constraint.
-% the last one, whose value is determined by the  power constraint
-% tr(Q_k)/snr=1. For the case Mt=1, just pass a 1 x L all zero matrix 
+Functions that compute the outage mutual information for a given set of input covariance matrices and the outage mutual information with Alamouti. 
+The \verb|outage_mi| function evaluates the outage mutual information corresponding to a given input covariance matrix, whose eigenvalues are specified in \verb|pow_all|. Specifically, \verb|pow_all| is a \verb|Mt-1 x L| matrix containing the
+first \verb|Mt|$-1$ eigenvalues of the input covariance matrices corresponding to each coherent block. The last eigenvalue follows from the power constraint. To obtain the outage capacity one has to optimize over all possible choices of $\verb|pow_all|$.
+
 
 
 % subsection outage_outage_capacity()_outage_capacity_alamouti()_ (end)

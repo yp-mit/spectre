@@ -1,7 +1,7 @@
-function [Cout,current_eps]=outage_capacity(snrdb,epsilon,Mt,Mr,L,pow_all,prec)
+function [Cout,current_eps]=outage_mi(snrdb,epsilon,Mt,Mr,L,pow_all,prec)
 %
 %
-% compute outage capacity of a block-memoryless MIMO Rayleigh fading
+% compute outage mutual information of a block-memoryless MIMO Rayleigh fading
 % channel
 % snrdb: snr in dB
 % epsilon: outage probability
@@ -9,7 +9,7 @@ function [Cout,current_eps]=outage_capacity(snrdb,epsilon,Mt,Mr,L,pow_all,prec)
 % Mr: number of receive antennas
 % L: number of time_frequency diversity branches
 % prec: it controls the number of samples for the Monte Carlo simulation; Note nsamples=2^prec; One should have nsamples>> 100 x 1/epsilon
-% pow_all: power allocation matrix. A Mt-1 x L matrices containing the
+% pow_all: ``power allocation matrix''. A Mt-1 x L matrices containing the
 % eigenvalues of the input covariance matrix Q_k/snr, k=1,...,L, apart from
 % the last one, whose value is determined by the  power constraint
 % tr(Q_k)/snr=1. For the case Mt=1, just pass a 1 x L all zero matrix 

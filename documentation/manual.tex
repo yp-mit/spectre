@@ -41,6 +41,9 @@
 \def\snr{\rho} %snr
 \def\tfdiv{l}  %amount of time-frequency diversity available (number of independent fading realizations observed over a codeword)]
 \def\ncod{M}
+\def\tr{\mathrm{tr}}
+\def\PP{\mathbb{P}}
+\def\EE{\mathbb{E}}
 
 %*******************************************************************************
 %!TEX encoding =  
@@ -219,20 +222,24 @@ General info:
   \item Channel model: Rayleigh block-fading channel with~$\txant$ 
   transmit antennas and~$\rxant$ receive antennas that stays constant for
    $\cohtime$ channel uses.
-  The blocklength $\bl$ is an integer multiple of the coherence time $\cohtime$, i.e., $\bl=\tfdiv\cohtime$; here $\tfdiv$ denotes the number of independent time-frequency branches. The power constraint is defined per coherence interval. 
-  Specifically, let us express each  codeword $C_m \in \mathbb{C}^{\cohtime \times \txant\tfdiv}$, $m=1,\dots,\ncod$, as the concatenation of $l$ subcodewords
-    %
+  The blocklength $\bl$ is an integer multiple of the coherence time $\cohtime$, i.e., $\bl=\tfdiv\cohtime$; here
+  $\tfdiv$ denotes the number of independent time-frequency branches:
+  
+  \begin{equation}\label{eq:bfmimo}
+  	\mathbb{Y}_k = X_k \mathbb{H}_k + \mathbb{W}_k\,, \qquad k=1,\ldots, \tfdiv\,,
+\end{equation}  
+  where $\mathbb{Y}_k, \mathbb{W}_k \in \mathbb{C}^{\cohtime \times \rxant}$, $X_k \in \mathbb{C}^{\cohtime \times
+  \txant}$ and $\mathbb{H}_k\in\mathbb{C}^{\txant \times \rxant}$. The noise $\mathbb{W}$ and the channel gain
+  $\mathbb{H}$ have independent $\mathcal{CN}(0,1)$ entries.
+
+
+  The power constraint is defined \textit{per coherence interval.} I.e. each codeword $X_1,\ldots, X_\tfdiv$ should
+  satisfy:
     \begin{equation*}
-      C_m=\bigl[ C_{m,1}, \cdots, C_{m,l} \bigr].
+      \tr\bigl\{X_{k}^H X_{k}\bigr\}= \cohtime\snr,\quad  k=1,\dots,\tfdiv. 
     \end{equation*}
     %
-    We require that each subcodeword $C_{m,k}\in \mathbb{C}^{\cohtime\times\txant}$ satisfies the  power constraint
-    %
-    \begin{equation*}
-      \mathrm{tr}\bigl\{C_{m,k}^H C_{m,k}\bigr\}= \cohtime\snr,\quad m=1,\dots,\ncod,\quad k=1,\dots,\tfdiv. 
-    \end{equation*}
-    %
-    Here, $\snr$ denotes the SNR. Note: the Rayleigh-fading channel is assumed to have unit variance.
+    Here, $\snr$ denotes the SNR. 
 
   
   \item Common input, output arguments: 
@@ -319,7 +326,14 @@ Compute achievability and converse bounds for a $2\times 2$ MIMO system with Ala
   =outage_alamouti(snrdb,epsilon,L,prec,filename)  
 \end{verbatim}
 
-Functions that compute the outage mutual information for a given set of input covariance matrices and the outage mutual information with Alamouti. 
+Functions that compute the outage mutual information $I_\epsilon$ for a given set of input covariance matrices and the outage mutual
+information with Alamouti:
+
+$$ \PP[ \EE[\imath(X^\tfdiv; \mathbb{Y}^\tfdiv)|\mathbb{H}^\tfdiv] \le
+I_\epsilon] = \epsilon\,, $$
+where distribution of $X^\tfdiv=(X_1,\ldots,X_\tfdiv)$ is specified by \verb|pow_all| and 
+$$\imath(X^\tfdiv; \mathbb{Y}^\tfdiv) = \sum_{k=1}^\tfdiv \log {dP_{\mathbb{Y}_k|X_k}\over dP_{\mathbb{Y}_k}}\,.$$
+
 The \verb|outage_mi| function evaluates the outage mutual information corresponding to a given input covariance matrix, whose eigenvalues are specified in \verb|pow_all|. Specifically, \verb|pow_all| is a \verb|Mt-1 x L| matrix containing the
 first \verb|Mt|$-1$ eigenvalues of the input covariance matrices corresponding to each coherent block. The last eigenvalue follows from the power constraint. To obtain the outage capacity one has to optimize over all possible choices of $\verb|pow_all|$.
 

@@ -69,9 +69,9 @@ figs/%.eps figs/%.pdf: figs/%.fig figs/%.tex
 ifdef USE_PDFLATEX
 %.pdf: %.tex
 	pdflatex -src-specials $<
-	gs -q -dSAFER -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dPDFSETTINGS=/printer \
-		-dCompatibilityLevel=1.4 -sPAPERSIZE=letter -sOutputFile=$*_out.pdf -f $@
-	mv $*_out.pdf $@
+#	gs -q -dSAFER -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dPDFSETTINGS=/printer \
+#		-dCompatibilityLevel=1.4 -sPAPERSIZE=letter -sOutputFile=$*_out.pdf -f $@
+#	mv $*_out.pdf $@
 endif # USE_PDFLATEX #
 
 %.pdf: %.ps

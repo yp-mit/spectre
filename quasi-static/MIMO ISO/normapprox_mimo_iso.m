@@ -1,4 +1,4 @@
-%[rate_na , C_epsilon] = NormalApp_mimo_iso(nn,P,error,tx,rx,K) computes
+%[rate_na , C_epsilon] = normapprox_mimo_iso(nn,P,error,tx,rx,K) computes
 %the epsilon-capacity and the normal approximation for the maximal
 %achievable rate over a quasi-static MIMO Rician fading channel with
 %isotropic inputs; It also outputs the epsilon-capacity of the
@@ -14,7 +14,7 @@
 %K:  rician K factor, scalar; the default value is 0.
 
 
-function [rate_na, C_epsilon] = NormalApp_mimo_iso(nn,P,error,tx,rx,K)
+function [rate_na, C_epsilon] = normapprox_mimo_iso(nn,P,error,tx,rx,K)
 if (nargin < 6) || isempty(K)
 	K = 0;
 end

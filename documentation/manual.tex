@@ -26,6 +26,7 @@
 \usepackage{verbatim}
 \usepackage{amsfonts}
 \usepackage[stretch=16,shrink=16,step=4]{microtype}
+\usepackage{amssymb}
 %\usepackage{vmr-symbols-rndbold}
 %\usepackage{standard-macros}
 %\input{defs_giuseppe.tex}
@@ -44,6 +45,7 @@
 \def\tr{\mathrm{tr}}
 \def\PP{\mathbb{P}}
 \def\EE{\mathbb{E}}
+\def\complexset{\mathbb{C}}
 
 %*******************************************************************************
 %!TEX encoding =  
@@ -336,6 +338,143 @@ $$\imath(X^\tfdiv; \mathbb{Y}^\tfdiv) = \sum_{k=1}^\tfdiv \log {dP_{\mathbb{Y}_k
 
 The \verb|outage_mi| function evaluates the outage mutual information corresponding to a given input covariance matrix, whose eigenvalues are specified in \verb|pow_all|. Specifically, \verb|pow_all| is a \verb|Mt-1 x L| matrix containing the
 first \verb|Mt|$-1$ eigenvalues of the input covariance matrices corresponding to each coherent block. The last eigenvalue follows from the power constraint. To obtain the outage capacity one has to optimize over all possible choices of $\verb|pow_all|$.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Quasi-static fading channel}
+
+
+
+
+
+General info:
+\begin{itemize}
+\item Maintainer: W. Yang \url{<ywei@chalmers.se>}
+
+\item Main references: \cite{yang14-07a}
+
+\item Example: See Fig.~\ref{fig:bounds-simo}
+
+\item Channel model: a quasi-static MIMO fading channel with $\txant$ transmit and $\rxant$ receive antennas. The channel input-output relation within $\bl$ channel uses is given by 
+\begin{equation}
+\mathbb{Y} = \mathsf{X}\mathbb{H} + \mathbb{Z}
+\end{equation}
+where $\mathsf{X} \in\complexset^{\bl\times\txant}$ is the signal transmitted over $\bl$ channel uses; $\mathbb{Y} \in \complexset^{\bl\times\rxant}$ is the corresponding received signal; the matrix $\mathbb{H}\in\complexset^{\txant\times\rxant}$ contains the complex fading coefficients, which are random but remain constant over the~$\bl$ channel uses;
+%
+ $\mathbb{Z} \in \complexset^{\bl\times\rxant}$ denotes the additive noise at the receiver, which is independent of $\mathbb{H}$ and has iid $\mathcal{CN} (0,1)$ entries. 
+	Power constraints: each codeword $x^n$ satisfies
+			$$ \|\mathsf{X} \|_{\mathrm{F}}^2 \le n P .$$
+In the code, we also assume that  the entries of $\mathbb{H}$ are iid Rician-distributed, i.e., 
+$$H_{ij} \sim \mathcal{CN} (\sqrt{K/(K+1)}, 1/(K+1))$$
+where $K$ is the Rician $K$-factor. 
+
+
+
+\item Input/output arguments:
+\begin{enumerate}
+\item \verb|nn| -- input argument; vector of blocklengths.
+\item \verb|error| -- input argument; block error probability.
+\item \verb|tx|, \verb|rx| -- input arguments; number of transmit and receive antennas.
+%\item \verb|rx| -- input argument; number of receive antennas.
+\item \verb|P| -- input argument; parameter of the power constraint (linear scale).
+\item \verb|K| -- input argument; Rician $K$-factor. If \verb|K| is not set, it defaults to $0$, in which case the entries of $\mathbb{H}$ follow a Rayleigh distribution.
+\item \verb|rate_a|, \verb|rate_c|, \verb|rate_na| -- output arguments; lower (achievability) bound, upper (converse) bound, and normal approximation of  $(\log_2 M)/n$, channel coding rate (base-2 information units).
+%\item \verb -- output argument; upper (converse) bound on $(\log_2 M)/n$.
+%\item \verb|rate_na| -- output argument; normal approximation of $(\log_2 M)/n$. 
+\end{enumerate}
+\end{itemize}
+
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[scale=0.8]{plots/quasi-static-simo.pdf}
+\vspace{-1.5mm}
+\caption{Achievability and converse bounds for a quasi-static SIMO Rician-fading channel with $K$-factor equal to $20$ dB, two receive antennas, $\text{SNR}=-1.55 $ dB, and $\epsilon=10^{-3}$. 
+\label{fig:bounds-simo}}
+\end{figure}
+
+
+%\section{Summary plot: \texttt{plot\_v3()}}
+%
+%Definition:
+%\begin{verbatim}
+%	function [Ns lb ub feinst gal wlfz] = plot_v3(P, epsil)
+%\end{verbatim}
+%
+%This function plots various bounds on the same figure. See Fig.~\ref{fig:awgn_example}.
+
+
+\section{Achievability: \texttt{ach\_simo\_csir()}}
+
+Format:
+\begin{verbatim}
+	function rate_a = ach_simo_csir(nn,P, error, rx, K);
+\end{verbatim}
+
+This function computes the $\kappa\beta$ achievability bound over a single-input multiple-output (SIMO) channel with perfect CSIR, see~\cite[Footnote~7]{yang14-07a}.
+
+\section{Achievability: \texttt{ach\_simo\_nocsi()} }
+Format:
+\begin{verbatim}
+	function rate_a = ach_simo_nocsi(nn, P, error, rx, K);
+\end{verbatim}
+
+This function computes the achievability bound over a SIMO channel with no CSI, see~\cite[Eq.~(67)]{yang14-07a}. 
+
+\section{Achievability: \texttt{mimo\_iso\_ach()}}
+Format:
+\begin{verbatim}
+	function rate_a = mimo_iso_ach(nn, P, error, tx, rx, K);
+\end{verbatim}
+
+This function computes the achievability bound over a MIMO channel with no CSI, where all input codewords satisfy $\mathsf{X}^{\mathrm{H}}\mathsf{X} = \frac{\bl P}{\txant}\mathsf{I}_{\txant}$, see~\cite[Eq.~(65)]{yang14-07a}. 
+
+\section{Converse: \texttt{converse\_simo()}}
+\begin{verbatim}
+	function rate_c = converse_simo(nn,P, error, rx, K);
+\end{verbatim}
+
+This function computes the converse bound over a single-input multiple-output (SIMO) channel with CSIRT, see~\cite[Eq.~(76)]{yang14-07a}.
+
+\section{Converse: \texttt{mimo\_iso\_conv()}}
+\begin{verbatim}
+	function rate_c = mimo_iso_ach(nn, P, error, tx, rx, K);
+\end{verbatim}
+
+This function computes the converse bound over a MIMO channel with CSIRT, where all input codewords satisfy $\mathsf{X}^{\mathrm{H}}\mathsf{X} = \frac{\bl P}{\txant}\mathsf{I}_{\txant}$, see~\cite[Eq.~(78)]{yang14-07a}. 
+
+
+
+\section{Normal approximation: \texttt{normapprox\_simo()}, \texttt{normapprox\_mimo\_iso()}}
+
+Format:
+\begin{verbatim}
+	function rate_na = normapprox_simo(nn,P, error, rx, K)
+	function rate_na = normapprox_mimo_iso(nn, P, error, tx, rx, K);
+\end{verbatim}
+
+These two functions compute the normal approximation $R^{\mathcal{N}}(\epsilon,\bl)$ to both achievability and converse, obtained by solving the following equation
+	$$ \epsilon  =\mathbb{E}\mathopen{}\left[Q\mathopen{}\left(\frac{C(\mathbb{H}) - R^{\mathcal{N}}(\epsilon,\bl) }{\sqrt{ n V(\mathbb{H}) }}\right)\right]$$
+where
+$$C(\mathsf{H}) \triangleq \log_2 \mathrm{det}\mathopen{} \left(\mathsf{I}_{\txant} + \frac{P}{\txant} \mathsf{H} \mathsf{H}^{H} \right)$$
+and
+$$V(\mathsf{H}) \triangleq  m\log_2^2 e  - \sum\limits_{i=1}^{m } \frac{\log_2^2 e}{(1+P\lambda_i/\txant)}$$
+with $m \triangleq \min\{\txant , \rxant\}$ and $\{\lambda_i\}$ being the eigenvalues of $\mathsf{H}\mathsf{H}^{\mathrm{H}}$.
+
+
+%
+%\section{Code database: \texttt{plot\_universe()}}
+%
+%Code in \verb|universe/plot_universe()| compiles a comparative plot of normalized rate for different codes.
+%See~\cite[Section IV.D]{PPV08}.
+%
+%
+
+
+
+
+
 
 
 

@@ -58,7 +58,7 @@ Short Packet Communication Toolbox for Wireless Engineers\\[1cm]
 Version 0.1}
 
 \author{Contributors (alphabetic order):\\
-Giuseppe Durisi, Johan \"Ostman, Yury Polyanskiy, Wei Yang,\dots}
+Giuseppe Durisi, Johan \"Ostman, Yury Polyanskiy, Wei Yang}
 
 
 \maketitle
@@ -87,7 +87,7 @@ In some applications, however, a more refined analysis of the interplay between 
 Finite-blocklength information theory, a subfield of information theory that benefitted from seminal contributions from Shannon, Strassen, and Dobrushin, among others, is currently a very active field of research. 
 Nonasymptotic achievability and converse bounds on the \emph{maximum coding rate} achievable for a given packet size and packet error probability are now available for several channel models that are relevant for wireless communication systems, such as the AWGN channel, the quasi-static Rayleigh fading channel, and the Rayleigh block-fading channel.
 The purpose of this toolbox is to provide numerical routines for the computation of these bounds.
-In the next chapters, we provide a bare-bone manual on the routines available in this toolbox.
+In the next chapters, we provide a bare-bone manual, which describes the routines available in this toolbox.
 
 
 
@@ -231,14 +231,15 @@ General info:
   	\mathbb{Y}_k = X_k \mathbb{H}_k + \mathbb{W}_k\,, \qquad k=1,\ldots, \tfdiv\,,
 \end{equation}  
   where $\mathbb{Y}_k, \mathbb{W}_k \in \mathbb{C}^{\cohtime \times \rxant}$, $X_k \in \mathbb{C}^{\cohtime \times
-  \txant}$ and $\mathbb{H}_k\in\mathbb{C}^{\txant \times \rxant}$. The noise $\mathbb{W}$ and the channel gain
-  $\mathbb{H}$ have independent $\mathcal{CN}(0,1)$ entries.
+  \txant}$ and $\mathbb{H}_k\in\mathbb{C}^{\txant \times \rxant}$. The noise $\mathbb{W}_k$ and the channel gain
+  $\mathbb{H}_k$ are independent and have independent $\mathcal{CN}(0,1)$ entries.
+  Neither the transmitter nor the receiver are aware of the realizations of the fading matrix $\mathbb{H}_k$.
 
 
-  The power constraint is defined \textit{per coherence interval.} I.e. each codeword $X_1,\ldots, X_\tfdiv$ should
+  The power constraint is defined \textit{per coherence interval}, i.e., each codeword $C$  consists of $\tfdiv$ subcodewords $C_1,\ldots, C_\tfdiv$ that must
   satisfy:
     \begin{equation*}
-      \tr\bigl\{X_{k}^H X_{k}\bigr\}= \cohtime\snr,\quad  k=1,\dots,\tfdiv. 
+      \tr\bigl\{C_{k}^H C_{k}\bigr\}= \cohtime\snr,\quad  k=1,\dots,\tfdiv. 
     \end{equation*}
     %
     Here, $\snr$ denotes the SNR. 
@@ -252,10 +253,10 @@ General info:
     \item \verb|Mt| -- number of tranmsmit antennas
     \item \verb|Mr| -- number of receve antennas
     \item \verb|epsilon| -- packet error rate (block error rate)
-    \item \verb|prec| -- $\log_2$ of the number of samples used in the Monte-Carlo step; one should have $2^{\verb|prec|} \gg 100 / \verb|epsilon|$
-    \item \verb|filename| data file where the samples of the information density are saved for possible future refinements (provided that the flag \verb|SAVE| is set)
+    \item \verb|prec| -- $\log_2$ of the number of samples used in the Monte-Carlo step; this parameter should be set so that $2^{\verb|prec|} \gg 100 / \verb|epsilon|$
+    \item \verb|filename| -- data file in which the samples of the information density are saved for possible future refinements (provided that the flag \verb|SAVE| is set)
     \item \verb|R| -- estimate of the maximum coding rate
-    \item \verb|current_eps| -- actual bound on the packet error rate (it may  deviate from |epsilon| if \verb|prec| is not chosen appropriately)
+    \item \verb|current_eps| -- actual bound on the packet error rate (it may  deviate from \verb|epsilon| if \verb|prec| is not chosen appropriately)
   \end{itemize}
 %  [R,current_eps]=DT_USTM_NxM(snrdB,T,L,Mt,Mr,epsilon,prec,filename)
   
@@ -300,7 +301,7 @@ function [R,current_eps,current_prec]
 
 These three functions compute the right-hand side of~\cite[Eq.~(41)]{durisi14-12a} for fixed input diagonal matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$ and fixed number of effectively used antennas $\txantalt$, for the case $\txant=\rxant=2$ and $\txant=\rxant=4$. 
 To obtain the actual converse bound, a further optimization over these parameters need to be performed. In the function, the parameter \verb|pow_all| is related to the diagonal entries of the matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$. For the $\txant=\rxant=2$ case, \verb|pow_all| is an $\tfdiv$-dimensional vector, whose entries are in $[0,0.5]$. Indeed, the particular formulation of the power constraint in~\cite[Eq.~(41)]{durisi14-12a} implies that the other entry is uniquely determined from the first one.
-For the $4\times 4$ case, the code provided assume that the optimization in~\cite[Eq.~(41)]{durisi14-12a} is restricted only to $\{\Sigma_k\}_{k=1}^{\tfdiv}$ of the form $\Sigma_1=\dots=\Sigma_\tfdiv=\Sigma$. In this case, \verb|pow_all| is a $4$-dimensional vector that contains the diagonal entries of $\Sigma$.
+For the $4\times 4$ case, the code provided assumes that the optimization in~\cite[Eq.~(41)]{durisi14-12a} is restricted only to $\{\Sigma_k\}_{k=1}^{\tfdiv}$ of the form $\Sigma_1=\dots=\Sigma_\tfdiv=\Sigma$. In this case, \verb|pow_all| is a $4$-dimensional vector that contains the diagonal entries of $\Sigma$.
 
 
 \section{Alamouti: \texttt{DT\_USTM\_Alamouti()}, \texttt{MC\_USTM\_Alamouti()}} % (fold)
@@ -318,27 +319,30 @@ function [R,current_eps]
 Compute achievability and converse bounds for a $2\times 2$ MIMO system with Alamouti used as inner code
 
 
-\section{Outage: \texttt{outage\_mi()}, \texttt{outage\_alamouti()} } % (fold)
+\section{Outage: \texttt{outage\_mi()}, \texttt{outage\_alamouti()}, \texttt{outage\_2x2\_telatar()} } % (fold)
 \label{sec:outage}
 
 \begin{verbatim}
-  [Cout,current_eps]
+  function [Cout,current_eps]
   =outage_mi(snrdB,epsilon,Mt,Mr,L,pow_all,prec)  
   function [Cout,current_eps]
   =outage_alamouti(snrdb,epsilon,L,prec,filename)  
+  function R=outage_2x2_telatar(L,prec,epsilon,snrdb)
 \end{verbatim}
 
-Functions that compute the outage mutual information $I_\epsilon$ for a given set of input covariance matrices and the outage mutual
-information with Alamouti:
+The first two functions  compute the outage mutual information $I_{\epsilon}$ for a given set of diagonal input covariance matrices, and the outage mutual
+information with Alamouti, respectively:
 
 $$ \PP[ \EE[\imath(X^\tfdiv; \mathbb{Y}^\tfdiv)|\mathbb{H}^\tfdiv] \le
 I_\epsilon] = \epsilon\,, $$
-where distribution of $X^\tfdiv=(X_1,\ldots,X_\tfdiv)$ is specified by \verb|pow_all| and 
+where in the first case, the covariance structure of $X^\tfdiv=(X_1,\ldots,X_\tfdiv)$ is specified by \verb|pow_all| and 
 $$\imath(X^\tfdiv; \mathbb{Y}^\tfdiv) = \sum_{k=1}^\tfdiv \log {dP_{\mathbb{Y}_k|X_k}\over dP_{\mathbb{Y}_k}}\,.$$
-
+%
 The \verb|outage_mi| function evaluates the outage mutual information corresponding to a given input covariance matrix, whose eigenvalues are specified in \verb|pow_all|. Specifically, \verb|pow_all| is a \verb|Mt-1 x L| matrix containing the
-first \verb|Mt|$-1$ eigenvalues of the input covariance matrices corresponding to each coherent block. The last eigenvalue follows from the power constraint. To obtain the outage capacity one has to optimize over all possible choices of $\verb|pow_all|$.
+first \verb|Mt|$-1$ eigenvalues of the input covariance matrices corresponding to each coherence interval. The last eigenvalue follows from the power constraint. To obtain the outage capacity one has to optimize over all possible choices of $\verb|pow_all|$.
 
+The function \verb|outage_2x2_telatar| provides an example on how to perform this optimization for the $2\times 2$ MIMO case. The optimization is restricted to input covariance matrices that satisfy the generalized Telatar conjecture~\cite[Eq.~(42)]{durisi14-12a} according to which in 
+the eigenvalues of the input covariance matrix in each coherence interval satisfy the following property: $k$ out the \verb|Mt| eigenvalues are equal to \verb|SNR|$/k$ and the remaining \verb|Mt|$-k$ eigenvalues are equal to zero. The value of $k$ may change across the coherence intervals.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

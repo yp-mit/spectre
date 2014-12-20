@@ -285,23 +285,34 @@ function [R,current_eps]
 
 These two functions compute the USTM-DT achievability bound~\cite[Th.~3]{durisi14-12a} for the case $\txant< \rxant$ and $\txant=\rxant$, respectively. These two cases are distinguished because different normalizations are used to avoid numerical instabilities.
 
-\section{Converse bounds: \texttt{MC\_USTM\_2x2\_q1x2()}, \texttt{MC\_USTM\_2x2\_q\_2x2()}, \texttt{MC\_USTM\_4x4\_q\_Mx4}} % (fold)
+\section{Converse helper functions: \texttt{MC\_USTM\_2x2\_q1x2()}, \texttt{MC\_USTM\_2x2\_q\_2x2()}, \texttt{MC\_USTM\_4x4\_q\_Mx4}} % (fold)
 \label{sec:converse_bounds__texttt}
 
 Format
-
+%
 \begin{verbatim}
 function [R,current_eps,current_prec]
-=MC_USTM_2x2_q1x2(snrdB,T,L,epsilon,prec,pow_all,filename)
+=MC_USTM_2x2(snrdB,T,L,Mtalt,epsilon,prec,pow_all,filename)
 function [R,current_eps,current_prec]
-=MC_USTM_2x2_q2x2(snrdB,T,L,Mt,epsilon,prec,pow_all,filename)
-function [R,current_eps,current_prec]
-=MC_USTM_4x4_qMx4(snrdB,Mt,T,L,epsilon,prec,pow_all,filename)
+=MC_USTM_4x4(snrdB,Mtalt,T,L,epsilon,prec,pow_all,filename)
 \end{verbatim}
-
-These three functions compute the right-hand side of~\cite[Eq.~(41)]{durisi14-12a} for fixed input diagonal matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$ and fixed number of effectively used antennas $\txantalt$, for the case $\txant=\rxant=2$ and $\txant=\rxant=4$. 
-To obtain the actual converse bound, a further optimization over these parameters need to be performed. In the function, the parameter \verb|pow_all| is related to the diagonal entries of the matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$. For the $\txant=\rxant=2$ case, \verb|pow_all| is an $\tfdiv$-dimensional vector, whose entries are in $[0,0.5]$. Indeed, the particular formulation of the power constraint in~\cite[Eq.~(41)]{durisi14-12a} implies that the other entry is uniquely determined from the first one.
+%
+These two functions compute the right-hand side of~\cite[Eq.~(41)]{durisi14-12a} for fixed input diagonal matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$ and fixed auxiliary output distribution (which is parameterized by the number of effectively used transmit antennas \verb|Mtalt| that result in this distribution), for the case $\txant=\rxant=2$ and $\txant=\rxant=4$. 
+To obtain the actual converse bound, a further optimization over these parameters need to be performed. This is discussed in the next section.
+The parameter \verb|pow_all| is related to the diagonal entries of the matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$. For the $\txant=\rxant=2$ case, \verb|pow_all| is an $\tfdiv$-dimensional vector, whose entries are in $[0,0.5]$. Indeed, the particular formulation of the power constraint in~\cite[Eq.~(41)]{durisi14-12a} implies that the other entry is uniquely determined from the first one.
 For the $4\times 4$ case, the code provided assumes that the optimization in~\cite[Eq.~(41)]{durisi14-12a} is restricted only to $\{\Sigma_k\}_{k=1}^{\tfdiv}$ of the form $\Sigma_1=\dots=\Sigma_\tfdiv=\Sigma$. In this case, \verb|pow_all| is a $4$-dimensional vector that contains the diagonal entries of $\Sigma$.
+
+\section{Converse bound: \texttt{compute\_MC\_2x2\_telatar}}
+Format
+%
+\begin{verbatim}
+  function R=compute_MC_2x2_telatar(snrdB,T,L,epsilon)
+\end{verbatim}
+%
+Compute the metaconverse upper bound~\cite[Eq.~(41)]{durisi14-12a} by invoking the function \texttt{MC\_USTM\_2x2()} and by optimizing over the input diagonal matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$ and the number of effectively used transmit antennas.
+The optimization over the $\{\Sigma_k\}_{k=1}^{\tfdiv}$ is restricted to $2\times 2$ diagonal matrices whose diagonal entries are either [\verb|SNR|$/2$, \verb|SNR|$/2$]  or [\verb|SNR|, 0] according to the generalized form of Telatar conjecture reported in~\cite[Eq.~(42)]{durisi14-12a}.
+
+
 
 
 \section{Alamouti: \texttt{DT\_USTM\_Alamouti()}, \texttt{MC\_USTM\_Alamouti()}} % (fold)

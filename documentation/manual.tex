@@ -209,7 +209,7 @@ N_0 \cdot \log_2 M}$, where $E$ is the total expended energy over infinite chann
 $N_0\over 2$.  These are bounds from~\cite[Theorems 2 and 3]{PPV10eneff}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Block-memoryless fading channels: no CSI, Rayleigh}
+\chapter[Block-memoryless Rayleigh fading]{Block-memoryless Rayleigh fading channel, no CSI}
 
 General info:
 \begin{itemize}
@@ -228,18 +228,18 @@ General info:
   $\tfdiv$ denotes the number of independent time-frequency branches:
   
   \begin{equation}\label{eq:bfmimo}
-  	\mathbb{Y}_k = X_k \mathbb{H}_k + \mathbb{W}_k\,, \qquad k=1,\ldots, \tfdiv\,,
+  	\mathbb{Y}_k = \mathsf{X}_k \mathbb{H}_k + \mathbb{W}_k\,, \qquad k=1,\ldots, \tfdiv\,,
 \end{equation}  
-  where $\mathbb{Y}_k, \mathbb{W}_k \in \mathbb{C}^{\cohtime \times \rxant}$, $X_k \in \mathbb{C}^{\cohtime \times
+  where $\mathbb{Y}_k, \mathbb{W}_k \in \mathbb{C}^{\cohtime \times \rxant}$, $\mathsf{X}_k \in \mathbb{C}^{\cohtime \times
   \txant}$ and $\mathbb{H}_k\in\mathbb{C}^{\txant \times \rxant}$. The noise $\mathbb{W}_k$ and the channel gain
   $\mathbb{H}_k$ are independent and have independent $\mathcal{CN}(0,1)$ entries.
   Neither the transmitter nor the receiver are aware of the realizations of the fading matrix $\mathbb{H}_k$.
 
 
-  The power constraint is defined \textit{per coherence interval}, i.e., each codeword $C$  consists of $\tfdiv$ subcodewords $C_1,\ldots, C_\tfdiv$ that must
+  The power constraint is defined \textit{per coherence interval}, i.e., each codeword $\mathsf{C}$  consists of $\tfdiv$ subcodewords $\mathsf{C}_1,\ldots, \mathsf{C}_\tfdiv$ that must
   satisfy:
     \begin{equation*}
-      \tr\bigl\{C_{k}^H C_{k}\bigr\}= \cohtime\snr,\quad  k=1,\dots,\tfdiv. 
+      \tr\bigl\{\mathsf{C}_{k}^H \mathsf{C}_{k}\bigr\}= \cohtime\snr,\quad  k=1,\dots,\tfdiv. 
     \end{equation*}
     %
     Here, $\snr$ denotes the SNR. 
@@ -272,7 +272,7 @@ General info:
     \label{fig:snr6eps03M2}
   \end{figure}
   
-\section{Achievability bounds: \texttt{DT\_USTM\_NxM()}, \texttt{DT\_USTM\_MxM()}} % (fold)
+\section[Achievability bounds]{Achievability bounds: \texttt{DT\_USTM\_NxM()}, \texttt{DT\_USTM\_MxM()}} % (fold)
 \label{sec:achievability_bound_dt_ustm_nxm}
 %
 Format:
@@ -285,7 +285,7 @@ function [R,current_eps]
 
 These two functions compute the USTM-DT achievability bound~\cite[Th.~3]{durisi14-12a} for the case $\txant< \rxant$ and $\txant=\rxant$, respectively. These two cases are distinguished because different normalizations are used to avoid numerical instabilities.
 
-\section{Converse helper functions: \texttt{MC\_USTM\_2x2\_q1x2()}, \texttt{MC\_USTM\_2x2\_q\_2x2()}, \texttt{MC\_USTM\_4x4\_q\_Mx4}} % (fold)
+\section[Converse helper functions]{Converse helper functions: \texttt{MC\_USTM\_2x2\_q1x2()}, \texttt{MC\_USTM\_2x2\_q\_2x2()}, \texttt{MC\_USTM\_4x4\_q\_Mx4}} % (fold)
 \label{sec:converse_bounds__texttt}
 
 Format
@@ -301,8 +301,9 @@ These two functions compute the right-hand side of~\cite[Eq.~(41)]{durisi14-12a}
 To obtain the actual converse bound, a further optimization over these parameters need to be performed. This is discussed in the next section.
 The parameter \verb|pow_all| is related to the diagonal entries of the matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$. For the $\txant=\rxant=2$ case, \verb|pow_all| is an $\tfdiv$-dimensional vector, whose entries are in $[0,0.5]$. Indeed, the particular formulation of the power constraint in~\cite[Eq.~(41)]{durisi14-12a} implies that the other entry is uniquely determined from the first one.
 For the $4\times 4$ case, the code provided assumes that the optimization in~\cite[Eq.~(41)]{durisi14-12a} is restricted only to $\{\Sigma_k\}_{k=1}^{\tfdiv}$ of the form $\Sigma_1=\dots=\Sigma_\tfdiv=\Sigma$. In this case, \verb|pow_all| is a $4$-dimensional vector that contains the diagonal entries of $\Sigma$.
+%
 
-\section{Converse bound: \texttt{compute\_MC\_2x2\_telatar}}
+\section[Converse bound]{Converse bound: \texttt{compute\_MC\_2x2\_telatar}}
 Format
 %
 \begin{verbatim}
@@ -311,11 +312,13 @@ Format
 %
 Compute the metaconverse upper bound~\cite[Eq.~(41)]{durisi14-12a} by invoking the function \texttt{MC\_USTM\_2x2()} and by optimizing over the input diagonal matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$ and the number of effectively used transmit antennas.
 The optimization over the $\{\Sigma_k\}_{k=1}^{\tfdiv}$ is restricted to $2\times 2$ diagonal matrices whose diagonal entries are either [\verb|SNR|$/2$, \verb|SNR|$/2$]  or [\verb|SNR|, 0] according to the generalized form of Telatar conjecture reported in~\cite[Eq.~(42)]{durisi14-12a}.
+NOTE: this function may be very slow if \verb|L| is large or \verb|epsilon| is small. 
 
 
 
 
-\section{Alamouti: \texttt{DT\_USTM\_Alamouti()}, \texttt{MC\_USTM\_Alamouti()}} % (fold)
+
+\section[Alamouti]{Alamouti: \texttt{DT\_USTM\_Alamouti()}, \texttt{MC\_USTM\_Alamouti()}} % (fold)
 \label{sec:alamouti}
 
 Format
@@ -330,7 +333,7 @@ function [R,current_eps]
 Compute achievability and converse bounds for a $2\times 2$ MIMO system with Alamouti used as inner code
 
 
-\section{Outage: \texttt{outage\_mi()}, \texttt{outage\_alamouti()}, \texttt{outage\_2x2\_telatar()} } % (fold)
+\section[Outage capacity]{Outage: \texttt{outage\_mi()}, \texttt{outage\_alamouti()}, \texttt{outage\_2x2\_telatar()} } % (fold)
 \label{sec:outage}
 
 \begin{verbatim}
@@ -461,7 +464,7 @@ This function computes the converse bound over a MIMO channel with CSIRT, where 
 
 
 
-\section{Normal approximation: \texttt{normapprox\_simo()}, \texttt{normapprox\_mimo\_iso()}}
+\section[Normal approximation]{Normal approximation: \texttt{normapprox\_simo()}, \texttt{normapprox\_mimo\_iso()}}
 
 Format:
 \begin{verbatim}

@@ -53,8 +53,8 @@
 \begin{document}
 
 
-\title{SPeCTrE\\
-Short Packet Communication Toolbox for Wireless Engineers\\[1cm]
+\title{SPECTRE\\
+Short Packet Communication Toolbox\\[1cm]
 Version 0.1}
 
 \author{Contributors (alphabetic order):\\
@@ -65,10 +65,18 @@ Giuseppe Durisi, Johan \"Ostman, Yury Polyanskiy, Wei Yang}
 
 \begin{abstract}
 
-In his 1948 landmark paper, Claude E. Shannon demonstrated that communication with arbitrarily small probability of error is feasible if, and only if, the communication rate is below the so called channel capacity. To achieve this result, codes with large packet size (blocklength) must be employed. 
-In the nonasymptotic regime of finite packet size, the interplay between packet error probability, communication rate, and packet size can be described through closed-form achievability and converse bounds.
-The SPeCTrE toolbox provides numerical routines to evaluate these bounds for some channel models that occur in wireless communication applications. 
-The toolbox is under development and the participation of additional members of the information and communication theory communities in this endevour is warmly welcomed!
+Shannon theory describes fundamental limits of communication and
+compression systems. Classic closed-form results
+(such as the well known $log(1+\mathrm{SNR})$ formula)   apply only to the regime of infinite blocklength
+(infinite packet size/delay). For finite blocklengths, no closed-form results are usually
+obtainable, but there  exist tight upper and lower bounds, as well as
+approximations. This manual describes numerical routines for  computing
+these bounds and approximations for some popular channel and
+source models.
+
+The toolbox is under development and the participation of additional
+members of the information and communication theory communities in
+this endeavor is warmly welcomed!
 \end{abstract}
 \newpage
 \tableofcontents
@@ -209,7 +217,7 @@ N_0 \cdot \log_2 M}$, where $E$ is the total expended energy over infinite chann
 $N_0\over 2$.  These are bounds from~\cite[Theorems 2 and 3]{PPV10eneff}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter[Block-memoryless Rayleigh fading]{Block-memoryless Rayleigh fading channel, no CSI}
+\chapter[Block-memoryless Rayleigh fading (no CSI)]{Block-memoryless Rayleigh fading channel, no CSI}
 
 General info:
 \begin{itemize}

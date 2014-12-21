@@ -14,9 +14,6 @@ if (nargin < 5) || isempty(K)
 	K = 0;
 end
 
-g0 = ncx2inv(error,2*rx, 2*rx*K)/(2*K+2); %compute the error-th quantile of the sum of rx rician distributions with K-factor K
-%
-C_error = log(1 + g0*P);% epsilon-capacity
 
 rate_na=[];
 
@@ -37,7 +34,6 @@ G_num=[G1,G2];
 %compute the pdf of channel gain
 pdf_G = ncx2pdf(G_num*(2*K+2), 2*rx, 2*rx*K)*(2*K+2);
 
-error=0.001;
 
 rate_previous=100/loop1;
 for n=nn

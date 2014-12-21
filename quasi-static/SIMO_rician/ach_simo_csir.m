@@ -17,7 +17,7 @@ if (nargin < 5) || isempty(K)
 end
 
 loop =  min(1000/error, 10^7);
-loop =  max(loop, 1^5);
+loop =  max(loop, 10^5);
 
 if rx ==1
     G= abs(sqrt(K/(K+1))+sqrt(1/(K+1)/2)*(randn(rx,loop)+1i*randn(rx,loop))).^2 ;

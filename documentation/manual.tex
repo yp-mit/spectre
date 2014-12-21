@@ -395,6 +395,12 @@ In the code, we also assume that  the entries of $\mathbb{H}$ are iid Rician-dis
 $$H_{ij} \sim \mathcal{CN} (\sqrt{K/(K+1)}, 1/(K+1))$$
 where $K$ is the Rician $K$-factor. 
 
+\item The code for the MIMO case ($\txant>1$) is built under the additional assumption that all codewords $\mathsf{X}$ are ``isotropic'', i.e.,  (see~\cite[Sec.~III]{yang14-07a})
+\begin{equation}
+\label{eq:mimo-iso-constraint}
+ \frac{1}{\bl} \mathsf{X}^{\mathrm{H}} \mathsf{X} = \frac{P}{\txant} \mathsf{I}_{\txant}.
+ \end{equation}
+Currently, we do not have code for MIMO achievability and converse bounds that hold without the assumption~\eqref{eq:mimo-iso-constraint}.
 
 
 \item Input/output arguments:
@@ -409,6 +415,7 @@ where $K$ is the Rician $K$-factor.
 %\item \verb -- output argument; upper (converse) bound on $(\log_2 M)/n$.
 %\item \verb|rate_na| -- output argument; normal approximation of $(\log_2 M)/n$. 
 \end{enumerate}
+
 \end{itemize}
 
 
@@ -429,13 +436,21 @@ where $K$ is the Rician $K$-factor.
 %\end{verbatim}
 %
 %This function plots various bounds on the same figure. See Fig.~\ref{fig:awgn_example}.
+\section{Summary plot: \texttt{plot\_all()}}
+
+Format:
+\begin{verbatim}
+[C_e, rate_a, rate_c, rate_na] = plot_all(nn, P, error, tx, rx, K);
+\end{verbatim}
+
+This function plots capacity/achievability/converse/normal approximation curves on the same figure. See Fig.~\ref{fig:bounds-simo}.
 
 
 \section{Achievability: \texttt{ach\_simo\_csir()}}
 
 Format:
 \begin{verbatim}
-	function rate_a = ach_simo_csir(nn,P, error, rx, K);
+	function rate_a = ach_simo_csir(nn, P, error, rx, K);
 \end{verbatim}
 
 This function computes the $\kappa\beta$ achievability bound over a single-input multiple-output (SIMO) channel with perfect CSIR, see~\cite[Footnote~7]{yang14-07a}.

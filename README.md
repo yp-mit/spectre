@@ -37,7 +37,6 @@ For questions and access permissions: email <fblcode-list@mit.edu>
 
 Contributors (alphabetic order)
 ---------------------------------------
-
 * Giuseppe Durisi (Chalmers)
 * Johan Östman (HKUST)
 * Yury Polyanskiy (MIT)

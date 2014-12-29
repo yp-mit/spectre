@@ -289,12 +289,10 @@ General info:
 Format:
 \begin{verbatim}
 function [R,current_eps]
-=DT_USTM_NxM(snrdB,T,L,Mt,Mr,epsilon,prec,filename);
-function [R,current_eps]
-=DT_USTM_MxM(snrdB,T,L,Mt,epsilon,prec,filename);
+=DT_USTM(snrdB,T,L,Mt,Mr,epsilon,prec,filename);
 \end{verbatim}
-
-These two functions compute the USTM-DT achievability bound~\cite[Th.~3]{durisi14-12a} for the case $\txant< \rxant$ and $\txant=\rxant$, respectively. These two cases are distinguished because different normalizations are used to avoid numerical instabilities.
+%
+This  function computes the USTM-DT achievability bound~\cite[Th.~3]{durisi14-12a} for the case $\txant\leq \rxant$.
 
 \section[Converse helper functions]{Converse helper functions: \texttt{MC\_USTM\_2x2\_q1x2()}, \texttt{MC\_USTM\_2x2\_q\_2x2()}, \texttt{MC\_USTM\_4x4\_q\_Mx4}} % (fold)
 \label{sec:converse_bounds__texttt}
@@ -318,7 +316,7 @@ For the $4\times 4$ case, the code provided assumes that the optimization in~\ci
 Format
 %
 \begin{verbatim}
-  function R=compute_MC_2x2_telatar(snrdB,T,L,epsilon)
+function R=compute_MC_2x2_telatar(snrdB,T,L,epsilon)
 \end{verbatim}
 %
 Compute the metaconverse upper bound~\cite[Eq.~(41)]{durisi14-12a} by invoking the function \texttt{MC\_USTM\_2x2()} and by optimizing over the input diagonal matrices $\{\Sigma_k\}_{k=1}^{\tfdiv}$ and the number of effectively used transmit antennas.
@@ -333,28 +331,28 @@ NOTE: this function may be very slow if \verb|L| is large or \verb|epsilon| is s
 \label{sec:alamouti}
 
 Format
-
+%
 \begin{verbatim}
 function [R,current_eps]
 =MC_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
 function [R,current_eps]
 =DT_USTM_Alamouti(snrdB,T,L,epsilon,prec,filename)
 \end{verbatim}
-
-Compute achievability and converse bounds for a $2\times 2$ MIMO system with Alamouti used as inner code
-
-
+%
+These functions compute achievability and converse bounds for a $2\times 2$ MIMO system with Alamouti used as inner code
+%
+%
 \section[Outage capacity]{Outage: \texttt{outage\_mi()}, \texttt{outage\_alamouti()}, \texttt{outage\_2x2\_telatar()} } % (fold)
 \label{sec:outage}
-
+%
 \begin{verbatim}
-  function [Cout,current_eps]
-  =outage_mi(snrdB,epsilon,Mt,Mr,L,pow_all,prec)  
-  function [Cout,current_eps]
-  =outage_alamouti(snrdb,epsilon,L,prec,filename)  
-  function R=outage_2x2_telatar(L,prec,epsilon,snrdb)
+function [Cout,current_eps]
+=outage_mi(snrdB,epsilon,Mt,Mr,L,pow_all,prec)  
+function [Cout,current_eps]
+=outage_alamouti(snrdb,epsilon,L,prec,filename)  
+function R=outage_2x2_telatar(L,prec,epsilon,snrdb)
 \end{verbatim}
-
+%
 The first two functions  compute the outage mutual information $I_{\epsilon}$ for a given set of diagonal input covariance matrices, and the outage mutual
 information with Alamouti, respectively:
 
@@ -372,7 +370,7 @@ the eigenvalues of the input covariance matrix in each coherence interval satisf
 
 \section[Ergodic capacity]{Ergodic capacity: \texttt{ergodic\_USTM()}}
 \begin{verbatim}
-  function RergUSTM=ergodic_USTM(snrdB,T,Mt,Mr,prec)
+function RergUSTM=ergodic_USTM(snrdB,T,Mt,Mr,prec)
 \end{verbatim}
 This function computes a lower bound on the ergodic capacity (no CSIR), obtained by evaluating the mutual information for a USTM input distribution. 
 It is assumed that $\txant\leq\rxant$.

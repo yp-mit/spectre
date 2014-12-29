@@ -1,11 +1,12 @@
 
-function [R,current_eps]=DT_USTM_MxM(snrdB,T,L,Mt,epsilon,prec,filename)
+function [R,current_eps]=DT_USTM(snrdB,T,L,Mt,Mr,epsilon,prec,filename)
 %
 % Function to compute the DT lower bound for a Rayleigh block-fading
 % channel with no CSI at transmitter and receiver. The bound assumes that
 % USTM is chosen as input distribution 
 % snrdB: SNR in dB
-% Mant: number of transmit antennas and number of receive antennas (square setting)
+% Mt: number of transmit antennas 
+% Mr: number of receive antennas (Mt<=Mr); 
 % T: size of coherence interval 
 % L: number of independent coherence intervals; L*T is the blocklength
 % epsilon: maximal block error probability
@@ -20,9 +21,9 @@ function [R,current_eps]=DT_USTM_MxM(snrdB,T,L,Mt,epsilon,prec,filename)
 %                       SET-UP PARAMETERS
 %-------------------------------------------------------------------
 
-SAVE=1; % if this flag is active the samples of the information density are saved for possibe further refinemes
+SAVE=0; % if this flag is active the samples of the information density are saved for possibe further refinemes
+MAT=0; % save with .mat extension
 
-Mr=Mt; %number of receive antennas
 K = 2^prec; % number of monte carlo simulations (it should be at least 100 x 1/epsilon)
 rho = 10.^(snrdB/10); % SNR in linear scale
 
@@ -34,7 +35,7 @@ I = zeros(K,1); %allocate for the montecarlo runs
 %                       CONSTANTS
 %-------------------------------------------------------------------
 rho_tilde = T*rho/Mt; 
-D= [(1+rho_tilde)*eye(Mt), zeros(Mt,T-Mt);
+D= [sqrt(1+rho_tilde)*eye(Mt), zeros(Mt,T-Mt);
     zeros(T-Mt,Mt), eye(T-Mt)]; % D matrix (covariance matrix of equivalent noise)
 
 lambda=1+rho_tilde;
@@ -44,60 +45,56 @@ c2 = logComplexGammaRatio(Mt,Mr,T); %gamma constant
 c1 = Mt*(T-Mt)*log(lambda2); % SNR constant
 const = c1+c2;
 
-P=max(Mt,Mr);
+noise_norm=sqrt(.5);
 
 
 %-------------------------------------------------------------------
 %                       MONTE CARLO
 %-------------------------------------------------------------------
 
-
 for k = 1:K %do K montecarlo runs
-    
-
         i_L = 0;   
-  
+        Z = (randn(T,Mr,L)+1i*randn(T,Mr,L))*noise_norm;
         for l = 1:L %Create each realization
-            %GENERATE Z
-            Z = randn(T,Mr)*sqrt(.5)+1i*randn(T,Mr)*sqrt(.5);
+            Sigma = svd(D*Z(:,:,l)).^2;    
+            if (Mt==1)
+                M = createMalt(Mt,Mr,T,Sigma,lambda2); %create  matrix
+                logdetM=log(det(M))+Sigma(1)*lambda2-(T-Mr)*log(Sigma(1)); 
+                partial_sum=sum(Sigma)-logdetM;
+            else
+                M = createM(Mt,Mr,T,Sigma,lambda2);
+                logdetM=log(det(M)); 
+                logdetSigma = (T-Mr)*sum(log(Sigma));% compute logdet(Sigma^(T-M))
+                partial_sum=lambda1*sum(Sigma) - logdetM +logdetSigma;
+            end
             
-            %COMPUTE EVERYTHING THAT HAS TO DO WITH SINGULAR VALUES
-            Sigma = abs(eig(Z'*D*Z));
-            Sigma=sort(Sigma,1,'descend');
-            M = createM(Mt,Mr,P,T,Sigma,lambda2); %create  matrix
-            detM = det(M); %get the determinant
             vanderTerm = det(vander(Sigma)); %get the determinant of the vandermode matrix
-            TraceZ=trace(Z'*Z);
-         
-        
-            logDetSigma = (T-Mr)*sum(log(Sigma));% compute det(Sigma^(T-M))
+            TraceZ=real(trace(Z(:,:,l)'*Z(:,:,l)));
             
-            logdetM=log(detM);
-
-            % GET INFORMATION DENSITY
-            i = const- TraceZ  + lambda1*sum(Sigma) - log(detM) + log(vanderTerm) + logDetSigma;%Information density for time l (i(x_l, y_l)
-            i_L = i_L + i; %add it to the total i_L 
-            
+            i_temp = const- TraceZ  +partial_sum + log(vanderTerm);  %Information density for time l (i(x_l, y_l)
+            i_L = i_L + i_temp; %add it to the total i_L 
         end
 
         I(k) =  i_L; %put all computations on a pile to compute the average later
         
 end
 
+ 
 
-if (SAVE==1)
 
+if (SAVE==1) 
+  if (MAT==1)
+    save(filename,'I')
+  else
     save(filename,'I','-ascii','-append')
+  end
 end
+
 
 
 %---------------------------------------
 %   START SEARCHING FOR THE RATE
 %---------------------------------------  
-if (SAVE==1)
-
-    I=load(filename);
-end
 
 I=sort(I);
 
@@ -135,31 +132,60 @@ end
 
 current_eps=sum(exp(-max(0,I-I(index))))/K;
 
+if (I(index)>500),
 
-R=log2(exp(I(index))+1)/(L*T); % factor 2 removed from DT bound to account for max error probability
+  R=I(index)/(L*T*log(2));
+  
+else
+
+  R=log2(exp(I(index))+1)/(L*T); % factor 2 removed from DT bound to account for max error probability
+
+end
 
 end
 
 
 function val = logComplexGammaRatio(Mt,Mr,T)
-    k=T-min(Mt,Mr)+1:1:T;
+    k=T-Mt+1:1:T;
     val = -sum(gammaln(k));
     r=1:1:Mt;
-    val=val+sum(gammaln(r)); 
+    val=val+sum(gammaln(r));
 end
 
-function M = createM(Mt,Mr,P,T,Sigma,lambda)
-    M = nan(P,P); %(l is the row, k is the column)
-    % note: this function is invoked in the following program only for the case Mt=Mr;
+function M = createMalt(Mt,Mr,T,Sigma,lambda)
+    M = nan(Mr,Mr); %(l is the row, k is the column)
+    for l = 1:Mr,
+      for k=1:Mt,      
+        M(l,k)=(Sigma(l)^(Mt-k))*gammainc(lambda*Sigma(l),T+k-Mt-Mr)*exp(lambda*(Sigma(l)-Sigma(1)))*(Sigma(1)/Sigma(l))^(T-Mr);
+      end
+      
+      for k=Mt+1:1:Mr,
+          M(l,k)= Sigma(l)^(Mr-k);
+      end
+        
+    end
+
+                
+end
+
+
+function M = createM(Mt,Mr,T,Sigma,lambda)
+    M = nan(Mr,Mr); %(l is the row, k is the column)
+    P=Mr;
+    
     for l = 1:Mr,
         for k=1:Mt,
                 
             M(l,k)=(Sigma(l)^(Mt-k))*gammainc(lambda*Sigma(l),T+k-Mt-P);
         end
         
+        for k=Mt+1:Mr,
+                    
+            M(l,k)=(Sigma(l)^(T-k))*exp(-Sigma(l)*lambda); % case Mt<Mr
+            
+        end
     end
-
-                
+    
 end
 
  

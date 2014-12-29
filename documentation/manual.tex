@@ -55,7 +55,7 @@
 
 \title{SPECTRE\\
 Short Packet Communication Toolbox\\[1cm]
-Version 0.1}
+Version 0.2}
 
 \author{Contributors (alphabetic order):\\
 Giuseppe Durisi, Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
@@ -368,6 +368,14 @@ first \verb|Mt|$-1$ eigenvalues of the input covariance matrices corresponding t
 
 The function \verb|outage_2x2_telatar| provides an example on how to perform this optimization for the $2\times 2$ MIMO case. The optimization is restricted to input covariance matrices that satisfy the generalized Telatar conjecture~\cite[Eq.~(42)]{durisi14-12a} according to which in 
 the eigenvalues of the input covariance matrix in each coherence interval satisfy the following property: $k$ out the \verb|Mt| eigenvalues are equal to \verb|SNR|$/k$ and the remaining \verb|Mt|$-k$ eigenvalues are equal to zero. The value of $k$ may change across the coherence intervals.
+
+
+\section[Ergodic capacity]{Ergodic capacity: \texttt{ergodic\_USTM()}}
+\begin{verbatim}
+  function RergUSTM=ergodic_USTM(snrdB,T,Mt,Mr,prec)
+\end{verbatim}
+This function computes a lower bound on the ergodic capacity (no CSIR), obtained by evaluating the mutual information for a USTM input distribution. 
+It is assumed that $\txant\leq\rxant$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

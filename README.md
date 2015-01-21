@@ -18,7 +18,7 @@ Achievability bounds, converse bounds and approximation for the following channe
 Getting started
 ------------------
 
-Consult the toolbox manual
+Consult the toolbox [manual](https://sites.google.com/site/durisi/manual.pdf?attredirects=0&d=1). For the latest version,
 ```
   cd documentation
   make manual.pdf

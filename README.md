@@ -1,5 +1,8 @@
-SPECTRE: Short packet communication toolbox
+<img src="https://sites.google.com/site/durisi/software/spectre%20logo%20high-res.jpg?attredirects=0)" alt="spectre logo" align="middle" height="142" width="142"> 
+short packet communication toolbox
 ===========================================
+
+
 
 Shannon theory describes fundamental limits of communication and compression systems. Classic closed-form results (such as the well known log(1 + SNR) formula) apply only to the regime of infinite blocklength (infinite packet size/ infinite delay). 
 

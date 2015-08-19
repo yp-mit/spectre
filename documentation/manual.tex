@@ -521,6 +521,82 @@ with $m \triangleq \min\{\txant , \rxant\}$ and $\{\lambda_i\}$ being the eigenv
 %
 %
 
+\chapter{Block-memoryless Rayleigh Fading (CSIR)}
+
+General info:
+\begin{itemize}
+\item Maintainer: A. Collins \url{<austinc@mit.edu>}
+
+\item Main references: XXXX
+
+\item Example: See Figure~\ref{fig:block_mimo_summary}
+
+\item Channel Model: with $n_t$ transmit antennas, $n_r$ receive antennas, and coherence time $T$, the model is given by
+\begin{align}
+Y_j = H_jX_j + Z_j, \qquad j = 1,\hdots,n
+\end{align}
+Where $\mathbb{F}$ is either $\mathbb{R}$ or $\mathbb{C}$, and
+\begin{itemize}
+\item $X_j \in \mathbb{F}^{n_t \times T}$ is channel input
+\item $H_j \in \mathbb{F}^{n_r \times n_t}$ is fading matrix, iid Rayleigh per block
+\item $Z_j \in \mathbb{F}^{n_r \times T}$ is the i.i.d. (circularly symmetric) Gassian noise matrix.
+\item $Y_j \in \mathbb{F}^{n_r \times T}$ is output matrix
+\end{itemize}
+The input must satisfy the per-codeword power constraint
+\begin{align}
+\sum_{j=1}^n \|x_j\|_F^2 \leq nP
+\end{align}
+
+\item Input / output arguments
+\begin{itemize}
+\item \verb|P| --  SNR in dB
+\item \verb|n| -- number of coherent blocks (for $nT$ total channel uses)
+\item \verb|n_t| -- number of transmitter antennas
+\item \verb|n_r| -- number of receiver antennas
+\item \verb|T| -- channel coherence time (in number of channel uses)
+\item \verb|epsilon| -- average probability of error
+\item \verb|real_or_complex| -- specifies real or complex channel (set to \verb|'real'| or \verb|'complex'|, respectively)
+\end{itemize}
+\end{itemize}
+
+\section{Summary plot: }
+
+\begin{figure}[ht]\label{fig:block_mimo_summary}
+    \centering
+    \includegraphics[scale=0.50]{plots/block-csir-mimo.png}
+\vspace{-1.5mm}
+\caption{Achievability (blue), normal approximation (red), and capacity for the real MIMO CSIR block fading channel with $n_t = n_r = T = 2$, $P=10$, $\epsilon = 10^{-3}$.
+\label{fig:bounds-simo}}
+\end{figure}
+
+
+
+\section{Achievability Bound: \texttt{MIMO\_achievability\_CSIR()}}
+
+Format:
+\begin{verbatim}
+    function log_M = MIMO_achievability_CSIR(n,epsilon,n_t,n_r,T,P,real_or_complex)
+\end{verbatim}
+
+This function computes the following average probability of error achievability bound:
+
+\begin{align}
+\log M \geq \sup_{0<\tau<\epsilon} \sup_{Q_Y}\frac{\beta_{\tau}(P_Y,Q_Y)}{\beta_{1-\epsilon+\tau}(P_{XY},P_XQ_Y)}
+\end{align}
+Where $P_Y$ is the output distribution through the channel when the input $P_X$ has the following distribution ($X^n$ iid $\mathcal{N}(0,P/n_t)$)
+\begin{align}
+X^n \frac{\sqrt{nTP}}{\|X^n\|_F}
+\end{align}
+And $Q_Y$ is the output distribution when the input is iid Gaussian $\mathcal{N}(0,P/n_t)$.  Both of these are fairly easily adjustable in the code.
+
+\section{Capacity and Dispersion: \texttt{Capacity\_and\_Dispersion()}}
+
+Format:
+\begin{verbatim}
+    function [C,V] = capacity_and_dispersion(n_t,n_r,T,P,real_or_complex)
+\end{verbatim}
+
+This function computes the capacity and dispersion of the MIMO block fading channel (parameters are a subset of those listed above).  
 
 
 

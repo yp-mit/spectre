@@ -32,6 +32,8 @@
 %\input{defs_giuseppe.tex}
 
 \def\matn{\mathcal{N}}
+\def\matcn{\mathcal{CN}}
+\def\matc{\mathcal{C}}
 %\newcommand{\safemath}[2]{\newcommand{#1}{\ensuremath{#2}\xspace}}
 \def\txant{m_{\mathrm{t}}} %number of transmit antennas
 \def\txantalt{\widetilde{m}_{\mathrm{t}}}
@@ -111,7 +113,7 @@ General info:
 \begin{itemize}
 \item Maintainer: Y. Polyanskiy \url{<yp@mit.edu>}
 
-\item Main references: \cite{PPV08,PPV10eneff}
+\item Main references: \cite{PPV08}
 
 \item Example: See Fig.~\ref{fig:awgn_example} 
 
@@ -206,18 +208,6 @@ Code in \verb|universe/plot_universe()| compiles a comparative plot of normalize
 See~\cite[Section IV.D]{PPV08}.
 
 
-\section{Energy-per-bit bounds}
-
-Format:
-\begin{verbatim}
-	function En0 = ach_nofb(Lms, epsil);
-	function lm = converse_nofb(en0, epsil);
-	function lm = normapx_nofb(en0, epsil);
-\end{verbatim}
-
-These functions return achievability/converse/normal approximation for the problem of minimal achievable ratio ${E\over
-N_0 \cdot \log_2 M}$, where $E$ is the total expended energy over infinite channel uses of AWGN channel with noise
-$N_0\over 2$.  These are bounds from~\cite[Theorems 2 and 3]{PPV10eneff}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter[Block-memoryless Rayleigh fading (no CSI)]{Block-memoryless Rayleigh fading channel, no CSI}
@@ -607,9 +597,73 @@ Format:
 This function computes the capacity and dispersion of the MIMO block fading channel (parameters are a subset of those listed above).  
 
 
+\chapter{Energy-per-bit under vanishing spectral efficiency}
 
+General info:
+\begin{itemize}
+\item Maintainer: Y. Polyanskiy \url{<yp@mit.edu>}
 
+\item Main references: \cite{PPV10eneff,YDP15}
 
+\item Example: See Fig.~\ref{fig:ebno_example} 
+
+\item Channel model:
+\begin{equation}\label{eq:ebno_channel}
+		Y_j = H_j X_j + Z_j, \quad j=1,\ldots \qquad n=\infty \quad\mbox{\bfseries (!!!)} 
+\end{equation}	
+	\begin{itemize}
+	\item Noise: $Z_j \sim \matcn(0,N_0)$ iid and $N_0$ is noise spectral density
+	\item Channel gain (for AWGN): $H_j=1$ constant
+	\item Channel gain (for Rayleigh fading): $H_j\sim\matcn(0,1)$ iid 
+	\item Power constraints: Each codeword $x^\infty$ satisfies
+			$$ \sum_{j=1}^n |x_j|^2 \le E\,,  $$
+		where $E$ is the total energy budget. 
+	\item Energy-per-bit: For the codebook $\matc$ of size $M$ its energy-per-bit is defined as
+			$$ E_b = {E\over \log_2 M}\,.$$
+	\end{itemize}
+
+\item Description: \\Bounds in this Chapter address the question of finding the absolutely minimal energy-per-bit required
+for transmitting $\log_2 M$ bits with probability of error $\epsilon$ and \textit{without
+restriction on the number of channel uses}. Asymptotically as $M\to \infty$ it is known:
+	$$ {E_b\over N_0} \to \log_e 2 \approx -1.59~dB $$
+
+\item Real/Complex: In the regime of infinite bandwidth as here, there is no difference between real/complex channel
+inputs (but noise variance in the real case should be taken $Z_j \sim \matn(0, {N_0\over 2})$).
+
+\item MIMO and block-fading: Surprisingly, having multiple transmit antennas or block-constant fading makes no 
+	difference for energy-per-bit, see~\cite{YDP15}. Having $m_r>1$ receive antennas is equivalent to scaling $N_0
+	\to {N_0\over m_r}$ and thus again does not require any special treatment.
+
+\item Remark: These bounds correspond to allowing no feedback link. Even a modicum of feedback significantly
+improves the energy-per-bit tradeoff at finite length, see~\cite{PPV10eneff}.
+
+\item Remark: The tradeoff $E_b\over N_0$ vs. $\log_2 M$ can also be interpreted as the rate-blocklength tradeoff for the
+power-constrained \textit{infinite-bandwidth} continunuous-time channel, see~\cite[(50)-(51)]{PPV10eneff}.
+
+\item Common input/output arguments:
+\begin{enumerate}
+\item \verb|epsil| -- block probability of block error.
+\item \verb|lm| or \verb|Lms| -- input or output argument; $\log_2 M$, log-size of codebook (base-2 information units). 
+\item \verb|en0| or \verb|EE| -- input/output argument; energy-per-bit $E_b\over N_0$.
+\end{enumerate}
+\end{itemize}
+
+\section{Summary plot}
+
+\textbf{TODO}
+
+\section{The AWGN channel ($H_j=1$)}
+
+Here $H_j=1$ in the channel model~\eqref{eq:ebno_channel}.
+
+Format:
+\begin{verbatim}
+	function En0 = energy_awgn_ach(Lms, epsil);
+	function lm = energy_awgn_conv(en0, epsil);
+	function lm = energy_awgn_normapx(en0, epsil);
+\end{verbatim}
+
+These functions return achievability/converse/normal approximation. The bounds are from~\cite[Theorems 2 and 3]{PPV10eneff}.
 
 
 % subsection outage_outage_capacity()_outage_capacity_alamouti()_ (end)

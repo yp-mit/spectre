@@ -1,14 +1,14 @@
 %info_bits=function conv_epb_csir(EE, epsil);
 %
 %This function computes the converse bound on the maixmal number of
-%information bits that can be transmitted over a Rayleigh-fading channel
+%information bits (lm=log_2 M) that can be transmitted over a Rayleigh-fading channel
 %(perfect CSIR) with a fixed energy budget "EE" and error probability
 %"epsil". Here, "EE" is a vector, and "epsil" is a scalar.
 
-function info_bits=conv_epb_csir(EE, epsil)
+function lm=energy_csir_conv(EE, epsil)
 
 
-info_bits=[];
+lm=[];
 for ij = 1:length(EE)
     
     E = EE(ij);
@@ -52,7 +52,7 @@ for ij = 1:length(EE)
     end
     
     logM = min(eta_array - log(pr_array -epsil));
-    info_bits =[info_bits, logM/log(2)];
+    lm =[lm, logM/log(2)];
     
 %     Eb=log10(E/logM*log(2))*10;
 %     disp(['k^*(E,error)=',num2str(logM/log(2)),';    Eb=',num2str(Eb)]);

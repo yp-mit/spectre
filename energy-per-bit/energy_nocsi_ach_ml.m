@@ -6,7 +6,7 @@
 %Here, "EE" is a vector, and "epsil" is a scalar. Note that the entries in
 %"EE" must be arranged in ascending order.     
 
-function info_bits=ach_epb_ml(EE,epsil)
+function info_bits=energy_nocsi_ach_ml(EE,epsil)
 
 
 %normal approximation for k^*(E,error) 

@@ -644,7 +644,8 @@ power-constrained \textit{infinite-bandwidth} continunuous-time channel, see~\ci
 \begin{enumerate}
 \item \verb|epsil| -- block probability of block error.
 \item \verb|lm| or \verb|Lms| -- input or output argument; $\log_2 M$, log-size of codebook (base-2 information units). 
-\item \verb|en0| or \verb|EE| -- input/output argument; energy-per-bit $E_b\over N_0$.
+\item \verb|en0| -- input/output argument; energy-per-bit $E_b\over N_0$.
+\item \verb|EE| -- input argument; total energy budget available $E\over N_0$ (to get ${E_b\over N_0}$).
 \end{enumerate}
 \end{itemize}
 
@@ -664,7 +665,45 @@ Format:
 \end{verbatim}
 
 These functions return achievability/converse/normal approximation. The bounds are from~\cite[Theorems 2 and 3]{PPV10eneff}.
+Note that \verb|en0| is the $E_b\over N_0$ (i.e. energy-per-bit, \textit{not} total energy budget).
 
+
+\section{Rayleigh fading: CSIR case}
+
+Format:
+\begin{verbatim}
+	function lm = energy_csir_conv(EE, epsil);
+\end{verbatim}
+
+This function computes the converse (upper) bound on the number of information bits, \verb|lm|, that a Rayleigh fading
+channel with perfect CSIR can transmit under a total energy budget \verb|EE|$={E\over N_0}$; see~\cite[Theorem
+11]{YDP15}. Note that for CSIR case we can use \verb|energy_aegn_ach()| and \verb|energy_awgn_normapx()| for
+achievability and normal approximation, see~\cite[Section III.D]{YDP15}.
+
+\medskip
+\textbf{Note:} vector \verb|EE| should be in ascending order.
+
+\section{Rayleigh fading: noCSI case}
+
+Format:
+\begin{verbatim}
+	function lm = energy_nocsi_ach_ht(EE, epsil);
+	function lm = energy_nocsi_ach_ml(EE, epsil);
+\end{verbatim}
+
+	These are two achievability bounds~\cite[Corollary 4 and 5]{YDP15} with the second one, \verb|_ml()|, being
+	typically better.
+
+\begin{verbatim}
+	function lm = energy_nocsi_conv(EE, epsil);
+	function lm = energy_nocsi_normapx(EE, epsil);
+\end{verbatim}
+
+	The converse bound is~\cite[Theorem 6]{YDP15}. The normal approximation is computed by maximizing over $A$
+	in~\cite[(64)]{YDP15}.
+
+\medskip
+\textbf{Note:} vector \verb|EE| should be in ascending order.
 
 % subsection outage_outage_capacity()_outage_capacity_alamouti()_ (end)
 

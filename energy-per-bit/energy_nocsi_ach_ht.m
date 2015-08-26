@@ -5,7 +5,7 @@
 %Rayleigh-fading channel with a fixed energy budget "EE" and error
 %probability "epsil". Here, EE is a vector, and epsil is a scalar.   
 
-function info_bits = ach_epb_ht(EE, epsil)
+function info_bits = energy_nocsi_ach_ht(EE, epsil)
 
 info_bits=[];
 loop=100000;

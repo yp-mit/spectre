@@ -6,11 +6,11 @@
 %"epsil". Here, "EE" is a vector, and "epsil" is a scalar.
 
 
-function info_bits=conv_epb_nocsi(EE, epsil)
+function info_bits=energy_nocsi_conv(EE, epsil)
 
 info_bits=[];
 
-[info_bits_na, NN_na]=normal_approx_nocsi(EE,epsil);
+[info_bits_na, NN_na]=energy_nocsi_normapx(EE,epsil);
 
 if epsil<0.1
     target_error = epsil*2;

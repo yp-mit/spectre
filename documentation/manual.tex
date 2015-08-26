@@ -106,7 +106,7 @@ In the next chapters, we provide a bare-bone manual, which describes the routine
 
 % subsection contributors (end)
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{AWGN channel}
+\chapter{The real AWGN channel}
 
 
 General info:
@@ -119,9 +119,12 @@ General info:
 
 \item Channel model:
 	$$ Y_j = X_j + Z_j, \quad j=1,\ldots,n $$
-	Noise: $Z_j \sim \matn(0,1)$ iid.\\
-	Power constraints: Each codeword $x^n$ satisfies
+	\begin{itemize}
+	\item Codewords are real: $x_j \in \mathbb{R}, j=1,\ldots,n$
+	\item Noise: $Z_j \sim \matn(0,1)$ iid.\\
+	\item Power constraints: Each codeword $x^n$ satisfies
 			$$ \sum_{j=1}^n |x_j|^2 \le n P $$
+	\end{itemize}
 
 \item Common input/output arguments:
 \begin{enumerate}

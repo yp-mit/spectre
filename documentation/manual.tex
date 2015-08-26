@@ -559,7 +559,14 @@ The input must satisfy the per-codeword power constraint
 \end{itemize}
 \end{itemize}
 
-\section{Summary plot: }
+\section{Summary plot: \texttt{plot\_all()}}
+
+Format:
+\begin{verbatim}
+    function log_M = plot_all(P,n_t,n_r,T,epsilon)
+\end{verbatim}
+
+This will plot the achievability bound, the normal approximation, and the capacity as in Figure~\ref{fig:block_mimo_summary}.  To change the plot range, the \verb|n_vec| vector can be changed to include the desired points.
 
 \begin{figure}[ht]\label{fig:block_mimo_summary}
     \centering
@@ -568,7 +575,6 @@ The input must satisfy the per-codeword power constraint
 \caption{Achievability (blue), normal approximation (red), and capacity for the real MIMO CSIR block fading channel with $n_t = n_r = T = 2$, $P=10$, $\epsilon = 10^{-3}$.
 \label{fig:bounds-simo}}
 \end{figure}
-
 
 
 \section{Achievability Bound: \texttt{MIMO\_achievability\_CSIR()}}
@@ -588,6 +594,8 @@ Where $P_Y$ is the output distribution through the channel when the input $P_X$ 
 X^n \frac{\sqrt{nTP}}{\|X^n\|_F}
 \end{align}
 And $Q_Y$ is the output distribution when the input is iid Gaussian $\mathcal{N}(0,P/n_t)$.  Both of these are fairly easily adjustable in the code.
+
+Note that the \verb|iter| variable in the code sets the number of Monte Carlo iterations.  This should be taken to be $~< 100/\epsilon$.  For small $\epsilon$ (e.g. $10^{-3}$, you may want to let the code run overnight.
 
 \section{Capacity and Dispersion: \texttt{Capacity\_and\_Dispersion()}}
 

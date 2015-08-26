@@ -34,6 +34,9 @@ for E=EE
         end
     end
     info_bit =  max(info_bits_tem)/log(2);
+    if(isempty(info_bit))
+	    info_bit = 0;
+    end
     if info_bit <100 
         info_bit = log2(2^info_bit + 1);% M-1 >= tau/beta.
     end

@@ -1,4 +1,4 @@
-function En0 = ach_nofb(Lms, epsil);
+function En0 = energy_awgn_ach(Lms, epsil);
 % I use the following bound on the orig. ach-ty bound:
 % denote by x* anything satisfying M Q(x*) > 1
 %

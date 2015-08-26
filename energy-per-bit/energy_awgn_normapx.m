@@ -1,4 +1,4 @@
-function lm = normapx_nofb(en0, epsil)
+function lm = energy_awgn_normapx(en0, epsil)
 % Compute normapx on log m^*(E/N_0, \epsilon)
 
 loge = log2(exp(1));

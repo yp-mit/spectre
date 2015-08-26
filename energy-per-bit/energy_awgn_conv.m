@@ -1,4 +1,4 @@
-function lm = converse_nofb(en0, epsil)
+function lm = energy_awgn_conv(en0, epsil)
 % Compute upper bound on log m^*(E/N_0, \epsilon)
 
 % Use the lower bound on Q-function:

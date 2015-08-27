@@ -32,8 +32,8 @@ legend('Achievability', 'Normal approximation', ...
 
 xlim([1 10^6]);
 
-%set(fig1, 'PaperPositionMode', 'manual');
-%set(fig1, 'PaperPosition', [0 0 12 9]);
+set(fig1, 'PaperPositionMode', 'manual');
+set(fig1, 'PaperPosition', [0 0 12 9]);
 %figure(fig1);
 %print -depsc2 energy_awgn.eps
 
@@ -67,7 +67,7 @@ legend('noCSI: Achievability (ach\_ht)', 'noCSI: Normal approximation', ...
 			'noCSI: Converse', 'CSIR: Normal approximation', 'Shannon limit, -1.59 dB');
 xlim([1 2e5]);
 ylim([-2 10]);
-%set(fig2, 'PaperPositionMode', 'manual');
-%set(fig2, 'PaperPosition', [0 0 12 9]);
+set(fig2, 'PaperPositionMode', 'manual');
+set(fig2, 'PaperPosition', [0 0 12 9]);
 %figure(fig2);
 %print -depsc2 energy_nocsi.eps

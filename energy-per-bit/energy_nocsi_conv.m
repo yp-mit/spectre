@@ -8,6 +8,11 @@
 
 function info_bits=energy_nocsi_conv(EE, epsil)
 
+
+disp(['Warning: This function can benefit from parallel execution.']);
+disp(['Please execute matlabpool(','''','open','''', ',#cores) before running this function if you are running Matlab R2013a and prior.']);
+disp(['For Matlab R2013b and later, a parallel pool will automatically start when excuting this function.']);
+
 info_bits=[];
 
 [info_bits_na, NN_na]=energy_nocsi_normapx(EE,epsil);

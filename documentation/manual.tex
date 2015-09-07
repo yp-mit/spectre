@@ -372,13 +372,13 @@ It is assumed that $\txant\leq\rxant$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Quasi-static fading channel}
 
-
+\label{ch:qs-fading-st}
 
 
 
 General info:
 \begin{itemize}
-\item Maintainer: W. Yang \url{<ywei@chalmers.se>}
+\item Maintainer: W. Yang \url{<weiy@princeton.edu>}
 
 \item Main references: \cite{yang14-07a}
 
@@ -506,13 +506,86 @@ $$V(\mathsf{H}) \triangleq  m\log_2^2 e  - \sum\limits_{i=1}^{m } \frac{\log_2^2
 with $m \triangleq \min\{\txant , \rxant\}$ and $\{\lambda_i\}$ being the eigenvalues of $\mathsf{H}\mathsf{H}^{\mathrm{H}}$.
 
 
+
+\chapter{Quasi-static fading channel (long-term power constraint) }
+
+General info:
+\begin{itemize}
+\item Maintainer: W. Yang \url{<weiy@princeton.edu>}
+
+\item Main references: \cite{yang15-09}
+
+%\item Example: See Fig.~\ref{fig:ebno_example} 
+
+\item Channel model:
+\begin{equation}
+Y_i = H X_i + Z_i, \qquad i=1,\ldots, n
+\label{eq:qs-channel-lt}
+\end{equation}
+where 
+\begin{itemize}
 %
-%\section{Code database: \texttt{plot\_universe()}}
+\item $X_i, Y_i \in \complexset$ are the channel input and output, respectively
 %
-%Code in \verb|universe/plot_universe()| compiles a comparative plot of normalized rate for different codes.
-%See~\cite[Section IV.D]{PPV08}.
+\item $H\in \complexset$ is the complex channel coefficient 
+%
+\item $ Z_i \sim \mathcal{CN}(0,1)$ is the i.i.d. white Gaussian noise
+\end{itemize}
 %
 %
+\item An $(n,M,\epsilon)_{\mathrm{lt}}$ code for the channel~\eqref{eq:qs-channel-lt} consists of 
+%
+\begin{itemize}
+\item an encoder $f:\{1,\ldots,M\} \times \complexset \to \complexset^n $ that maps the message $W\in\{1,\ldots,M\}$ and the channel coefficient $H$ to a codeword $x^n = f(W,H)$ satisfying the \emph{long-term}  (i.e., averaged-over-all-codeword) power constraint 
+\begin{equation}
+\mathbb{E}_{W,H}\mathopen{}\big[\|f(W,H)\|^2\big] \leq n P
+\end{equation}
+where $W$ is equiprobable on $\{1,\ldots,M\}$ 
+%
+\item a decoder $g: \complexset^n \times \complexset \to\{1,\ldots,M\}$ satisfying the average error probability constraint 
+\begin{equation}
+\mathbb{P}[g(Y^n , H) \neq W] \leq \epsilon
+\end{equation}
+where $Y^n$ is the channel output induced by the transmitted codeword $x^n = f(W,H)$ according to~\eqref{eq:qs-channel-lt}.
+ \end{itemize}
+
+\item Remark: for comparison, a code is said to satisfy a \emph{short-term}  (i.e., per-codeword) power constraint if the encoder satisfies 
+\begin{equation}
+\|f(W,H)\|^2 \leq n P 
+\end{equation}
+with probability one, see Chapter~\ref{ch:qs-fading-st}. 
+
+\item Common input/output arguments:
+\begin{itemize}
+\item \verb|snr_db| -- input argument; SNR in dB
+\item \verb|nn| -- input argument; blocklength
+\item \verb|error| -- input argument; block error probability
+\item \verb|rate_ach_lt|/\verb|rate_conv_lt|/\verb|rate_na_lt| -- output arguments; lower (achievability) bound, upper (converse) bound, and normal approximation of $(\log_2 M)/n$, maximal achievable rate (in bits/ch. use).
+
+\end{itemize}
+
+
+
+\end{itemize}
+
+
+
+\section{The AWGN channel ($H=1$)}
+
+Format 
+
+\begin{verbatim}
+	function rate_ach_lt=awgn_ach_lt(snr_db, nn, error);
+	function rate_conv_lt=awgn_conv_lt(snr_db, nn, error);
+	function rate_na_lt = awgn_na_lt(snr_db,nn,error);
+\end{verbatim}
+
+These functions compute achievability/converse/normal approximation of $(\log_2 M)/n$, maximal achievable rate (in bits/ch. use). The bounds are from~\cite[Section II.C]{yang15-09} .
+
+\section{Quasi-static fading channel with perfect CSIT}
+
+Under construction.  
+
 
 \chapter{Block-memoryless Rayleigh Fading (CSIR)}
 
@@ -600,6 +673,7 @@ Format:
 This function computes the capacity and dispersion of the MIMO block fading channel (parameters are a subset of those listed above).  
 
 
+
 \chapter{Energy-per-bit under vanishing spectral efficiency}
 
 General info:
@@ -619,7 +693,7 @@ General info:
 	\item Channel gain (for AWGN): $H_j=1$ constant
 	\item Channel gain (for Rayleigh fading): $H_j\sim\matcn(0,1)$ iid 
 	\item Power constraints: Each codeword $x^\infty$ satisfies
-			$$ \sum_{j=1}^n |x_j|^2 \le E\,,  $$
+			$$ \sum_{j=1}^\infty |x_j|^2 \le E\,,  $$
 		where $E$ is the total energy budget. 
 	\item Energy-per-bit: For the codebook $\matc$ of size $M$ its energy-per-bit is defined as
 			$$ E_b = {E\over \log_2 M}\,.$$

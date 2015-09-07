@@ -1,4 +1,4 @@
-%Info_bits = ach_epb_ml(EE, epsil)
+%Info_bits = energy_nocsi_ach_ml(EE, epsil)
 %
 %This function computes the achievability bound on the maixmal number of
 %information bits that can be transmitted over a Rayleigh-fading channel
@@ -8,16 +8,12 @@
 
 function info_bits=energy_nocsi_ach_ml(EE,epsil)
 
-
 %normal approximation for k^*(E,error) 
-info_bits_na=EE/log(2) - (12^(-1/3)+(2/3)^(1/3))*(qfuncinv(epsil)/log(2))^(2/3)*(log2(EE)).^(1/3).*(EE).^(2/3);
+[info_bits_na, NN_na] = energy_nocsi_normapx(EE,epsil);
 
 info_bits=[];
 
 num_samples=1000; %number of k_values
-
-%determine the optimal number of nonzero entries using normal approximation
-NN_na = (1.5*qfuncinv(epsil)*EE/log(2)./log2(EE)).^(2/3);
 
 exceeding_indicator=0; %1 means that E is too big to do exact computations.
 
@@ -27,9 +23,20 @@ for index_E = 1:length(EE)
     
     E = EE(index_E);
     disp(['E=',num2str(E)]);
+    
     tic
     
-    N_na = NN_na(index_E); %optimal N from normal approximation
+    if info_bits_na(index_E) <=0 
+%        N_na = E; % in this case, E is small, and the normal approximation may not be accurate
+    disp(['This value of E is too small, energy_nocsi_ach_ml(', num2str(E),',',num2str(epsil),')=0']);
+    
+    info_bits=[info_bits, 0];
+    
+    continue;
+    else
+        N_na = NN_na(index_E); %optimal N from normal approximation    
+    end
+    
     
     N_start = floor(N_na/5);
     N_end = floor(N_na*5);
@@ -44,7 +51,7 @@ for index_E = 1:length(EE)
         
         k_start = max(floor(info_bits_na(index_E)/2),1);
         
-        k_end = info_bits_na(index_E)*2;
+        k_end = info_bits_na(index_E)*5;
         
         step_k = (log(k_end)-log(k_start))/num_samples;
         
@@ -52,6 +59,10 @@ for index_E = 1:length(EE)
         
         index_kk =find(kkk_ary<=1);
         kkk_ary(index_kk)=[];
+        
+        
+        kkk_ary = [kkk_ary, ceil(k_end):1: 1030]; % this is to make sure that the "while" loop ends before kkk_ary was exhausted 
+        
     end
     
     opt_k_ary=[];
@@ -60,7 +71,7 @@ for index_E = 1:length(EE)
         
         N=NN(index_N);        
         ij=1;
-        while exceeding_indicator==0
+        while exceeding_indicator==0 
             
             if kkk_ary(ij) <= 1020 %2^(1020) is probably the largest real number that a 64-bit version of MATLAB can handle
                 M = 2.^(kkk_ary(ij));
@@ -89,6 +100,7 @@ for index_E = 1:length(EE)
             ij=ij+1;
         end
         
+        
         if exceeding_indicator == 1
             xx= N/loop: N/loop: N;
             
@@ -113,8 +125,6 @@ for index_E = 1:length(EE)
     end%end N
     
     info_bits=[info_bits, max(opt_k_ary)]; 
-    Eb=log10(E/max(opt_k_ary) )*10;
-    disp(['k^*(E,error)=', num2str(max(opt_k_ary)),';    Eb=',num2str(Eb)]);
     toc
 end
-%semilogx(info_bits, log10(EE./info_bits)*10)
+

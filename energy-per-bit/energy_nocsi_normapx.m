@@ -1,4 +1,4 @@
-%[info_bits,opt_N] = normal_approx_nocsi(EE, epsil)
+%[info_bits,opt_N] = energy_nocsi_normapx(EE, epsil)
 %
 %This function computes the normal approximation for the maixmal number of
 %information bits that can be transmitted over a Rayleigh-fading channel

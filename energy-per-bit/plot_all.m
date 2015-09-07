@@ -40,14 +40,14 @@ set(fig1, 'PaperPosition', [0 0 12 9]);
 
 figure; fig2=gcf; axes('FontSize', 14);
 
-EE = 10.^linspace(2,5,30);
+EE = 10.^linspace(1.5,8,30);
 Lm_na = max(energy_nocsi_normapx(EE, epsil),0);
 Lm_ach_ht = energy_nocsi_ach_ht(EE,epsil);
 
 disp('Starting computation of 30 points of converse. This may take several hours...');
 
-%Lm_conv = energy_nocsi_conv(EE,epsil);
-Lm_conv = 0*EE;
+Lm_conv = energy_nocsi_conv(EE,epsil);
+%Lm_conv = 0*EE;
 
 EE_csir_na = 10.^linspace(1.5,5,100);
 Lm_csir_na = max(energy_awgn_normapx(EE_csir_na, epsil), 0);

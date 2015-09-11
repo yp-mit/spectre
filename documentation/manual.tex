@@ -60,7 +60,7 @@ Short Packet Communication Toolbox\\[1cm]
 Version 0.2}
 
 \author{Contributors (alphabetic order):\\
-Giuseppe Durisi, Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
+Austin Collins, Giuseppe Durisi, Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
 e-mail: \url{fblcode-list@mit.edu}}
 
 
@@ -663,14 +663,22 @@ And $Q_Y$ is the output distribution when the input is iid Gaussian $\mathcal{N}
 
 Note that the \verb|iter| variable in the code sets the number of Monte Carlo iterations.  This should be taken to be $~< 100/\epsilon$.  For small $\epsilon$ (e.g. $10^{-3}$, you may want to let the code run overnight.
 
-\section{Capacity and Dispersion: \texttt{Capacity\_and\_Dispersion()}}
+\section{Normal Approximation: \texttt{MIMO\_csir\_normapx()}}
 
 Format:
 \begin{verbatim}
-    function [C,V] = capacity_and_dispersion(n_t,n_r,T,P,real_or_complex)
+    function logM = MIMO_csir_normapx(n,epsilon,n_t,n_r,T,P,real_or_complex)
 \end{verbatim}
 
-This function computes the capacity and dispersion of the MIMO block fading channel (parameters are a subset of those listed above).  
+This function computes the normal approximation up to the $O(\sqrt{n})$ term, i.e.
+\begin{align}
+\log M \approx nTC - \sqrt{nTV}Q^{-1}(\epsilon)
+\end{align}
+It utilized the function 
+\begin{verbatim}
+    function [C,V] = capacity_and_dispersion(n_t,n_r,T,P,real_or_complex)
+\end{verbatim}
+Which computes the capacity and dispersion ($C$ and $V$, respectively) of the MIMO block fading channel for the given parameters.
 
 
 

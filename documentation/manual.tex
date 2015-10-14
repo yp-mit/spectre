@@ -532,9 +532,9 @@ General info:
 \item Example: See Figure~\ref{fig:block_mimo_summary}
 
 \item Channel Model: with $n_t$ transmit antennas, $n_r$ receive antennas, and coherence time $T$, the model is given by
-\begin{align}
+\begin{align*}
 Y_j = H_jX_j + Z_j, \qquad j = 1,\hdots,n
-\end{align}
+\end{align*}
 Where $\mathbb{F}$ is either $\mathbb{R}$ or $\mathbb{C}$, and
 \begin{itemize}
 \item $X_j \in \mathbb{F}^{n_t \times T}$ is channel input
@@ -543,13 +543,13 @@ Where $\mathbb{F}$ is either $\mathbb{R}$ or $\mathbb{C}$, and
 \item $Y_j \in \mathbb{F}^{n_r \times T}$ is output matrix
 \end{itemize}
 The input must satisfy the per-codeword power constraint
-\begin{align}
+\begin{align*}
 \sum_{j=1}^n \|x_j\|_F^2 \leq nP
-\end{align}
+\end{align*}
 
 \item Input / output arguments
 \begin{itemize}
-\item \verb|P| --  SNR in dB
+\item \verb|P| -- Power constraint
 \item \verb|n| -- number of coherent blocks (for $nT$ total channel uses)
 \item \verb|n_t| -- number of transmitter antennas
 \item \verb|n_r| -- number of receiver antennas
@@ -586,16 +586,16 @@ Format:
 
 This function computes the following average probability of error achievability bound:
 
-\begin{align}
+\begin{align*}
 \log M \geq \sup_{0<\tau<\epsilon} \sup_{Q_Y}\frac{\beta_{\tau}(P_Y,Q_Y)}{\beta_{1-\epsilon+\tau}(P_{XY},P_XQ_Y)}
-\end{align}
+\end{align*}
 Where $P_Y$ is the output distribution through the channel when the input $P_X$ has the following distribution ($X^n$ iid $\mathcal{N}(0,P/n_t)$)
-\begin{align}
+\begin{align*}
 X^n \frac{\sqrt{nTP}}{\|X^n\|_F}
-\end{align}
+\end{align*}
 And $Q_Y$ is the output distribution when the input is iid Gaussian $\mathcal{N}(0,P/n_t)$.  Both of these are fairly easily adjustable in the code.
 
-Note that the \verb|iter| variable in the code sets the number of Monte Carlo iterations.  This should be taken to be $~< 100/\epsilon$.  For small $\epsilon$ (e.g. $10^{-3}$, you may want to let the code run overnight.
+Note that the \verb|iter| variable in the code sets the number of Monte Carlo iterations.  The sampling loop uses \verb|parfor|, which attempts to distribute the computation.  The number of Monte Carlo iterations should be taken $~< 100/\epsilon$.  For small $\epsilon$ (e.g. $10^{-3}$, you may want to let the code run overnight.
 
 \section{Normal Approximation: \texttt{MIMO\_csir\_normapx()}}
 
@@ -605,14 +605,18 @@ Format:
 \end{verbatim}
 
 This function computes the normal approximation up to the $O(\sqrt{n})$ term, i.e.
-\begin{align}
+\begin{align*}
 \log M \approx nTC - \sqrt{nTV}Q^{-1}(\epsilon)
-\end{align}
-It utilized the function 
+\end{align*}
+It utilizes one of two functions to compute the capacity $C$ and dispersion $V$:
 \begin{verbatim}
-    function [C,V] = capacity_and_dispersion(n_t,n_r,T,P,real_or_complex)
+    function [C,V] = capacity_and_dispersion(n_t,n_r,T,P)
 \end{verbatim}
-Which computes the capacity and dispersion ($C$ and $V$, respectively) of the MIMO block fading channel for the given parameters.
+or
+\begin{verbatim}
+    function [C,V] = capacity_and_dispersion_mc(n_t,n_r,T,P,real_or_complex)
+\end{verbatim}
+The \verb|capacity_and_dispersion| function computes $C$ and $V$ via numerical integration for the complex MIMO channel, while \verb|capacity_and_dispersion_mc| compute these quantities using Monte Carlo.  The Monte Carlo computation is also useful it's flexibility, e.g. it's simple to change the fading distribution to compute the capacity and dispersion of non-Rayleigh fading channels.
 
 
 

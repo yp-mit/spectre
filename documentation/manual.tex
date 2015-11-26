@@ -58,7 +58,7 @@ Short Packet Communication Toolbox\\[1cm]
 Version 0.2}
 
 \author{Contributors (alphabetic order):\\
-Austin Collins, Giuseppe Durisi, Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
+Austin Collins, Giuseppe Durisi, Victoria Kostina, \\Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
 e-mail: \url{fblcode-list@mit.edu}}
 
 
@@ -430,7 +430,7 @@ Currently, we do not have code for MIMO achievability and converse bounds that h
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[scale=0.8]{plots/quasi-static-simo.pdf}
+	\includegraphics[scale=0.5]{plots/quasi-static-simo.pdf}
 \vspace{-1.5mm}
 \caption{Achievability and converse bounds for a quasi-static SIMO Rician-fading channel with $K$-factor equal to $20$ dB, two receive antennas, $\text{SNR}=-1.55 $ dB, and $\epsilon=10^{-3}$. 
 \label{fig:bounds-simo}}
@@ -624,7 +624,441 @@ The \verb|capacity_and_dispersion| function computes $C$ and $V$ via numerical i
 
 
 
+
 % subsection outage_outage_capacity()_outage_capacity_alamouti()_ (end)
+
+
+
+
+
+
+
+
+\chapter{Fixed-length source coding under a distortion criterion}
+
+\begin{itemize}
+\item Maintainer: V. Kostina \url{<vkostina@caltech.edu>}
+
+\item Main references: \cite{kostina2011fixed}
+
+\item Performance criterion - excess distortion probability: $$ \PP[ \mathsf d(S, Z) > d] \leq \epsilon,$$
+where $S$ is the source and $Z$ is its representation. 
+
+
+\item The code uses auxiliary functions contained in \verb|lib/|. This directory can to be added to Matlab path by running the following command: \verb|path(path, '../../lib');|
+
+\item To speed up calculations, some functions use the so-called `persistent' variables whose values are retained during multiple calls to those functions. This helps to choose the starting positions for various optimizations wisely. For example, if the function is computed for blocklength $510$ after blocklength $500$, it takes advantage of the previous computation to choose a starting position for various optimizations. To avoid problems, use command \verb|clear all| to clear the values of all persistent variables when making a computation unrelated to the previous computation.    
+
+
+\item Recommended usage: 
+\begin{verbatim}
+path(path, '../../lib');
+clear all; 
+
+N = 10:10:1000;
+out = NaN(1, length(N));
+for k = 1:length(N)
+    n = N(k);  
+    try
+        out(k) = Rstar(..., n, ...);  
+        save('mydatafile');  
+    catch ME
+        fprintf('Error: %s\n', getReport(ME));
+        out(k) = NaN;
+    end    
+end
+\end{verbatim}
+
+
+\end{itemize}
+
+
+
+
+
+\section{Binary memoryless source}
+
+\subsection{Source model}
+$ S_1, S_2, \ldots $ are i.i.d Bernoulli with bias $p$. 
+
+\subsection{Distortion measure}
+Bit error rate $$\mathsf d(s^k, z^k) = \frac 1 k \sum_{i = 1}^k 1\{s_i \neq z_i\}.$$
+
+\subsection{Matlab code}
+ \verb|sc/BMS/|
+
+
+\subsection{Main functions}
+\begin{description}
+\item[\texttt{Rstar(d, n, e, p, fun)}:]  Compression rate compatible with a given excess distortion. 
+\item[\texttt{Dstar(R, n, e, p, fun)}:]  Distortion threshold compatible with a given excess probability and a given rate. 
+\end{description}
+
+\subsection{Input arguments}
+
+\begin{description}
+\item[\texttt{d}:] distortion threshold.
+\item[\texttt{R}:] compression rate.
+\item[\texttt{n}:] blocklength.
+\item[\texttt{e}:] excess distortion probability.
+\item[\texttt{p}:] source bias.
+\item[\texttt{fun}:] alias for the function to be computed. Acceptable values:
+\begin{description}
+\item \emph {`shannon'}: Shannon's achievability bound \cite[Theorem 1]{kostina2011fixed}.
+\item \emph {`normal'}: Gaussian approximation \cite[Theorem 12]{kostina2011fixed}.
+\item \emph {`spherecoveringc'}: Converse via sphere covering and hypothesis testing \cite[Theorem 8]{kostina2011fixed}.
+\item \emph {`generalc'}: General converse via $\mathsf d$-tilted information \cite[Theorem 7]{kostina2011fixed}.
+\item \emph {`spherecoveringa'}: Achievability via covering with random spheres  \cite[Theorem 21]{kostina2011fixed}.
+\item \emph {`permutationa'}: Achievability via permutation coding (i.e. all codewords are of the same type, namely, the type that achieves the rate-distortion function)  \cite[Theorem 22]{kostina2011fixed}.
+\item \emph {`martona'}: Converse via Marton's bound \cite[Theorem 5]{kostina2011fixed}.
+\end{description}
+\end{description}
+
+
+
+
+
+
+
+
+\section{Gaussian memoryless source}
+
+\subsection{Source model}
+$ S_1, S_2, \ldots $ are i.i.d $\mathcal N(0, 1)$. 
+
+\subsection{Distortion measure}
+Squared error $$\mathsf d(s^k, z^k) = \frac 1 k \sum_{i = 1}^k (s_i - z_i)^2$$
+
+\subsection{Matlab code}
+\verb|sc/GMS/|
+
+
+\subsection{Main functions}
+\begin{description}
+\item[\texttt{Rstar(d, n, e, fun)}:]  Compression rate compatible with a given excess distortion. 
+\item[\texttt{Dstar(R, n, e, fun)}:]  Distortion threshold compatible with a given excess probability and a given rate. 
+\end{description}
+
+\subsection{Input arguments}
+
+\begin{description}
+\item[\texttt{d}:] distortion threshold.
+\item[\texttt{R}:] compression rate.
+\item[\texttt{n}:] blocklength.
+\item[\texttt{e}:] excess distortion probability.
+\item[\texttt{fun}:] alias for the function to be computed. Acceptable values:
+\begin{description}
+\item \emph {`shannon'}: Shannon's achievability bound \cite[Theorem 1]{kostina2011fixed}.
+\item \emph {`normal'}: Gaussian approximation \cite[Theorem 12]{kostina2011fixed}.
+\item \emph {`spherecoveringc'}: Converse via sphere covering and hypothesis testing \cite[Theorem 8]{kostina2011fixed}.
+\item \emph {`spherecoveringa'}: Achievability via covering with random spheres \cite[Theorem 37]{kostina2011fixed}.
+\end{description}
+
+The following \texttt{fun} values are accepted only by \texttt{Rstar(...)}.
+\begin{description}
+\item \emph {`generalc'}: General converse via $\mathsf d$-tilted information \cite[Theorem 7]{kostina2011fixed}. 
+\item \emph {`rogersa'}: Achievability using a result by Rogers \cite[Theorem 39]{kostina2011fixed}.
+\end{description}
+
+
+\end{description}
+
+
+
+
+
+\section{Binary erased source}
+
+\subsection{Source model}
+$ S_1, S_2, \ldots $ are i.i.d fair coin flips. However, the encoder does not observe $S_1, S_2, \ldots$. Instead, it observes an erased version of the source: $X_1, X_2, \ldots$, where $X_i = S_i$ with probability $1 - \alpha$, and $X_i = \texttt{?}$ with probability $\alpha$.    
+
+\subsection{Distortion measure}
+Bit error rate with respect to the original source$$\mathsf d(s^k, z^k) = \frac 1 k \sum_{i = 1}^k 1\{s_i \neq z_i\}, \qquad s_i, z_i \in \{ \texttt{0, 1} \}. $$
+
+\subsection{Matlab code}
+ \verb|sc/BES/|
+
+
+\subsection{Main functions}
+\begin{description}
+\item[\texttt{Rstar(d, n, e, alpha, fun)}:]  Compression rate compatible with a given excess distortion. 
+\end{description}
+
+\subsection{Input arguments}
+
+\begin{description}
+\item[\texttt{d}:] distortion threshold.
+\item[\texttt{n}:] blocklength.
+\item[\texttt{e}:] excess distortion probability.
+\item[\texttt{alpha}:] erasure probability. 
+
+\item[\texttt{fun}:] alias for the function to be computed. Acceptable values:
+\begin{description}
+\item \emph {`spherecoveringa'}: Achievability via covering with random spheres  \cite[Theorem 33]{kostina2011fixed}.
+\item \emph {`spherecoveringc'}: Converse via sphere covering (hypothesis testing) \cite[Theorem 32]{kostina2011fixed}.
+\item \emph {`normal'}: Gaussian approximation \cite[Theorem 12]{kostina2011fixed}.
+\item \emph {`aeq'}: Achievability via covering with random spheres for a surrogate rate-distortion problem which negates the stochastic variability of the erasure channel \cite{kostina2013ITWnoisysc}.
+\item \emph {`ceq'}: Converse via sphere covering (hypothesis testing) for the surrogate problem \cite{kostina2013ITWnoisysc}. 
+\item \emph {`normaleq'}: Gaussian approximation for the surrogate problem \cite{kostina2013ITWnoisysc}.
+\end{description}
+\end{description}
+
+
+
+
+
+
+
+
+
+\chapter{Variable-length compression allowing errors}
+
+\begin{itemize}
+\item Maintainer: V. Kostina \url{<vkostina@caltech.edu>}
+
+\item Main references: \cite{kostina2015varrate}.
+
+
+\item Fixed probability of error: $$ \PP[ S \neq Z ] \leq \epsilon,$$
+where $S$ is the source and $Z$ is its reconstruction after the (almost lossless) encoding.
+
+\item Performance criterion: average length of the compressed representation.   
+
+\item Performance criterion - excess distortion probability: $$ \PP[ \mathsf d(S, Z) > d] \leq \epsilon,$$
+where $S$ is the source and $Z$ is its reconstruction after the transmission over a noisy channel. 
+\item The code uses auxiliary functions contained in \verb|lib/|. This directory needs to be added to Matlab path by running the following command: \verb|path(path, '../../lib');|
+
+\item To speed up calculations, some functions use the so-called `persistent' variables whose values are retained during multiple calls to those functions. This helps to choose the starting positions for various optimizations wisely. For example, if the function is computed for blocklength $510$ after blocklength $500$, it takes advantage of the previous computation to choose a starting position for various optimizations. To avoid problems, use command \verb|clear all| to clear the values of all persistent variables when making a computation unrelated to the previous computation.    
+
+
+\item Recommended usage: 
+\begin{verbatim}
+path(path, '../../lib');
+clear all; 
+
+N = 10:10:1000;
+out = NaN(1, length(N));
+for k = 1:length(N)
+    n = N(k);  
+    try
+        out(k) = Rstar(..., n, ...);  
+        save('mydatafile');  
+    catch ME
+        fprintf('Error: %s\n', getReport(ME));
+        out(k) = NaN;
+    end    
+end
+\end{verbatim}
+
+
+\end{itemize}
+
+
+
+
+\section{Binary memoryless source}
+\subsection{Source model}
+$ S_1, S_2, \ldots $ are i.i.d Bernoulli with bias $p$. 
+
+
+\subsection{Matlab code}
+ \verb|sc/varrate/|
+ 
+ 
+ 
+ 
+ \subsection{Main function}
+\begin{description}
+\item[\texttt{Rstar(p, e, n, fun)}:]  Compression rate compatible with a given excess distortion. 
+\end{description}
+
+\subsection{Input arguments}
+
+\begin{description}
+\item[\texttt{p}:] source bias.
+\item[\texttt{e}:] error probability.
+\item[\texttt{n}:] blocklength.
+\item[\texttt{fun}:] alias for the function to be computed. Acceptable values:
+\begin{description}
+\item \emph {`approx'}:  Gaussian approximation \cite[Theorem 4]{kostina2015varrate}.
+\item \emph {`exact'}: Exact minimum average rate \cite[(26)]{kostina2015varrate}.
+\item \emph {`exacti'}: Exact value of the Erokhin function  \cite[(40)]{kostina2015varrate}.
+\item \emph {`ie'}: Exact value of the expectation of the $\epsilon$-cutoff of information in $S^k$  \cite[(11),(13)]{kostina2015varrate}.
+\end{description}
+
+\end{description}
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+\chapter{Joint source-channel coding under a distortion criterion}
+
+\begin{itemize}
+\item Maintainer: V. Kostina \url{<vkostina@caltech.edu>}
+
+\item Main references: \cite{kostina2012jscc}
+
+\item Performance criterion - excess distortion probability: $$ \PP[ \mathsf d(S, Z) > d] \leq \epsilon,$$
+where $S$ is the source and $Z$ is its reconstruction after the transmission over a noisy channel. 
+\item The code uses auxiliary functions contained in \verb|lib/|. This directory needs to be added to Matlab path by running the following command: \verb|path(path, '../../lib');|
+
+\item To speed up calculations, some functions use the so-called `persistent' variables whose values are retained during multiple calls to those functions. This helps to choose the starting positions for various optimizations wisely. For example, if the function is computed for blocklength $510$ after blocklength $500$, it takes advantage of the previous computation to choose a starting position for various optimizations. To avoid problems, use command \verb|clear all| to clear the values of all persistent variables when making a computation unrelated to the previous computation.    
+
+
+\item Recommended usage: 
+\begin{verbatim}
+path(path, '../../lib');
+clear all; 
+
+N = 10:10:1000;
+out = NaN(1, length(N));
+for k = 1:length(N)
+    n = N(k);  
+    try
+        out(k) = Rstar(..., n, ...);  
+        save('mydatafile');  
+    catch ME
+        fprintf('Error: %s\n', getReport(ME));
+        out(k) = NaN;
+    end    
+end
+\end{verbatim}
+
+
+\end{itemize}
+
+
+
+
+
+\section{Binary memoryless source transmitted over a binary symmetric channel}
+
+\subsection{Source model}
+$ S_1, S_2, \ldots $ are i.i.d Bernoulli with bias $p$. 
+
+
+\subsection{Channel model}
+$Y_i = X_i + N_i$, where $N_i$ are i.i.d. Bernoulli with bias $\delta$. 
+
+
+\subsection{Distortion measure}
+Bit error rate $$\mathsf d(s^k, z^k) = \frac 1 k \sum_{i = 1}^k 1\{s_i \neq z_i\}.$$
+
+\subsection{Matlab code}
+ \verb|jscc/BMS-BSC/|
+
+
+\subsection{Main functions}
+\begin{description}
+\item[\texttt{Rstar(p, delta, d, e, n, fun)}:]  Compression rate compatible with a given excess distortion. 
+\item[\texttt{Dstar(R, n, e, p, delta, fun)}:]  Distortion threshold compatible with a given excess probability and a given rate. 
+\end{description}
+
+\subsection{Input arguments}
+
+\begin{description}
+\item[\texttt{p}:] source bias.
+\item[\texttt{delta}:] channel crossover probability.
+\item[\texttt{d}:] distortion threshold.
+\item[\texttt{e}:] excess distortion probability.
+\item[\texttt{R}:] compression rate.
+\item[\texttt{n}:] blocklength.
+\item[\texttt{fun}:] alias for the function to be computed. Acceptable values:
+\begin{description}
+\item \emph {`approx'}:  Gaussian approximation \cite[Theorem 10]{kostina2012jscc}.
+\item \emph {`clistdecoding'}: Converse via list decoding and hypothesis testing \cite[Theorem 4]{kostina2012jscc}.
+\item \emph {`ajoint'}: Achievability via joint source-channel coding  \cite[Theorem 8]{kostina2012jscc}.
+\item \emph {`aseparate'}: Achievability via separation  \cite[Theorem 6]{kostina2012jscc}.
+\end{description}
+
+
+The following \texttt{fun} values are accepted only by \texttt{Rstar(...)}.
+\begin{description}
+\item \emph {`cgeneral'}: General converse via $\mathsf d$-tilted information \cite[Theorem 2]{kostina2012jscc}.
+\item \emph {`approxseparate'}: Gaussian approximation for the separation architecture  \cite[(126)]{kostina2012jscc}.
+\item \emph {`arcu'}: For the almost lossless transmission, achievability via RCU bound  \cite[Theorem 9]{kostina2012jscc}.
+\end{description}
+The following \texttt{fun} values are accepted only by  \texttt{Dstar(...)}. 
+\begin{description}
+\item \emph {`random'}: Achievability via random coding for fair coin flip source \cite[Theorem 6]{kostina2012jscc}.
+\item \emph {`nocoding'}: Achievability via no coding.  \cite[Theorem 23]{kostina2012jscc}.
+\end{description}
+
+
+\end{description}
+
+
+
+
+
+
+\section{Gaussian source transmitted over an AWGN channel}
+
+\subsection{Source model}
+$ S_1, S_2, \ldots $ are i.i.d $\mathcal N(0, 1)$. 
+
+
+\subsection{Channel model}
+$Y_i = X_i + N_i$, where $N_i$ are i.i.d. $\mathcal N(0, 1)$. 
+
+
+\subsection{Distortion measure}
+Squared error $$\mathsf d(s^k, z^k) = \frac 1 k \sum_{i = 1}^k (s_i - z_i)^2.$$
+
+\subsection{Matlab code}
+ \verb|jscc/GMS-AWGN/|
+
+
+\subsection{Main functions}
+\begin{description}
+\item[\texttt{Rstar(P, d, e, n, fun)}:]  Transmission rate compatible with a given excess distortion (nats). 
+\item[\texttt{Dstar(R, n, e, P, fun)}:]  Distortion threshold compatible with a given excess probability and a given rate. 
+\end{description}
+
+\subsection{Input arguments}
+
+\begin{description}
+\item[\texttt{P}:] maximum allowable transmit power, or SNR.
+\item[\texttt{d}:] distortion threshold.
+\item[\texttt{e}:] excess distortion probability.
+\item[\texttt{R}:] transmission rate.
+\item[\texttt{n}:] blocklength.
+\item[\texttt{fun}:] alias for the function to be computed. Acceptable values:
+
+
+\begin{description}
+\item \emph {`approx'}:  Gaussian approximation \cite[Theorem 10]{kostina2012jscc}.
+\item \emph {`cht'}: Converse via list decoding and hypothesis testing \cite[Theorem 4]{kostina2012jscc}.
+\item \emph {`ajoint'}: Achievability via joint source-channel coding  \cite[Theorem 8]{kostina2012jscc}.
+\item \emph {`aseparate'}: Achievability via separation  \cite[Theorem 6]{kostina2012jscc}.
+\end{description}
+
+
+The following \texttt{fun} values are accepted only by \texttt{Dstar()}. 
+\begin{description}
+\item \emph {`nocoding'}: Achievability via no coding \cite[Theorem 24]{kostina2012jscc}.
+\item \emph {`approxnocoding'}: Gaussian approximation for the uncoded system \cite[(129), (208)]{kostina2012jscc}.
+\end{description}
+
+The following \texttt{fun} values are accepted only by \texttt{Rstar()}.
+\begin{description}
+\item \emph {`cgeneral'}: General converse via $\mathsf d$-tilted information \cite[Theorem 2]{kostina2012jscc}.
+\item \emph {`approxseparate'}: Gaussian approximation for the separation architecture  \cite[(126)]{kostina2012jscc}.
+\end{description}
+
+\end{description}
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{IEEEtran}

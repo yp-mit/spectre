@@ -12,11 +12,13 @@ For finite blocklengths, no closed-form results are usually obtainable, but ther
 Content
 --------------------
 
-Achievability bounds, converse bounds and approximation for the following channel models:
+Achievability bounds, converse bounds and approximation for the following source and channel models:
 
 * AWGN channel
 * Quasi-static fading channel
 * Rayleigh block-fading channel (no CSI)
+* Binary memoryless source
+* Gaussian memoryless source
 
 Getting started
 ------------------
@@ -42,6 +44,7 @@ Contributors (alphabetic order)
 ---------------------------------------
 * [Austin Collins](http://www.mit.edu/~austinc/) (MIT)
 * [Giuseppe Durisi](https://sites.google.com/site/durisi/) (Chalmers)
+* [Victoria Kostina](http://vkostina.caltech.edu/) (Caltech)
 * Johan Östman (HKUST)
 * [Yury Polyanskiy](http://people.lids.mit.edu/yp/homepage/) (MIT)
 * Ido Tal (Technion)

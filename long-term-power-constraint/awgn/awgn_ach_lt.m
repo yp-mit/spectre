@@ -1,15 +1,11 @@
 %achievability bound for AWGN channel under a long-term power constraint
 %
 
-function [rate_kb]=awgn_ach_lt(snr_db, nn, error)
-
-%snr_db=0;
-%error=0.1;
-%nn=[1050:50:2000];% blocklength
+function rate_ach_lt=awgn_ach_lt(snr_db, nn, error)
 
 snr = 10^(snr_db);
 
-rate_kb = zeros(1,length(nn)); %achievable rate (kappa beta)
+rate_ach_lt = zeros(1,length(nn)); %achievable rate (kappa beta)
 
 %Check whether a long-term power constraint will be beneficial 
 C=log(1+snr);
@@ -19,7 +15,7 @@ n_min = ( (1+snr)/snr*sqrt(2*pi*snr)*(1-error)*exp(qfuncinv(error)^2/2) + qfunci
 n_index=find(nn <= n_min);
 
 if length(n_index)>0
-    rate_kb(n_index) = kappabeta_ach(2*nn(n_index),error,snr,1)./nn(n_index); %use the kappa beta bound for short-term power constraint  
+    rate_ach_lt(n_index) = kappabeta_ach(2*nn(n_index),error,snr,1)./nn(n_index); %use the kappa beta bound for short-term power constraint  
 end
 
 
@@ -42,6 +38,6 @@ for index_n= index_large_n
             temp_rate = (log2(kappa_inf(tau, P_n)) - betaq_up_v2(1-error_n+tau, 2*n, P_n))/n;
             temp_rate_arr=[temp_rate_arr,temp_rate];
         end
-        rate_kb(index_n)=max(temp_rate_arr); 
+        rate_ach_lt(index_n)=max(temp_rate_arr); 
     end
 end

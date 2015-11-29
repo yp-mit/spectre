@@ -276,7 +276,7 @@ General info:
 
    \begin{figure}[t]
     \centering
-      \includegraphics[width=.9\textwidth]{./plots/snr6eps03M2}
+      \includegraphics[width=20cm]{./plots/snr6eps03M2}
     \caption{Maximum coding rate $R^\ast(n_c,l,\epsilon,\rho)$ for $2\times 2$ MIMO system operating over a Rayleigh block-fading channel with coherence time $n_c$.
     Each packet spans~$l$ coherence intervals. The packet size is $168$ channel uses. The packet error rate is $\epsilon=10^{-3}$.
     The SNR is $\rho=6$ dB.}
@@ -669,6 +669,17 @@ for k = 1:length(N)
 end
 \end{verbatim}
 
+
+\item For an example plot (produced via~\verb|sc/GMS/plot_all.m|) see Fig.~\ref{fig:cgms1}.
+\begin{figure}
+\centering
+\begin{verbatim}
+	> cd sc/GMS
+	> plot_all(0.1, 0.01, 10:5:500)
+\end{verbatim}
+\includegraphics[height=5cm]{plots/compress_gms.eps}\\
+\caption{Lossy compression bounds for the memoryless Gaussian source.}\label{fig:cgms1}
+\end{figure}
 
 \end{itemize}
 

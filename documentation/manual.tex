@@ -1254,6 +1254,108 @@ The following \texttt{fun} values are accepted only by \texttt{Rstar()}.
 \end{description}
 
 
+\chapter{The binary-symmetric channel (BSC)}
+
+
+General info:
+\begin{itemize}
+\item Maintainer: Y. Polyanskiy \url{<yp@mit.edu>}
+
+\item Main references: \cite{PPV08}
+
+\item Example: See Fig.~\ref{fig:bsc_example} 
+
+\item Channel model:
+	$$ Y_j = X_j + Z_j \mod 2, \quad j=1,\ldots,n $$
+	\begin{itemize}
+	\item Codewords are 0/1: $x_j \in \{0,1\}, j=1,\ldots,n$
+	\item Noise: $Z_j \sim \mathrm{Ber}(\delta)$ iid.\\
+	\end{itemize}
+
+\item Common input/output arguments:
+\begin{enumerate}
+\item \verb|delta| -- input argument; crossover probability $\delta$.
+\item \verb|epsil| -- block probability of block error. \textit{Warning:} All code in this section is tailored to
+maximal probability of error.
+\item \verb|lm| or \verb|Lms| -- output argument; $\log_2 M$, log-size of codebook (base-2 information units). 
+\item \verb|n| -- input argument; blocklength.\\
+		For slow functions that do not support vectorized arguments.
+\item \verb|Ns| -- input argument; vector of blocklengths.
+\end{enumerate}
+\end{itemize}
+
+
+\begin{figure}
+\centering
+\begin{verbatim}
+	> plot_all()
+\end{verbatim}
+\includegraphics[height=7cm]{plots/bsc_example}
+\caption{Code and resulting picture for BSC bounds}\label{fig:bsc_example}
+\end{figure}
+
+
+\section{Summary plot: \texttt{plot\_all()}}
+
+Definition:
+\begin{verbatim}
+	function [Ns ach_rcu ach_dt ach_gal conv normapx_val] = plot_all(delta, epsil);
+\end{verbatim}
+
+This function computes and plots various bounds on the same figure. See Fig.~\ref{fig:bsc_example}.
+
+
+\section{Achievability: \texttt{dt\_ach()}}
+
+Definition:
+\begin{verbatim}
+	function Lms = dt_ach(Ns, delta, epsil)
+\end{verbatim}
+
+Function computes DT achievability bound, see~\cite[(166)]{PPV08}.
+
+\section{Achievability: \texttt{rcu\_ach()}}
+Format:
+\begin{verbatim}
+	function lm = rcu_ach(n, delta, epsil)
+\end{verbatim}
+
+This computes the RCU achievability bound, see~\cite[(162)]{PPV08}. %Optional arguments \verb|plow|,\verb|pup| serve to
+%speed up the search of the best value of $\log M$. As an idea one may set 
+%\begin{verbatim}
+%	plow = gallager_ach(n, delta, epsil);
+%	pup = converse(n, delta, epsil);
+%\end{verbatim}
+
+\textit{Warning:} This function only takes scalar value of $n$.
+
+\section{Achievability: \texttt{gallager\_ach()}}
+Format:
+\begin{verbatim}
+	function Lms = gallager_ach(Ns, delta, epsil)
+\end{verbatim}
+
+Computes Gallager's achievability bound, see~\cite[(44)]{PPV08}.
+
+\section{Converse: \texttt{converse()}}
+Format:
+\begin{verbatim}
+	function Lms = converse(Ns, delta, epsil)
+\end{verbatim}
+
+This computes the sphere-packing lower bound. Equivalently, this is the best possible meta-converse bound with $Q_{Y^n}
+= \mathrm{Ber}(1/2)^n$, see~\cite[Theorem 35]{PPV08}. 
+
+
+\section{Normal approximation: \texttt{normapx()}}
+
+Format:
+\begin{verbatim}
+	function Lms = normapx(Ns, delta, epsil);
+\end{verbatim}
+
+Fast and frequently very precise approximation to both achievability and converse:
+	$$ \log M \approx n C - \sqrt{nV} Q^{-1}(\epsilon) + {1\over2} \log n $$
 
 
 

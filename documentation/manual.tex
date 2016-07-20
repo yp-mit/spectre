@@ -60,7 +60,7 @@ Short Packet Communication Toolbox\\[1cm]
 Version 0.2}
 
 \author{Contributors (alphabetic order):\\
-Austin Collins, Giuseppe Durisi, Victoria Kostina, \\Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
+Austin Collins, Giuseppe Durisi, Tomaso Erseghe, Victoria Kostina, \\Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
 e-mail: \url{fblcode-list@mit.edu}}
 
 
@@ -1358,6 +1358,123 @@ Fast and frequently very precise approximation to both achievability and convers
 	$$ \log M \approx n C - \sqrt{nV} Q^{-1}(\epsilon) + {1\over2} \log n $$
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{The binary-AWGN channel (BI-AWGN)}
+
+
+General info:
+\begin{itemize}
+\item Maintainer: T. Erseghe \url{<erseghe@dei.unipd.it>}
+
+\item Main references: \cite{erseghe2015coding}
+
+\item Example: See Fig.~\ref{fig:biawgn_example} 
+
+\item Channel model:
+	$$ Y_j = \sqrt{\Omega} \,X_j + Z_j, \quad j=1,\ldots,n $$
+	\begin{itemize}
+	\item Codewords are 0/1: $x_j \in \{\pm1\}, j=1,\ldots,n$
+	\item Noise: $Z_j \sim  \matn(0,1)$ iid
+	\item $\Omega$ is the signal to noise ratio (SNR).\\
+	\end{itemize}
+
+\item Common input/output arguments:
+\begin{enumerate}
+\item \verb|n| -- blocklength.
+\item \verb|Pe| -- block probability of block error, or packet error rate. \textit{Warning:} All code in this section is tailored to
+average probability of error.
+\item \verb|R| -- code rate. 
+\item \verb|SNRdB| -- signal to noise ratio in dB.
+\end{enumerate}
+\end{itemize}
+
+\section{Converse: \texttt{biawgnPPVbound()}}
+
+Definition \#1:
+\begin{verbatim}
+	R = biawgnPPVbound(N,Pe,SNRdB,'approx')
+\end{verbatim}
+
+\noindent returns the metaconverse Polyanskiy-Poor-Verd\`u (PPV) upper bound on rate for a codeword of length \verb|N|, a packet error rate of \verb|Pe|, and a signal to noise ratio of \verb|SNRdB| (in dB). Multiple bound values can be obtained by ensuring that \verb|N|, \verb|Pe|, and \verb|SNRdB| have the same length. The specific approximation used for calculating the bound is specified by \verb|'approx'|:
+\begin{itemize}
+\item \verb|'normal'| normal approximation, a $O(n^{-1})$ approximation; this is a
+               very fast algorithm, but may provide a weak approximation.
+\item \verb|'On2'| (default) the $O(n^{-2})$ approximation derived from \cite{erseghe2015coding};  at low \verb|Pe| this
+is much more reliable  than the \verb|'normal'| option.
+\item \verb|'On3'|  the $O(n^{-3})$ approximation derived from \cite{erseghe2015coding}; at high \verb|Pe| this is much more unrealiable than \verb|'On2'|. 
+               It can  be used to identify the region where \verb|'On2'| is a 
+               reliable solution, namely the region where \verb|'On2'| and \verb|'On3'| 
+               closely match.
+\item \verb|'full'| (this option will be available soon) the full bound derived
+               numerically from \cite{erseghe2015coding}.
+\end{itemize}
+
+\vspace*{5mm}
+
+\noindent Definition \#2:
+\begin{verbatim}
+	SNRdB = biawgnPPVbound(N,Pe,R,'approx','error')
+\end{verbatim}
+
+\noindent for a codeword of length  \verb|N|, and code rate \verb|R|, the function returns the signal to noise ration \verb|SNRdB| (in dB) at which the PPV metaconverse lower bound on error rate is equal to \verb|Pe|. Multiple bound values can be 
+ obtained by ensuring that \verb|N|, \verb|Pe|, and \verb|R| have the same length. The specific
+ approximation used for calculating the bound is specified by \verb|'approx'| (see above).
+
+\vspace*{5mm}
+
+\noindent Example:\\ we can investigate the bounds for \verb|n=1000| by using the following code:
+\begin{verbatim}
+    n = 1e3;
+
+    % calculate spectral efficiency rho=2R and corresponding
+    % EbN0 value
+    Pe = 1e-5;
+    SNRdB = -15:10;
+    uno = ones(size(SNRdB));
+
+    % normal approximation - expected execution time 2 sec    
+    rhoNA = 2*biawgnPPVbound(n*uno,Pe*uno,SNRdB,'normal'); 
+    EbN0NA = SNRdB-10*log10(rhoNA);
+    % O(n^-2) approximation - expected execution time 90 sec
+    rhoPPV = 2*biawgnPPVbound(n*uno,Pe*uno,SNRdB,'On2'); 
+    EbN0PPV = SNRdB-10*log10(rhoPPV);
+    % O(n^-3) approximation - expected execution time 120 sec
+    rhoPPVb = 2*biawgnPPVbound(n*uno,Pe*uno,SNRdB,'On3'); 
+    EbN0PPVb = SNRdB-10*log10(rhoPPVb);
+
+    % calculate lower bounds on Pe
+    R = 1/2;
+    Pev = 10.^([-0.5:-0.25:-1.75,-2:-0.5:-7]);
+    uno = ones(size(Pev));
+
+    % normal approximation - expected execution time 15 sec
+    SNRdBNA = biawgnPPVbound(n*uno,Pev,R*uno,'normal','error');
+    % O(n^-2) approximation - expected execution time 120 sec
+    SNRdBPPV = biawgnPPVbound(n*uno,Pev,R*uno,'On2','error');
+    % O(n^-3) approximation - expected execution time 280 sec
+    SNRdBPPVb = biawgnPPVbound(n*uno,Pev,R*uno,'On3','error');
+\end{verbatim}
+and then plot the results by using
+\begin{verbatim}
+    figure
+    set(0,'defaulttextinterpreter','latex')
+    subplot(1,2,1)
+    semilogy(EbN0PPV,rhoPPV,'-',EbN0PPVb,rhoPPVb,'--',EbN0NA,rhoNA,'-.')
+    xlabel('SNR $E_b/N_0$')
+    ylabel('spectral efficiency $\rho$ [bit/s/Hz]')
+    grid
+    subplot(1,2,2)
+    semilogy(SNRdBPPV,Pev,'-',SNRdBPPVb,Pev,'--',SNRdBNA,Pev,'-.')
+    xlabel('SNR $E_b/N_0$')
+    ylabel('error probability $P_e$')
+    grid
+\end{verbatim}
+The result is given in Fig.~\ref{fig:biawgn_example}
+\begin{figure}[h]
+\centering
+\includegraphics[height=10cm]{plots/biawgn_plot1_ex}
+\caption{Examples of BI-AWGN metaconverse bounds}\label{fig:biawgn_example}
+\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%

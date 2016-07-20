@@ -1356,8 +1356,99 @@ Format:
 
 Fast and frequently very precise approximation to both achievability and converse:
 	$$ \log M \approx n C - \sqrt{nV} Q^{-1}(\epsilon) + {1\over2} \log n $$
+where $C=\log 2-\delta \log {1\over \delta} - (1-\delta) \log {1\over 1-\delta}$ and $V=\delta(1-\delta) \log^2
+{1-\delta\over \delta}$.
 
 
+\chapter{The binary-erasure channel (BEC)}
+
+
+General info:
+\begin{itemize}
+\item Maintainer: Y. Polyanskiy \url{<yp@mit.edu>}
+
+\item Main references: \cite{PPV08}
+
+\item Example: See Fig.~\ref{fig:bsc_example} 
+
+\item Channel model:
+	$$ Y_j = \begin{cases} X_j, & \mbox{with prob.} 1-\delta\\
+				e, & \mbox{with prob.} \delta
+		\end{cases} \qquad j=1,\ldots,n $$
+	Codewords are 0/1: $x_j \in \{0,1\}, j=1,\ldots,n$
+
+\item Common input/output arguments:
+\begin{enumerate}
+\item \verb|delta| -- input argument; crossover probability $\delta$.
+\item \verb|epsil| -- block probability of block error. \textit{Warning:} All code in this section is tailored to
+maximal probability of error.
+\item \verb|lm| or \verb|Lms| -- output argument; $\log_2 M$, log-size of codebook (base-2 information units). 
+\item \verb|n| -- input argument; blocklength.\\
+		For slow functions that do not support vectorized arguments.
+\item \verb|Ns| -- input argument; vector of blocklengths.
+\end{enumerate}
+\end{itemize}
+
+\begin{figure}
+\centering
+\begin{verbatim}
+	> plot_all()
+\end{verbatim}
+\includegraphics[height=7cm]{plots/bec_example}
+\caption{Code and resulting picture for BEC bounds}\label{fig:bec_example}
+\end{figure}
+
+
+\section{Summary plot: \texttt{plot\_all()}}
+
+Definition:
+\begin{verbatim}
+	function [Ns ach_dt ach_gal conv normapx_val] = plot_all(delta, epsil);
+\end{verbatim}
+
+This function computes and plots various bounds on the same figure. See Fig.~\ref{fig:bec_example}.
+
+
+\section{Achievability: \texttt{dt\_ach()}}
+
+Definition:
+\begin{verbatim}
+	function Lms = dt_ach(Ns, delta, epsil)
+\end{verbatim}
+
+Function computes DT achievability bound, see~\cite[(183)]{PPV08}.
+
+
+\textbf{Note:} The RCU bound is weaker for the BEC, so we do not need to evaluate it.
+
+\section{Achievability: \texttt{gallager\_ach()}}
+Format:
+\begin{verbatim}
+	function Lms = gallager_ach(Ns, delta, epsil)
+\end{verbatim}
+
+Computes Gallager's achievability bound, see~\cite[(44)]{PPV08}.
+
+\section{Converse: \texttt{converse()}}
+Format:
+\begin{verbatim}
+	function Lms = converse(Ns, delta, epsil)
+\end{verbatim}
+
+This computes the special converse bound for the BEC, see~\cite[Theorem 38]{PPV08}. Later, it was found that it
+corresponds to the meta-converse bound with a non-product distribution $Q_{Y^n}$, see~\cite[Section VI.D]{YP12}. 
+
+
+\section{Normal approximation: \texttt{normapx()}}
+
+Format:
+\begin{verbatim}
+	function Lms = normapx(Ns, delta, epsil);
+\end{verbatim}
+
+Fast and frequently very precise approximation to both achievability and converse:
+	$$ \log M \approx n C - \sqrt{nV} Q^{-1}(\epsilon)\,, $$
+where $C=(1-\delta)\log 2$ and $V=\delta(1-\delta)\log^2 2$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%

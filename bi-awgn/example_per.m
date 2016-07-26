@@ -1,6 +1,6 @@
 % PACKET ERROR RATE BOUNDS - LOWER BOUNDS ON ERROR RATE
 
-if(0) % set to (1) if you wish to run the converse_mc function
+if(1) % set to (1) if you wish to run the converse_mc function
 
     n = 1e3;
     R = 1/2;
@@ -14,7 +14,7 @@ if(0) % set to (1) if you wish to run the converse_mc function
     % O(n^-3) approximation - expected execution time 280 sec
     SNRdBPPVb = converse_mc(n*uno,Pev,R*uno,'On3','error');toc; tic
 
-    save('example_per.mat')
+    % save('example_per.mat')
 else
     load('example_per.mat')
 end

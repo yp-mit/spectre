@@ -1,6 +1,6 @@
 % SPECTRAL EFFICIENCY CURVES - UPPER BOUNDS ON RATE
 
-if(0) % set to (1) if you wish to run the converse_mc function
+if(1) % set to (1) if you wish to run the converse_mc function
 
     n = 1e3;
     Pe = 1e-5;
@@ -17,7 +17,7 @@ if(0) % set to (1) if you wish to run the converse_mc function
     rhoPPVb = 2*converse_mc(n*uno,Pe*uno,SNRdB,'On3'); % spectral efficiency 
     EbN0PPVb = SNRdB-10*log10(rhoPPVb);toc; tic
 
-    save('example_speff.mat')
+    % save('example_speff.mat')
 else
     load('example_speff.mat')
 end

@@ -60,7 +60,7 @@ Short Packet Communication Toolbox\\[1cm]
 Version 0.2}
 
 \author{Contributors (alphabetic order):\\
-Austin Collins, Giuseppe Durisi, Victoria Kostina, \\Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
+Austin Collins, Giuseppe Durisi, Tomaso Erseghe, Victoria Kostina, \\Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
 e-mail: \url{fblcode-list@mit.edu}}
 
 
@@ -1360,8 +1360,8 @@ where $C=\log 2-\delta \log {1\over \delta} - (1-\delta) \log {1\over 1-\delta}$
 {1-\delta\over \delta}$.
 
 
-\chapter{The binary-erasure channel (BEC)}
 
+\chapter{The binary-erasure channel (BEC)}
 
 General info:
 \begin{itemize}
@@ -1449,6 +1449,142 @@ Format:
 Fast and frequently very precise approximation to both achievability and converse:
 	$$ \log M \approx n C - \sqrt{nV} Q^{-1}(\epsilon)\,, $$
 where $C=(1-\delta)\log 2$ and $V=\delta(1-\delta)\log^2 2$.
+
+
+
+
+\chapter{The binary-AWGN channel (BI-AWGN)}
+
+General info:
+\begin{itemize}
+\item Maintainer: T. Erseghe \url{<erseghe@dei.unipd.it>}
+
+\item Main references: \cite{erseghe2015coding}
+
+\item Example: See Fig.~\ref{fig:biawgn_example} 
+
+\item Channel model:
+	$$ Y_j = \sqrt{\Omega} \,X_j + Z_j, \quad j=1,\ldots,n $$
+	\begin{itemize}
+	\item Codewords are 0/1: $x_j \in \{\pm1\}, j=1,\ldots,n$
+	\item Noise: $Z_j \sim  \matn(0,1)$ iid
+	\item $\Omega$ is the signal to noise ratio (SNR).\\
+	\end{itemize}
+
+\item Common input/output arguments:
+\begin{enumerate}
+\item \verb|n| -- blocklength.
+\item \verb|Pe| -- block probability of block error, or packet error rate. \textit{Warning:} All code in this section is tailored to
+average probability of error.
+\item \verb|R| -- code rate. 
+\item \verb|SNRdB| -- signal to noise ratio in dB.
+\end{enumerate}
+\end{itemize}
+
+\section{Converse: \texttt{converse\_mc()}}
+
+Definition \#1:
+\begin{verbatim}
+	R = converse_mc(N,Pe,SNRdB,'approx')
+\end{verbatim}
+
+\noindent returns the metaconverse Polyanskiy-Poor-Verd\`u (PPV) upper bound on rate for a codeword of length \verb|N|, a packet error rate of \verb|Pe|, and a signal to noise ratio of \verb|SNRdB| (in dB). Multiple bound values can be obtained by ensuring that \verb|N|, \verb|Pe|, and \verb|SNRdB| have the same length. The specific approximation used for calculating the bound is specified by \verb|'approx'|:
+\begin{itemize}
+\item \verb|'normal'| normal approximation, the  $O(n^{-1})$ approximation available from \cite[Fig.~6, 3rd block]{erseghe2015coding}; this is a
+               very fast algorithm, but may provide a weak approximation.
+\item \verb|'On2'| (default) the $O(n^{-2})$ approximation derived from \cite[Fig.~6, 2nd block]{erseghe2015coding};  at low \verb|Pe| this
+is much more reliable  than the \verb|'normal'| option.
+\item \verb|'On3'|  the $O(n^{-3})$ approximation derived from \cite[Fig.~6, 2nd block]{erseghe2015coding}; at high \verb|Pe| this is much more unrealiable than \verb|'On2'|. 
+               It can  be used to identify the region where \verb|'On2'| is a 
+               reliable solution, namely the region where \verb|'On2'| and \verb|'On3'| 
+               closely match.
+\item \verb|'full'| (this option will be available soon) the full bound derived
+               numerically from \cite[Fig.~6, 1st block]{erseghe2015coding}.
+\end{itemize}
+
+\vspace*{5mm}
+
+\noindent Definition \#2:
+\begin{verbatim}
+	SNRdB = converse_mc(N,Pe,R,'approx','error')
+\end{verbatim}
+
+\noindent for a codeword of length  \verb|N|, and code rate \verb|R|, the function returns the signal to noise ration \verb|SNRdB| (in dB) at which the PPV metaconverse lower bound on error rate is equal to \verb|Pe|. Multiple bound values can be 
+ obtained by ensuring that \verb|N|, \verb|Pe|, and \verb|R| have the same length. The specific
+ approximation used for calculating the bound is specified by \verb|'approx'| (see above).
+
+\section{Example 1: \texttt{example\_speff.m}}
+
+In \verb|example_speff.m| we use the \verb|converse_mc| function in order to derive an upper bound on rate, $R$, and then plot a bound on spectral efficiency, namely $\rho=2R$. We also recall the relation 
+$$
+\Omega = \rho\, \frac{E_b}{N_0} 
+$$
+with $\Omega$ the SNR, and $E_b$ the energy spent per bit of information. The example is built on a codeword of length \verb|n=1000|  for which the bounds at \verb|Pe=1e-5| are derived according to  the following code:
+\begin{verbatim}
+    n = 1e3;
+    Pe = 1e-5;
+    SNRdB = -15:10; % SNR Omega
+    uno = ones(size(SNRdB)); % vector of ones
+
+    % normal approximation - expected execution time 2 sec    
+    rhoNA = 2*converse_mc(n*uno,Pe*uno,SNRdB,'normal'); 
+    EbN0NA = SNRdB-10*log10(rhoNA);
+    
+    % O(n^-2) approximation - expected execution time 90 sec
+    rhoPPV = 2*converse_mc(n*uno,Pe*uno,SNRdB,'On2'); 
+    EbN0PPV = SNRdB-10*log10(rhoPPV);
+    
+    % O(n^-3) approximation - expected execution time 120 sec
+    rhoPPVb = 2*converse_mc(n*uno,Pe*uno,SNRdB,'On3'); 
+    EbN0PPVb = SNRdB-10*log10(rhoPPVb);
+\end{verbatim}
+and then the results is plotted by using
+\begin{verbatim}
+    figure
+    set(0,'defaulttextinterpreter','latex')
+    semilogy(EbN0PPV,rhoPPV,'-',EbN0PPVb,rhoPPVb,'--',...
+                EbN0NA,rhoNA,'-.')
+    xlabel('SNR $E_b/N_0$')
+    ylabel('spectral efficiency $\rho$ [bit/s/Hz]')
+    grid
+\end{verbatim}
+The result is given in the plot on the left in Fig.~\ref{fig:biawgn_example}
+\begin{figure}[h]
+\centering
+\includegraphics[height=10cm]{plots/biawgn_plot1_ex}
+\caption{Examples of BI-AWGN metaconverse bounds}\label{fig:biawgn_example}
+\end{figure}
+
+
+\section{Example 2: \texttt{example\_per.m}}
+
+In \verb|example_per.m| we use the \verb|converse_mc| function in order to derive a lower bound on the packet error rate, $P_e$. The example is built on a codeword of length \verb|n=1000|  and rate \verb|R=0.5| for which bounds are derived according to  the following code:
+\begin{verbatim}
+    n = 1e3;
+    R = 1/2;
+    Pev = 10.^([-0.5:-0.25:-1.75,-2:-0.5:-7]);
+    uno = ones(size(Pev));
+
+    % normal approximation - expected execution time 15 sec
+    SNRdBNA = converse_mc(n*uno,Pev,R*uno,'normal','error');
+
+    % O(n^-2) approximation - expected execution time 120 sec
+    SNRdBPPV = converse_mc(n*uno,Pev,R*uno,'On2','error');
+
+    % O(n^-3) approximation - expected execution time 280 sec
+    SNRdBPPVb = converse_mc(n*uno,Pev,R*uno,'On3','error');
+\end{verbatim}
+and then the results is plotted by using
+\begin{verbatim}
+    figure
+    set(0,'defaulttextinterpreter','latex')
+    semilogy(SNRdBPPV,Pev,'-',SNRdBPPVb,Pev,'--',...
+              SNRdBNA,Pev,'-.')
+    xlabel('SNR $E_b/N_0$')
+    ylabel('error probability $P_e$')
+    grid
+\end{verbatim}
+The result is given in the plot on the right in Fig.~\ref{fig:biawgn_example}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%

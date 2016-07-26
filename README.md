@@ -14,10 +14,11 @@ Content
 
 Achievability bounds, converse bounds and approximation for the following source and channel models:
 
-* AWGN single-antenna channel
+* AWGN and BIAWGN single-antenna channels
 * Quasi-static fading multi-antenna channel
 * Rayleigh block-fading multi-antenna channel (no CSI)
 * Rayleigh block-fading multi-antenna channel (full CSI at receiver)
+* Binary symmetric and binary erasure channels
 * Binary memoryless source and Hamming distortion
 * Gaussian memoryless source and quadratic distortion
 
@@ -45,6 +46,7 @@ Contributors (alphabetic order)
 ---------------------------------------
 * [Austin Collins](http://www.mit.edu/~austinc/) (MIT)
 * [Giuseppe Durisi](https://sites.google.com/site/durisi/) (Chalmers)
+* [Tomaso Erseghe](http://www.dei.unipd.it/~erseghe/) (University of Padova) 
 * [Victoria Kostina](http://vkostina.caltech.edu/) (Caltech)
 * [Johan Östman](https://www.chalmers.se/en/staff/Pages/johanos.aspx) (Chalmers)
 * [Yury Polyanskiy](http://people.lids.mit.edu/yp/homepage/) (MIT)

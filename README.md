@@ -1,4 +1,5 @@
-<img src="https://sites.google.com/site/durisi/software/spectre%20logo%20high-res.jpg?attredirects=0)" alt="spectre logo" align="middle" height="142" width="142"> 
+<!-- <img src="https://sites.google.com/site/durisi/software/spectre%20logo%20high-res.jpg?attredirects=0)" alt="spectre logo" align="middle" height="142" width="142">  -->
+![Spectre logo](https://dl.dropboxusercontent.com/u/15471669/spectre%20logo%20low-res.jpg)
 short packet communication toolbox
 ===========================================
 

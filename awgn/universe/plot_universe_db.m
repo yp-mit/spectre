@@ -22,7 +22,8 @@ load_awgncodes
 %                              h     hexagram
 
 CLASSES = struct('class', [], ...
-	'plot', {'-kx', '-b+', '-g*', '-rs', '-kd', '-b^', '-gp', '-rh', '--ko', '--r+', '-bo', '-go', '-ro'}, ...
+	'plot', {'-kx', '-b+', '-g*', '-rs', '-kd', '-b^', '-gp', '-rh', '--ko', '--r+', '-bo', '-go', '-ro', '-ko',...
+		 '-rx', '-bx', '-gx', '-ks', '-bs', '-gs'}, ...
 	'idxs', [0]);
 
 addpath ./../
@@ -46,7 +47,7 @@ for idx = 1:N_codes;
 	Ns_norm = floor(linspace(80, Nmax));
 	nrm = normapx_awgn(Ns_norm, epsil, P);
 	Ns_norm_add = floor(linspace(10,80));
-	nrm_add= normapx_awgn(Ns_norm_add, epsilon, P);
+	nrm_add= normapx_awgn(Ns_norm_add, epsil, P);
 
 	found = 0;
 
@@ -100,7 +101,7 @@ for cc=1:last_class;
 		end
 		bllen = CODES(idx).n;
 		Popt = optpower(epsil, bllen, code_rate);
-		dbgap = 20*log10(A) - 10*log10(Popt);
+		dbgap = 10*log10(P) - 10*log10(Popt);
 		blocklens = [blocklens bllen];
 		dbgaps = [dbgaps dbgap];
 	end
@@ -130,6 +131,4 @@ figure(fig1);
 	legend('Location', 'EastOutside');
 	print('-depsc2', 'output/universe_db.eps');
 
-rmpath /home/tcp/tex/reports/rep23_awgn/
-rmpath /home/tcp/tex/reports/rep23_awgn/shannon_bound
 

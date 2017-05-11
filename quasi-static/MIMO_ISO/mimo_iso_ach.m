@@ -46,8 +46,9 @@ for  n= nn
         logM = max( log(tau) - alpha*log(sin_sort(floor((error-tau)*loop_h))) );
         for index_rx =1:rx
             logM = logM - sum(log( n-index_rx-[0:1:tx-1] )) + sum(log(n -alpha -index_rx - [0:1:tx-1]));
-            logM_n=[logM_n,logM];
+            
         end
+        logM_n=[logM_n,logM];
         
     end
     rate = max(logM_n)/n/log(2);

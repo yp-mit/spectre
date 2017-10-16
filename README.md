@@ -1,4 +1,4 @@
-![Spectre logo](https://www.dropbox.com/s/3wu2ntxxvbusbu0/spectre%20logo%20low-res.jpg?dl=1)
+![Spectre logo](figs/spectre_logo_low-res.jpg)
 short packet communication toolbox
 ===========================================
 

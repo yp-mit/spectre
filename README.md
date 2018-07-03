@@ -22,6 +22,7 @@ Achievability bounds, converse bounds and approximation for the following source
 * Binary memoryless source and Hamming distortion
 * Gaussian memoryless source and quadratic distortion
 
+
 Getting started
 ------------------
 
@@ -46,7 +47,8 @@ Contributors (alphabetic order)
 ---------------------------------------
 * [Austin Collins](http://www.mit.edu/~austinc/) (MIT)
 * [Giuseppe Durisi](https://sites.google.com/site/durisi/) (Chalmers)
-* [Tomaso Erseghe](http://www.dei.unipd.it/~erseghe/) (University of Padova) 
+* [Tomaso Erseghe](http://www.dei.unipd.it/~erseghe/) (University of Padova)
+* [Guido Carlo Ferrante](http://gcfer.github.io) (Chalmers)
 * [Victoria Kostina](http://vkostina.caltech.edu/) (Caltech)
 * [Johan Östman](https://www.chalmers.se/en/staff/Pages/johanos.aspx) (Chalmers)
 * [Yury Polyanskiy](http://people.lids.mit.edu/yp/homepage/) (MIT)

@@ -1,0 +1,1216 @@
+@COMMENT {
+
+% strings for additional journal titles and conferences
+% Author: Ulrich Schuster, Moritz Borgmann
+ 
+This file contains string definitions for journals and conferences
+these strings are not included in the IEEEabrv.bib file, and can be used in addition.
+
+identifiers:
+ J  = Journal
+ C  = Conference
+ CU = Conference (proceedings not yet available) (stands for "conference unpublished")
+
+Usage of conference identifiers
+before conference proceedings have appeared, include the following in the BibTeX record,
+as an example:
+
+  intype     = "presented at the",
+  booktitle  = IEEE_CU_GLOBECOM,
+
+after the proceedings have appeared, add the page numbers and volume, remove the intype
+field, and change the "CU" identifier in the conference macro to "C":
+
+  booktitle  = IEEE_C_GLOBECOM,
+  volume     = 1,
+  pages      = {142--148},
+
+See end of file for rules for abbreviation.
+
+### Cleaned by bibfix normalizer ###
+  command: bibclean --noexpandmacros --fixstrings  confs-jrnls.bib
+}
+
+% Journals
+@STRING{J_BLT             = "Bell Labs Tech.~J." }
+@STRING{J_BST             = "Bell Syst. Tech.~J." }
+@STRING{J_SPI             = "J. Statist. Planning Inference" }
+@STRING{J_ETT             = "Eur. Trans. Telecommun." }
+
+@STRING{J_AM              = "Acta Math." }
+@STRING{J_AJM             = "Am. J. Math." }
+@STRING{J_ANNMATH         = "Annals Math." }
+@STRING{J_ANNPROB         = "Ann. Prob." }
+@STRING{J_ANNSTAT         = "Ann. Statist." }
+@STRING{J_ANNMSTAT        = "Ann. Math. Statist." }
+@STRING{J_AML             = "Appl. Math. Lett." }
+@STRING{J_AUT             = "Automatica" }
+@STRING{J_BIT             = "BIT" }
+@STRING{J_BAMS            = "Bull. Am. Math. Soc." }
+@STRING{J_CACM            = "Commun. ACM" }
+@STRING{J_CMP             = "Commun. Math. Phys." }
+@STRING{J_CPAM            = "Commun. Pure Appl. Math." }
+@STRING{J_COMPAM          = "Commun. Pure Appl. Math." }
+@STRING{J_IC              = "Inform. Contr." }
+@STRING{J_IRE             = "Proc. IRE" }
+@STRING{J_JASA            = "J. Acoust. Soc. Am." }
+@STRING{J_JAMS            = "J. Am. Math. Soc." }
+@STRING{J_JAT             = "J. Approx. Theory" }
+@STRING{J_JAES            = "J. Audio Eng. Soc." }
+@STRING{J_JFI             = "J. Franklin Inst." }
+@STRING{J_JCAM            = "J. Comput. Appl. Math." }
+@STRING{J_JCP             = "J. Comput. Phys." }
+@STRING{J_JFAA            = "J. Fourier Anal. Appl." }
+@STRING{J_JFA             = "J. Funct. Anal." }
+@STRING{J_JIEE            = "J. IEE" }
+@STRING{J_JMAA            = "J. Math. Anal. Appl." }
+@STRING{J_JMIV            = "J. Math. Imag. Vision" }
+@STRING{J_JMP             = "J. Math. Phys." }
+@STRING{J_JMPA            = "J. Math. Pure Appl." }
+@STRING{J_MVA             = "J. Multivariate Anal." }
+@STRING{J_JOS             = "J. Opt. Soc." }
+@STRING{J_JROYSA          = "J. Roy. Statist. Soc. Ser. A" }
+@STRING{J_JROYSB          = "J. Roy. Statist. Soc. Ser. B" }
+@STRING{J_JROYSC          = "J. Roy. Statist. Soc. Ser. C" }
+@STRING{J_JSV             = "J. Sound Vib." }
+@STRING{J_LNM             = "Lecture Notes in Math." }
+@STRING{J_LINALG          = "Lin. Algeb. Appl." }
+@STRING{J_MC              = "Math. Comp." }
+@STRING{J_MM              = "Monatsh. Math." }
+@STRING{J_MN              = "Math. Nach." }
+@STRING{J_MS              = "Math. Scand." }
+@STRING{J_NM              = "Numer. Math." }
+@STRING{J_NA              = "Numer. Algor." }
+@STRING{J_OE              = "Opt. Eng." }
+@STRING{J_OPT             = "J. Optimization Theory Applicat." }
+@STRING{J_PJR             = "Philips J. Research" }
+@STRING{J_PAMS            = "Proc. Am. Math. Soc." }
+@STRING{J_PR              = "Phys. Rev." }
+@STRING{J_PRA             = "Phys. Rev. A" }
+@STRING{J_PRL             = "Phys. Rev. Lett." }
+@STRING{J_PRP             = "Phys. Rep." }
+@STRING{J_PTP             = "Prog. Theor. Phys." }
+@STRING{J_RMI             = "Rev. Mat. Iberoamericana" }
+@STRING{J_TAMS            = "Trans. Am. Math. Soc." }
+@STRING{J_WPC             = "Wireless Personal Commun." }
+
+
+@STRING{NOW_J_FTCIT       = "Foundations and Trends Commun. Inf. Theory" }
+@STRING{NOW_J_FTNW        = "Foundations and Trends Netw." }
+@STRING{NOW_J_FTSP        = "Foundations and Trends Signal Process." }
+
+@STRING{SIAM_J_AM         = "SIAM J. Appl. Math." }
+@STRING{SIAM_J_MA         = "SIAM J. Math. Anal." }
+@STRING{SIAM_J_MAA        = "SIAM J. Matrix Anal. Appl." }
+@STRING{SIAM_J_NA         = "SIAM J. Numer. Anal." }
+@STRING{SIAM_J_SC         = "SIAM J. Sci. Comp." }
+@STRING{SIAM_J_SSC        = "SIAM J. Sci. Statist. Comp." }
+@STRING{SIAM_JR           = "SIAM Rev." }
+
+@STRING{IEE_J_EL          = "Electron. Lett." }
+@STRING{IEE_J_COM         = "IEE Proc. Commun." }
+
+@STRING{IRE_J_PROC        = "Proc. IRE" }
+
+@STRING{EU_J_SP           = "EURASIP J. Signal Process." }
+@STRING{EU_J_ASP          = "EURASIP J. Appl. Signal Process." }
+@STRING{EU_J_WCN          = "EURASIP J. Wireless Commun. Netw." }
+
+% Legacy strings
+@STRING{J_EUSP            = EU_J_ASP }
+
+@STRING{J_OR                         = "Oper. Res."}
+
+% String added by Giuseppe
+
+@STRING{J_JCN                         = "J. Commun. Netw."}
+@STRING{WILEY_WCMC           ="Wirel. Commun. Mob. Comput."}
+@STRING{IEICE_J_EL 			    = "IEICE T. Fund. Electr."}
+@STRING{J_ACHA            = "Appl. Comput. Harmon. A." }
+
+% Conferences (unpublished)
+if you use these macros, add 
+  intype = "presented at the",
+to the bibtex entry (only works with IEEEtran.bst).
+@STRING{CU_ALLERTON       = "Allerton Conf. Commun., Contr., Comput." }
+@STRING{CU_ASILOMAR       = "Asilomar Conf. Signals, Syst., Comput." }
+@STRING{CU_EUSIPCO        = "Eur. Signal Process. Conf. (EUSIPCO)" }
+@STRING{CU_ICU            = "Int. Conf. Ultra-Wideband (ICU)" }
+@STRING{CU_ISITA          = "Int. Symp. Inf. Theory and its Applicat. (ISITA)" }
+@STRING{CU_IWUWBS         = "Int. Workshop Ultra-Wideband Syst. (IWUWBS)" }
+@STRING{CU_IZS            = "Int. Zurich Seminar Commun. (IZS)" }
+
+
+@STRING{IEEE_CU_ESSCIRC   = "IEEE Eur. Solid-State Circuits Conf. (ESSCIRC)" }
+@STRING{IEEE_CU_FOCUS   	= "IEEE Symp. Solid-State Circuits Conf. (ESSCIRC)" }
+@STRING{IEEE_CU_GLOBECOM  = "IEEE Global Telecommun. Conf. (GLOBECOM)" }
+@STRING{IEEE_CU_ICASSP    = "IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP)" }
+@STRING{IEEE_CU_ICC       = "IEEE Int. Conf. Commun. (ICC)" }
+@STRING{IEEE_CU_ICCCAS    = "IEEE Int. Conf. Commun., Circuits, Syst. (ICCCAS)" }
+@STRING{IEEE_CU_ICCSC     = "IEEE Int. Conf. Circuits and Syst. Commun. (ICCSC)" }
+@STRING{IEEE_CU_ICECS     = "IEEE Int. Conf. Electron., Circuits, Syst. (ICECS)" }
+@STRING{IEEE_CU_ISCAS     = "IEEE Int. Symp. Circuits and Syst. (ISCAS)" }
+@STRING{IEEE_CU_ISIT      = "IEEE Int. Symp. Inf. Theory (ISIT)" }
+@STRING{IEEE_CU_ISSCC     = "IEEE Int. Solid-State Circuits Conf. (ISSCC)" }
+@STRING{IEEE_CU_ISSPIT    = "IEEE Int. Symp. Signal Process. Inf. Technol. (ISSPIT)" }
+@STRING{IEEE_CU_ISSTA     = "IEEE Int. Symp. Spread Spectrum Tech. Applicat. (ISSTA)" }
+@STRING{IEEE_CU_ITW       = "IEEE Inf. Theory Workshop (ITW)" }
+@STRING{IEEE_CU_MILCOM    = "IEEE Mil. Commun. Conf. (MILCOM)" }
+@STRING{IEEE_CU_PIMRC     = "IEEE Int. Symp. Personal, Indoor, Mobile Radio Commun. (PIMRC)" }
+@STRING{IEEE_CU_RAWCON    = "IEEE Radio Wireless Conf. (RAWCON)" }
+@STRING{IEEE_CU_SPAWC     = "IEEE Int. Workshop Signal Process. Advances Wireless Commun. (SPAWC)" }
+@STRING{IEEE_CU_SSP       =  "IEEE Workshop Stat. Signal Process. (SSP)" }
+@STRING{IEEE_CU_UWBST     = "IEEE Conf. Ultra Wideband Syst. Technol. (UWBST)" }
+
+@STRING{IEEE_CU_ISSPA     = "IEEE Int. Symp. Sig. Proc. Appl. (ISSPA)" }
+
+% note that VTC turned biannual in 1999. Use IEEE_C(U)_VTC only before 1999.
+@STRING{IEEE_CU_VTC       = "IEEE Veh. Technol. Conf. (VTC)" }
+@STRING{IEEE_CU_VTC_F     = "IEEE Veh. Technol. Conf. Fall (VTC-Fall)" }
+@STRING{IEEE_CU_VTC_S     = "IEEE Veh. Technol. Conf. Spring (VTC-Spring)" }
+@STRING{IEEE_CU_WCNC      = "IEEE Wireless Commun. Netw. Conf. (WCNC)" }
+@STRING{IEEE_CU_WSCIT      = "IEEE Winter School on Coding and Information Theory" }
+
+
+% Conferences (published)
+@STRING{C_WSCIT       = "Proc. "  # IEEE_CU_WSCIT }
+@STRING{C_ALLERTON        = "Proc. "  # CU_ALLERTON }
+@STRING{C_ASILOMAR        = "Proc. "  # CU_ASILOMAR }
+@STRING{C_EUSIPCO         = "Proc. "  # CU_EUSIPCO }
+@STRING{C_ICU             = "Proc. "  # CU_ICU }
+@STRING{C_ISITA           = "Proc. "  # CU_ISITA }
+@STRING{C_IWUWBS          = "Proc. "  # CU_IWUWBS }
+@STRING{C_IZS             = "Proc. "  # CU_IZS }
+
+@STRING{IEEE_C_ESSCIRC    = "Proc. "  # IEEE_CU_ESSCIRC }
+@STRING{IEEE_C_GLOBECOM   = "Proc. "  # IEEE_CU_GLOBECOM }
+@STRING{IEEE_C_ICASSP     = "Proc. "  # IEEE_CU_ICASSP }
+@STRING{IEEE_C_ICC        = "Proc. "  # IEEE_CU_ICC }
+@STRING{IEEE_C_ICCCAS     = "Proc. "  # IEEE_CU_ICCCAS }
+@STRING{IEEE_C_ICCSC      = "Proc. "  # IEEE_CU_ICCSC }
+@STRING{IEEE_C_ICECS      = "Proc. "  # IEEE_CU_ICECS }
+@STRING{IEEE_C_ISCAS      = "Proc. "  # IEEE_CU_ISCAS }
+@STRING{IEEE_C_ISIT       = "Proc. "  # IEEE_CU_ISIT }
+@STRING{IEEE_C_ISSPIT     = "Proc. "  # IEEE_CU_ISSPIT }
+@STRING{IEEE_C_ISSCC      = IEEE_CU_ISSCC # "  Dig. Tech. Papers"}
+@STRING{IEEE_C_ISSTA      = "Proc. "  # IEEE_CU_ISSTA }
+@STRING{IEEE_C_ITW        = "Proc. "  # IEEE_CU_ITW }
+@STRING{IEEE_C_MILCOM     = "Proc. "  # IEEE_CU_MILCOM }
+@STRING{IEEE_C_PIMRC      = "Proc. "  # IEEE_CU_PIMRC }
+@STRING{IEEE_C_RAWCON     = "Proc. "  # IEEE_CU_RAWCON }
+@STRING{IEEE_C_SPAWC      = "Proc. "  # IEEE_CU_SPAWC }
+@STRING{IEEE_C_SSP        = "Proc. "  # IEEE_CU_SSP }
+@STRING{IEEE_C_UWBST      = IEEE_CU_UWBST # "  Dig. Tech. Papers"}
+@STRING{IEEE_C_VTC        = "Proc. "  # IEEE_CU_VTC }
+@STRING{IEEE_C_VTC_F      = "Proc. "  # IEEE_CU_VTC_F }
+@STRING{IEEE_C_VTC_S      = "Proc. "  # IEEE_CU_VTC_S }
+@STRING{IEEE_C_WCNC       = "Proc. "  # IEEE_CU_WCNC }
+@STRING{IEEE_C_ISSPA       = "Proc. "  # IEEE_CU_ISSPA }
+
+The rules for abbreviation are as follows:
+
+- not absolutely necessary prepositions and particles are omitted.
+- the following abbreviations are applied:
+							
+							"Symposium" => "Symp.",
+							"Conference" => "Conf.",
+							"Transaction" => "Trans.",
+							"Problem" => "Probl.",
+							"Magazine" => "Mag.",
+							"Journal" => "J.",
+							"Proceedings" => "Proc.",
+							"Letters" => "Lett.",
+							"International" => "Int.",
+							"Annual" => "Ann.",
+							"Association" => "Assoc.",
+							"Department" => "Dept.",
+							"Society" => "Soc.",
+							"University" => "Univ.",
+							"European" => "Eur.",
+														
+							"Applied" => "Appl.",
+							"Applications" => "Applicat.",
+							"Network" => "Netw.",
+							"Networking" => "Netw.",
+							"Programming" => "Program.",
+							"Institute" => "Inst.",
+							"Mathematic" => "Math.",
+							"Mathematical" => "Math.",
+							"National" => "Natl.",
+							"Review" => "Rev.",
+							"Government" => "Govt.",
+							"Federal" => "Fed.",
+							"Engineering" => "Eng.",
+							"American" => "Am.",
+							"Communication" => "Commun.", 
+							"Telecommunication" => "Telecommun.", 
+							"Information" => "Inf.",
+							"Processing" => "Process.",
+							"Technology" => "Technol.",
+							"System" => "Syst.",
+							"Vehicular" => "Veh.",
+							"Acoustic" => "Acoust.",
+							"Control" => "Contr.",
+							"Automatic" => "Automat.",
+							"Computing" => "Comput.",
+							"Computation" => "Comp.",
+							"Computer" => "Comput.",
+							"Techniques" => "Tech.",
+							"Technical" => "Tech.",
+							"Electronic" => "Electron.", 
+							"Propagation" => "Propagat.", 
+							"Statistical" => "Stat."
+
+@string{acmcs = {ACM Computing Surveys}}
+
+@string{acta = {Acta Informatica}}
+
+@string{apr = {Apr.}}
+
+@string{aug = {Aug.}}
+
+@string{CU_ALLERTON = {Allerton Conf. Commun., Contr., Comput.}}
+
+@string{c_allerton = {Proc. } # CU_ALLERTON}
+
+@string{CU_ASILOMAR = {Asilomar Conf. Signals, Syst., Comput.}}
+
+@string{c_asilomar = {Proc. } # CU_ASILOMAR}
+
+@string{CU_EUSIPCO = {Eur. Signal Process. Conf. (EUSIPCO)}}
+
+@string{c_eusipco = {Proc. } # CU_EUSIPCO}
+
+@string{CU_ICU = {Int. Conf. Ultra-Wideband (ICU)}}
+
+@string{c_icu = {Proc. } # CU_ICU}
+
+@string{CU_ISITA = {Int. Symp. Inf. Theory and its Applicat. (ISITA)}}
+
+@string{c_isita = {Proc. } # CU_ISITA}
+
+@string{CU_IWUWBS = {Int. Workshop Ultra-Wideband Syst. (IWUWBS)}}
+
+@string{c_iwuwbs = {Proc. } # CU_IWUWBS}
+
+@string{CU_IZS = {Int. Zurich Seminar Commun. (IZS)}}
+
+@string{c_izs = {Proc. } # CU_IZS}
+
+@string{IEEE_CU_WSCIT = {IEEE Winter School on Coding and Information Theory}}
+
+@string{c_wscit = {Proc. } # IEEE_CU_WSCIT}
+
+@string{cacm = {Communications of the ACM}}
+
+@string{cu_allerton = {Allerton Conf. Commun., Contr., Comput.}}
+
+@string{cu_asilomar = {Asilomar Conf. Signals, Syst., Comput.}}
+
+@string{cu_eusipco = {Eur. Signal Process. Conf. (EUSIPCO)}}
+
+@string{cu_icu = {Int. Conf. Ultra-Wideband (ICU)}}
+
+@string{cu_isita = {Int. Symp. Inf. Theory and its Applicat. (ISITA)}}
+
+@string{cu_iwuwbs = {Int. Workshop Ultra-Wideband Syst. (IWUWBS)}}
+
+@string{cu_izs = {Int. Zurich Seminar Commun. (IZS)}}
+
+@string{dec = {Dec.}}
+
+@string{eu_j_asp = {EURASIP J. Appl. Signal Process.}}
+
+@string{eu_j_sp = {EURASIP J. Signal Process.}}
+
+@string{eu_j_wcn = {EURASIP J. Wireless Commun. Netw.}}
+
+@string{feb = {Feb.}}
+
+@string{ibmjrd = {IBM Journal of Research and Development}}
+
+@string{ibmsj = {IBM Systems Journal}}
+
+@string{iee_j_com = {IEE Proc. Commun.}}
+
+@string{iee_j_el = {Electron. Lett.}}
+
+@string{IEEE_CU_ESSCIRC = {IEEE Eur. Solid-State Circuits Conf. (ESSCIRC)}}
+
+@string{ieee_c_esscirc = {Proc. } # IEEE_CU_ESSCIRC}
+
+@string{IEEE_CU_GLOBECOM = {IEEE Global Telecommun. Conf. (GLOBECOM)}}
+
+@string{ieee_c_globecom = {Proc. } # IEEE_CU_GLOBECOM}
+
+@string{IEEE_CU_ICASSP = {IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP)}}
+
+@string{ieee_c_icassp = {Proc. } # IEEE_CU_ICASSP}
+
+@string{IEEE_CU_ICC = {IEEE Int. Conf. Commun. (ICC)}}
+
+@string{ieee_c_icc = {Proc. } # IEEE_CU_ICC}
+
+@string{IEEE_CU_ICCCAS = {IEEE Int. Conf. Commun., Circuits, Syst. (ICCCAS)}}
+
+@string{ieee_c_icccas = {Proc. } # IEEE_CU_ICCCAS}
+
+@string{IEEE_CU_ICCSC = {IEEE Int. Conf. Circuits and Syst. Commun. (ICCSC)}}
+
+@string{ieee_c_iccsc = {Proc. } # IEEE_CU_ICCSC}
+
+@string{IEEE_CU_ICECS = {IEEE Int. Conf. Electron., Circuits, Syst. (ICECS)}}
+
+@string{ieee_c_icecs = {Proc. } # IEEE_CU_ICECS}
+
+@string{IEEE_CU_ISCAS = {IEEE Int. Symp. Circuits and Syst. (ISCAS)}}
+
+@string{ieee_c_iscas = {Proc. } # IEEE_CU_ISCAS}
+
+@string{IEEE_CU_ISIT = {IEEE Int. Symp. Inf. Theory (ISIT)}}
+
+@string{ieee_c_isit = {Proc. } # IEEE_CU_ISIT}
+
+@string{IEEE_CU_ISSCC = {IEEE Int. Solid-State Circuits Conf. (ISSCC)}}
+
+@string{ieee_c_isscc = IEEE_CU_ISSCC # {  Dig. Tech. Papers}}
+
+@string{IEEE_CU_ISSPA = {IEEE Int. Symp. Sig. Proc. Appl. (ISSPA)}}
+
+@string{ieee_c_isspa = {Proc. } # IEEE_CU_ISSPA}
+
+@string{IEEE_CU_ISSPIT = {IEEE Int. Symp. Signal Process. Inf. Technol. (ISSPIT)}}
+
+@string{ieee_c_isspit = {Proc. } # IEEE_CU_ISSPIT}
+
+@string{IEEE_CU_ISSTA = {IEEE Int. Symp. Spread Spectrum Tech. Applicat. (ISSTA)}}
+
+@string{ieee_c_issta = {Proc. } # IEEE_CU_ISSTA}
+
+@string{IEEE_CU_ITW = {IEEE Inf. Theory Workshop (ITW)}}
+
+@string{ieee_c_itw = {Proc. } # IEEE_CU_ITW}
+
+@string{IEEE_CU_MILCOM = {IEEE Mil. Commun. Conf. (MILCOM)}}
+
+@string{ieee_c_milcom = {Proc. } # IEEE_CU_MILCOM}
+
+@string{IEEE_CU_PIMRC = {IEEE Int. Symp. Personal, Indoor, Mobile Radio Commun. (PIMRC)}}
+
+@string{ieee_c_pimrc = {Proc. } # IEEE_CU_PIMRC}
+
+@string{IEEE_CU_RAWCON = {IEEE Radio Wireless Conf. (RAWCON)}}
+
+@string{ieee_c_rawcon = {Proc. } # IEEE_CU_RAWCON}
+
+@string{IEEE_CU_SPAWC = {IEEE Int. Workshop Signal Process. Advances Wireless Commun. (SPAWC)}}
+
+@string{ieee_c_spawc = {Proc. } # IEEE_CU_SPAWC}
+
+@string{IEEE_CU_SSP = {IEEE Workshop Stat. Signal Process. (SSP)}}
+
+@string{ieee_c_ssp = {Proc. } # IEEE_CU_SSP}
+
+@string{IEEE_CU_UWBST = {IEEE Conf. Ultra Wideband Syst. Technol. (UWBST)}}
+
+@string{ieee_c_uwbst = IEEE_CU_UWBST # {  Dig. Tech. Papers}}
+
+@string{IEEE_CU_VTC = {IEEE Veh. Technol. Conf. (VTC)}}
+
+@string{ieee_c_vtc = {Proc. } # IEEE_CU_VTC}
+
+@string{IEEE_CU_VTC_F = {IEEE Veh. Technol. Conf. Fall (VTC-Fall)}}
+
+@string{ieee_c_vtc_f = {Proc. } # IEEE_CU_VTC_F}
+
+@string{IEEE_CU_VTC_S = {IEEE Veh. Technol. Conf. Spring (VTC-Spring)}}
+
+@string{ieee_c_vtc_s = {Proc. } # IEEE_CU_VTC_S}
+
+@string{IEEE_CU_WCNC = {IEEE Wireless Commun. Netw. Conf. (WCNC)}}
+
+@string{ieee_c_wcnc = {Proc. } # IEEE_CU_WCNC}
+
+@string{ieee_cu_esscirc = {IEEE Eur. Solid-State Circuits Conf. (ESSCIRC)}}
+
+@string{ieee_cu_globecom = {IEEE Global Telecommun. Conf. (GLOBECOM)}}
+
+@string{ieee_cu_icassp = {IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP)}}
+
+@string{ieee_cu_icc = {IEEE Int. Conf. Commun. (ICC)}}
+
+@string{ieee_cu_icccas = {IEEE Int. Conf. Commun., Circuits, Syst. (ICCCAS)}}
+
+@string{ieee_cu_iccsc = {IEEE Int. Conf. Circuits and Syst. Commun. (ICCSC)}}
+
+@string{ieee_cu_icecs = {IEEE Int. Conf. Electron., Circuits, Syst. (ICECS)}}
+
+@string{ieee_cu_iscas = {IEEE Int. Symp. Circuits and Syst. (ISCAS)}}
+
+@string{ieee_cu_isit = {IEEE Int. Symp. Inf. Theory (ISIT)}}
+
+@string{ieee_cu_isscc = {IEEE Int. Solid-State Circuits Conf. (ISSCC)}}
+
+@string{ieee_cu_isspa = {IEEE Int. Symp. Sig. Proc. Appl. (ISSPA)}}
+
+@string{ieee_cu_isspit = {IEEE Int. Symp. Signal Process. Inf. Technol. (ISSPIT)}}
+
+@string{ieee_cu_issta = {IEEE Int. Symp. Spread Spectrum Tech. Applicat. (ISSTA)}}
+
+@string{ieee_cu_itw = {IEEE Inf. Theory Workshop (ITW)}}
+
+@string{ieee_cu_milcom = {IEEE Mil. Commun. Conf. (MILCOM)}}
+
+@string{ieee_cu_pimrc = {IEEE Int. Symp. Personal, Indoor, Mobile Radio Commun. (PIMRC)}}
+
+@string{ieee_cu_rawcon = {IEEE Radio Wireless Conf. (RAWCON)}}
+
+@string{ieee_cu_spawc = {IEEE Int. Workshop Signal Process. Advances Wireless Commun. (SPAWC)}}
+
+@string{ieee_cu_ssp = {IEEE Workshop Stat. Signal Process. (SSP)}}
+
+@string{ieee_cu_uwbst = {IEEE Conf. Ultra Wideband Syst. Technol. (UWBST)}}
+
+@string{ieee_cu_vtc = {IEEE Veh. Technol. Conf. (VTC)}}
+
+@string{ieee_cu_vtc_f = {IEEE Veh. Technol. Conf. Fall (VTC-Fall)}}
+
+@string{ieee_cu_vtc_s = {IEEE Veh. Technol. Conf. Spring (VTC-Spring)}}
+
+@string{ieee_cu_wcnc = {IEEE Wireless Commun. Netw. Conf. (WCNC)}}
+
+@string{ieee_cu_wscit = {IEEE Winter School on Coding and Information Theory}}
+
+@string{ieee_j_ac = {{IEEE} Trans. Autom. Control}}
+
+@string{ieee_j_advp = {{IEEE} Trans. Adv. Packag.}}
+
+@string{ieee_j_aes = {{IEEE} Trans. Aerosp. Electron. Syst.}}
+
+@string{ieee_j_affc = {{IEEE} Trans. Affect. Comput.}}
+
+@string{ieee_j_aire = {{IEEE} Trans. Airborne Electron.}}
+
+@string{ieee_j_amd = {{IEEE} Trans. Auton. Mental Develop.}}
+
+@string{ieee_j_ane = {{IEEE} Trans. Aerosp. Navig. Electron.}}
+
+@string{ieee_j_anne = {{IEEE} Trans. Aeronaut. Navig. Electron.}}
+
+@string{ieee_j_ap = {{IEEE} Trans. Antennas Propag.}}
+
+@string{ieee_j_appind = {{IEEE} Trans. Appl. Ind.}}
+
+@string{ieee_j_as = {{IEEE} Trans. Aerosp.}}
+
+@string{ieee_j_asc = {{IEEE} Trans. Appl. Supercond.}}
+
+@string{ieee_j_ase = {{IEEE} Trans. Autom. Sci. Eng.}}
+
+@string{ieee_j_asl = {{IEEE} Audio, Speech, Language Process.}}
+
+@string{ieee_j_aslp = {{IEEE/ACM} Trans. Audio, Speech, Language Process.}}
+
+@string{ieee_j_assp = {{IEEE} Trans. Acoust., Speech, Signal Process.}}
+
+@string{ieee_j_au = {{IEEE} Trans. Audio}}
+
+@string{ieee_j_auea = {{IEEE} Trans. Audio Electroacoust.}}
+
+@string{ieee_j_awpl = {{IEEE} Antennas Wireless Propag. Lett.}}
+
+@string{ieee_j_b-me = {{IEEE} Trans. Bio-Med. Eng.}}
+
+@string{ieee_j_bc = {{IEEE} Trans. Broadcast.}}
+
+@string{ieee_j_bcas = {{IEEE} Trans. Biomed. Circuits Syst.}}
+
+@string{ieee_j_bctv = {{IEEE} Trans. Broadcast Television Receivers}}
+
+@string{ieee_j_bd = {{IEEE} Trans. Big Data}}
+
+@string{ieee_j_bhi = {{IEEE} J. Biomed. Health Inform.}}
+
+@string{ieee_j_bme = {{IEEE} Trans. Biomed. Eng.}}
+
+@string{ieee_j_bmelc = {{IEEE} Trans. Bio-Med. Electron.}}
+
+@string{ieee_j_c = {{IEEE} Trans. Comput.}}
+
+@string{ieee_j_cad = {{IEEE} Trans. Comput.-Aided Design Integr. Circuits Syst.}}
+
+@string{ieee_j_cal = {{IEEE} Comput. Archit. Lett.}}
+
+@string{ieee_j_capt = {{IEEE} Trans. Compon. Packag. Technol.}}
+
+@string{ieee_j_capts = {{IEEE} Trans. Compon. Packag. Technol.}}
+
+@string{ieee_j_cas = {{IEEE} Trans. Circuits Syst.}}
+
+@string{ieee_j_casi = {{IEEE} Trans. Circuits Syst. {I}}}
+
+@string{ieee_j_casi_rp = {{IEEE} Trans. Circuits Syst. {I}}}
+
+@string{ieee_j_casii = {{IEEE} Trans. Circuits Syst. {II}}}
+
+@string{ieee_j_casii_eb = {{IEEE} Trans. Circuits Syst. {II}}}
+
+@string{ieee_j_casvt = {{IEEE} Trans. Circuits Syst. Video Technol.}}
+
+@string{ieee_j_cbb = {{IEEE/ACM} Trans. Comput. Biol. Bioinformatics}}
+
+@string{ieee_j_cc = {{IEEE} Trans. on Cloud Comput.}}
+
+@string{ieee_j_ccn = {{IEEE} Trans. on Cogn. Commun. Netw.}}
+
+@string{ieee_j_cds = {{IEEE} Trans. Cogn. Develop. Syst.}}
+
+@string{ieee_j_ce = {{IEEE} Trans. Consum. Electron.}}
+
+@string{ieee_j_chmt = {{IEEE} Trans. Compon., Hybrids, Manuf. Technol.}}
+
+@string{ieee_j_ciaig = {{IEEE} Trans. Comput. Intell. {AI} in Games}}
+
+@string{ieee_j_cjece = {Canadian J. Elect. Comput. Eng.}}
+
+@string{ieee_j_cns = {{IEEE} Trans. Control Netw. Syst.}}
+
+@string{ieee_j_com = {{IEEE} Trans. Commun.}}
+
+@string{ieee_j_coml = {{IEEE} Commun. Lett.}}
+
+@string{ieee_j_comt = {{IEEE} Trans. Commun. Technol.}}
+
+@string{ieee_j_cpart = {{IEEE} Trans. Compon. Parts}}
+
+@string{ieee_j_cpmt = {{IEEE} Trans. Compon. Packag. Manuf. Technol.}}
+
+@string{ieee_j_cpmta = {{IEEE} Trans. Compon., Packag., Manuf. Technol. {A}}}
+
+@string{ieee_j_cpmtb = {{IEEE} Trans. Compon., Packag., Manuf. Technol. {B}}}
+
+@string{ieee_j_cpmtc = {{IEEE} Trans. Compon., Packag., Manuf. Technol. {C}}}
+
+@string{ieee_j_css = {{IEEE} Trans. Comput. Social Syst.}}
+
+@string{ieee_j_cst = {{IEEE} Trans. Control Syst. Technol.}}
+
+@string{ieee_j_ct = {{IEEE} Trans. Circuit Theory}}
+
+@string{ieee_j_cyb = {{IEEE} Trans. Cybern.}}
+
+@string{ieee_j_dei = {{IEEE} Trans. Dielectr. Electr. Insul.}}
+
+@string{ieee_j_dmr = {{IEEE} Trans. Device Mater. Rel.}}
+
+@string{ieee_j_dsc = {{IEEE} Trans. Depend. Sec. Comput.}}
+
+@string{ieee_j_ec = {{IEEE} Trans. Energy Convers.}}
+
+@string{ieee_j_ecomp = {{IEEE} Trans. Electron. Comput.}}
+
+@string{ieee_j_ed = {{IEEE} Trans. Electron Devices}}
+
+@string{ieee_j_edl = {{IEEE} Electron Device Lett.}}
+
+@string{ieee_j_eds = {{IEEE} J. Electron Devices Soc.}}
+
+@string{ieee_j_edu = {{IEEE} Trans. Educ.}}
+
+@string{ieee_j_ei = {{IEEE} Trans. Electr. Insul.}}
+
+@string{ieee_j_em = {{IEEE} Trans. Eng. Manag.}}
+
+@string{ieee_j_emc = {{IEEE} Trans. Electromagn. Compat.}}
+
+@string{ieee_j_enano = {{IEEE} Nanotechnol. Express}}
+
+@string{ieee_j_epm = {{IEEE} Trans. Electron. Packag. Manuf.}}
+
+@string{ieee_j_es = {{IEEE} Embedded Syst. Lett.}}
+
+@string{ieee_j_essl = {{IEEE/ECS} Electrochem. Solid-State Lett.}}
+
+@string{ieee_j_estpe = {{IEEE} Trans. Emerg. Sel. Topics Power Electron.}}
+
+@string{ieee_j_etc = {{IEEE} Trans. Emerg. Topics Comput.}}
+
+@string{ieee_j_etcas = {{IEEE} Trans. Emerg. Sel. Topics Circuits Syst.}}
+
+@string{ieee_j_evc = {{IEEE} Trans. Evol. Comput.}}
+
+@string{ieee_j_ews = {{IEEE} Trans. Eng. Writing Speech}}
+
+@string{ieee_j_fuzz = {{IEEE} Trans. Fuzzy Syst.}}
+
+@string{ieee_j_ge = {{IEEE} Trans. Geosci. Electron.}}
+
+@string{ieee_j_grs = {{IEEE} Trans. Geosci. Remote Sens.}}
+
+@string{ieee_j_grsl = {{IEEE} Geosci. Remote Sens. Lett.}}
+
+@string{ieee_j_h = {{IEEE} Trans. Haptics}}
+
+@string{ieee_j_hfe = {{IEEE} Trans. Hum. Factors Electron.}}
+
+@string{ieee_j_hms = {{IEEE} Trans. Human-Mach. Syst.}}
+
+@string{ieee_j_ia = {{IEEE} Trans. Ind. Appl.}}
+
+@string{ieee_j_ie = {{IEEE} Trans. Ind. Electron.}}
+
+@string{ieee_j_ieci = {{IEEE} Trans. Ind. Electron. Contr. Instrum.}}
+
+@string{ieee_j_ifs = {{IEEE} Trans. Inf. Forensics Security}}
+
+@string{ieee_j_iga = {{IEEE} Trans. Ind. Gen. Appl.}}
+
+@string{ieee_j_iinf = {{IEEE} Trans. Ind. Informat.}}
+
+@string{ieee_j_im = {{IEEE} Trans. Instrum. Meas.}}
+
+@string{ieee_j_iot = {{IEEE} Internet Things J.}}
+
+@string{ieee_j_ip = {{IEEE} Trans. Image Process.}}
+
+@string{ieee_j_it = {{IEEE} Trans. Inf. Theory}}
+
+@string{ieee_j_itbm = {{IEEE} Trans. Inf. Technol. Biomed.}}
+
+@string{ieee_j_its = {{IEEE} Trans. Intell. Transp. Syst.}}
+
+@string{ieee_j_iv = {{IEEE} Trans. Intell. Veh.}}
+
+@string{ieee_j_jas = {{IEEE/CAA} J. Autom. Sinica}}
+
+@string{ieee_j_jdt = {{IEEE/OSA} J. Display Technol.}}
+
+@string{ieee_j_jem = {{IEEE/TMS} J. Electron. Mater.}}
+
+@string{ieee_j_jlt = {J. Lightw. Technol.}}
+
+@string{ieee_j_jqe = {{IEEE} J. Quantum Electron.}}
+
+@string{ieee_j_jra = {{IEEE} J. Robot. Autom.}}
+
+@string{ieee_j_jsac = {{IEEE} J. Sel. Areas Commun.}}
+
+@string{ieee_j_jssc = {{IEEE} J. Solid-State Circuits}}
+
+@string{ieee_j_jstqe = {{IEEE} J. Sel. Topics Quantum Electron.}}
+
+@string{ieee_j_kde = {{IEEE} Trans. Knowl. Data Eng.}}
+
+@string{ieee_j_ls = {{IEEE} Life Sci. Lett.}}
+
+@string{ieee_j_lt = {{IEEE} Trans. Learn. Technol.}}
+
+@string{ieee_j_mag = {{IEEE} Trans. Magn.}}
+
+@string{ieee_j_magl = {{IEEE} Magn. Lett.}}
+
+@string{ieee_j_mbsc = {{IEEE} Trans. Mol. Biol. Multi-Scale Commun.}}
+
+@string{ieee_j_mc = {{IEEE} Trans. Mobile Comput.}}
+
+@string{ieee_j_me = {{IEEE} Trans. Med. Electron.}}
+
+@string{ieee_j_mech = {{IEEE/ASME} Trans. Mechatronics}}
+
+@string{ieee_j_mems = {J. Microelectromech. Syst.}}
+
+@string{ieee_j_memsi = {J. Microelectromech. Syst.}}
+
+@string{ieee_j_mft = {{IEEE} Trans. Manuf. Technol.}}
+
+@string{ieee_j_mgwl = {{IEEE} Microw. Guided Wave Lett.}}
+
+@string{ieee_j_mi = {{IEEE} Trans. Med. Imag.}}
+
+@string{ieee_j_mil = {{IEEE} Trans. Mil. Electron.}}
+
+@string{ieee_j_mm = {{IEEE} Trans. Multimedia}}
+
+@string{ieee_j_mmct = {{IEEE} J. Multiscale and Multiphys. Comput. Techn.}}
+
+@string{ieee_j_mms = {{IEEE} Trans. Man-Mach. Syst.}}
+
+@string{ieee_j_mscs = {{IEEE} Trans. Multi-Scale Comput. Syst.}}
+
+@string{ieee_j_mtt = {{IEEE} Trans. Microw. Theory Techn.}}
+
+@string{ieee_j_mwcl = {{IEEE} Microw. Wireless Compon. Lett.}}
+
+@string{ieee_j_nano = {{IEEE} Trans. Nanotechnol.}}
+
+@string{ieee_j_nb = {{IEEE} Trans. Nanobiosci.}}
+
+@string{ieee_j_net = {{IEEE/ACM} Trans. Netw.}}
+
+@string{ieee_j_nn = {{IEEE} Trans. Neural Netw.}}
+
+@string{ieee_j_nnls = {{IEEE} Trans. Neural Netw. Learn. Syst.}}
+
+@string{ieee_j_ns = {{IEEE} Trans. Nucl. Sci.}}
+
+@string{ieee_j_nse = {{IEEE} Trans. Netw. Sci. Eng.}}
+
+@string{ieee_j_nsm = {{IEEE} Trans. Netw. Service Manag.}}
+
+@string{ieee_j_nsre = {{IEEE} Trans. Neural Syst. Rehabil. Eng.}}
+
+@string{ieee_j_ocn = {{IEEE} J. Opt. Commun. Netw.}}
+
+@string{ieee_j_oe = {{IEEE} J. Ocean. Eng.}}
+
+@string{ieee_j_pami = {{IEEE} Trans. Pattern Anal. Mach. Intell.}}
+
+@string{ieee_j_pc = {{IEEE} Trans. Prof. Commun.}}
+
+@string{ieee_j_pds = {{IEEE} Trans. Parallel Distrib. Syst.}}
+
+@string{ieee_j_pel = {{IEEE} Power Electron. Lett.}}
+
+@string{ieee_j_pets = {{IEEE} Power Energy Technol. Syst. J.}}
+
+@string{ieee_j_phot = {{IEEE} J. Photovolt.}}
+
+@string{ieee_j_php = {{IEEE} Trans. Parts, Hybrids, Packag.}}
+
+@string{ieee_j_pj = {{IEEE} Photon. J.}}
+
+@string{ieee_j_pmp = {{IEEE} Trans. Parts, Mater., Packag.}}
+
+@string{ieee_j_proc = {Proc. {IEEE}}}
+
+@string{ieee_j_ps = {{IEEE} Trans. Plasma Sci.}}
+
+@string{ieee_j_pse = {{IEEE} J. Product Safety Eng.}}
+
+@string{ieee_j_ptl = {{IEEE} Photon. Technol. Lett.}}
+
+@string{ieee_j_pwras = {{IEEE} Trans. Power App. Syst.}}
+
+@string{ieee_j_pwrd = {{IEEE} Trans. Power Del.}}
+
+@string{ieee_j_pwre = {{IEEE} Trans. Power Electron.}}
+
+@string{ieee_j_pwrs = {{IEEE} Trans. Power Syst.}}
+
+@string{ieee_j_r = {{IEEE} Trans. Rel.}}
+
+@string{ieee_j_ra = {{IEEE} Trans. Robot. Autom.}}
+
+@string{ieee_j_ral = {{IEEE} Robot. Autom. Lett.}}
+
+@string{ieee_j_rbme = {{IEEE} Rev. Biomed. Eng.}}
+
+@string{ieee_j_re = {{IEEE} Trans. Rehabil. Eng.}}
+
+@string{ieee_j_rfi = {{IEEE} Trans. Radio Freq. Interference}}
+
+@string{ieee_j_rfic = {{IEEE} {RFIC} J.}}
+
+@string{ieee_j_rfid = {{IEEE} {RFID} J.}}
+
+@string{ieee_j_rita = {{IEEE} Revista Iberoamericana de Technolog{\'{i}}as del Aprendizaje}}
+
+@string{ieee_j_ro = {{IEEE} Trans. Robot.}}
+
+@string{ieee_j_sap = {{IEEE} Trans. Speech Audio Process.}}
+
+@string{ieee_j_sc = {{IEEE} Trans. Serv. Comput.}}
+
+@string{ieee_j_se = {{IEEE} Trans. Softw. Eng.}}
+
+@string{ieee_j_sensor = {{IEEE} Sensors J.}}
+
+@string{ieee_j_sg = {{IEEE} Trans. Smart Grid}}
+
+@string{ieee_j_sipn = {{IEEE} Trans. Signal Inf. Process. Netw.}}
+
+@string{ieee_j_sm = {{IEEE} Trans. Semicond. Manuf.}}
+
+@string{ieee_j_smc = {{IEEE} Trans. Syst., Man, Cybern.}}
+
+@string{ieee_j_smca = {{IEEE} Trans. Syst., Man, Cybern. {A}}}
+
+@string{ieee_j_smcb = {{IEEE} Trans. Syst., Man, Cybern. {B}}}
+
+@string{ieee_j_smcc = {{IEEE} Trans. Syst., Man, Cybern. {C}}}
+
+@string{ieee_j_smcs = {{IEEE} Trans. Syst., Man, Cybern., Syst.}}
+
+@string{ieee_j_sp = {{IEEE} Trans. Signal Process.}}
+
+@string{ieee_j_spl = {{IEEE} Signal Process. Lett.}}
+
+@string{ieee_j_ssc = {{IEEE} Trans. Syst. Sci. Cybern.}}
+
+@string{ieee_j_stars = {{IEEE} J. Sel. Topics Appl. Earth Observ. Remote Sens.}}
+
+@string{ieee_j_ste = {{IEEE} Trans. Sustain. Energy}}
+
+@string{ieee_j_stsp = {{IEEE} J. Sel. Topics Signal Process.}}
+
+@string{ieee_j_su = {{IEEE} Trans. Sonics Ultrason.}}
+
+@string{ieee_j_susc = {{IEEE} Sustain. Comput.}}
+
+@string{ieee_j_syst = {{IEEE} Syst. J.}}
+
+@string{ieee_j_tcad = {{IEEE} J. Technol. Comput. Aided Design}}
+
+@string{ieee_j_tehm = {{IEEE} J. Transl. Eng. Health Med.}}
+
+@string{ieee_j_tjmj = {{IEEE} Transl. J. Magn. Jpn.}}
+
+@string{ieee_j_tte = {{IEEE} Trans. Transport. Electrific.}}
+
+@string{ieee_j_tthz = {{IEEE} Trans. {THz} Sci. Technol.}}
+
+@string{ieee_j_ue = {{IEEE} Trans. Ultrason. Eng.}}
+
+@string{ieee_j_uffc = {{IEEE} Trans. Ultrason., Ferroelectr., Freq. Control}}
+
+@string{ieee_j_vc = {{IEEE} Trans. Veh. Commun.}}
+
+@string{ieee_j_vcg = {{IEEE} Trans. Vis. Comput. Graphics}}
+
+@string{ieee_j_vlsi = {{IEEE} Trans. {VLSI} Syst.}}
+
+@string{ieee_j_vt = {{IEEE} Trans. Veh. Technol.}}
+
+@string{ieee_j_wcom = {{IEEE} Trans. Wireless Commun.}}
+
+@string{ieee_j_wcoml = {{IEEE} Wireless Commun. Lett.}}
+
+@string{ieee_j_xcdc = {{IEEE} J. Explor. Solid-State Computat. Devices Circuits}}
+
+@string{ieee_m_aes = {{IEEE} Aerosp. Electron. Syst. Mag.}}
+
+@string{ieee_m_ap = {{IEEE} Antennas Propag. Mag.}}
+
+@string{ieee_m_assp = {{IEEE} {ASSP} Mag.}}
+
+@string{ieee_m_c = {Computer}}
+
+@string{ieee_m_cap = {{IEEE} Comput. Appl. Power}}
+
+@string{ieee_m_cas = {{IEEE} Circuits Syst. Mag.}}
+
+@string{ieee_m_cd = {{IEEE} Circuits Devices Mag.}}
+
+@string{ieee_m_cga = {{IEEE} Comput. Graph. Appl.}}
+
+@string{ieee_m_chinac = {China Commun.}}
+
+@string{ieee_m_cim = {{IEEE} Comput. Intell. Mag.}}
+
+@string{ieee_m_com = {{IEEE} Commun. Mag.}}
+
+@string{ieee_m_comsoc = {{IEEE} Commun. Soc. Mag.}}
+
+@string{ieee_m_conc = {{IEEE} Concurrency}}
+
+@string{ieee_m_cs = {{IEEE} Control Syst. Mag.}}
+
+@string{ieee_m_cse = {{IEEE} Comput. Sci. Eng.}}
+
+@string{ieee_m_csem = {{IEEE} Comput. Sci. Eng. Mag.}}
+
+@string{ieee_m_dt = {{IEEE} Des. Test}}
+
+@string{ieee_m_dtc = {{IEEE} Des. Test. Comput.}}
+
+@string{ieee_m_ei = {{IEEE} Electr. Insul. Mag.}}
+
+@string{ieee_m_emb = {{IEEE} Eng. Med. Biol. Mag.}}
+
+@string{ieee_m_emc = {{IEEE} Electromagn. Compat.}}
+
+@string{ieee_m_emr = {{IEEE} Eng. Manag. Rev.}}
+
+@string{ieee_m_etf = {{IEEE} Electrific. Mag.}}
+
+@string{ieee_m_etr = {{IEEE} ElectroTechnol. Rev.}}
+
+@string{ieee_m_exp = {{IEEE} Expert}}
+
+@string{ieee_m_grs = {{IEEE} Geosci. Remote Sens. Mag.}}
+
+@string{ieee_m_hist = {{IEEE} Ann. Hist. Comput.}}
+
+@string{ieee_m_ia = {{IEEE} Ind. Appl. Mag.}}
+
+@string{ieee_m_ic = {{IEEE} Internet Comput.}}
+
+@string{ieee_m_ie = {{IEEE} Ind. Electron. Mag.}}
+
+@string{ieee_m_im = {{IEEE} Instrum. Meas. Mag.}}
+
+@string{ieee_m_is = {{IEEE} Intell. Syst.}}
+
+@string{ieee_m_itp = {{IEEE} {IT} Prof.}}
+
+@string{ieee_m_its = {{IEEE} Intell. Transp. Syst. Mag.}}
+
+@string{ieee_m_micro = {{IEEE} Micro}}
+
+@string{ieee_m_mm = {{IEEE} Multimedia}}
+
+@string{ieee_m_mw = {{IEEE} Microw. Mag.}}
+
+@string{ieee_m_nano = {{IEEE} Nanotechnol. Mag.}}
+
+@string{ieee_m_net = {{IEEE} Netw.}}
+
+@string{ieee_m_pcom = {{IEEE} Personal Commun. Mag.}}
+
+@string{ieee_m_pe = {{IEEE} Power Energy Mag.}}
+
+@string{ieee_m_pel = {{IEEE} Power Electron. Mag.}}
+
+@string{ieee_m_per = {{IEEE} Power Eng. Rev.}}
+
+@string{ieee_m_pot = {{IEEE} Potentials}}
+
+@string{ieee_m_pulse = {{IEEE} Pulse}}
+
+@string{ieee_m_pvc = {{IEEE} Pervasive Comput.}}
+
+@string{ieee_m_ra = {{IEEE} Robot. Autom. Mag.}}
+
+@string{ieee_m_s = {{IEEE} Softw.}}
+
+@string{ieee_m_sap = {{IEEE} Security Privacy}}
+
+@string{ieee_m_smc = {{IEEE} Syst., Man, Cybern. Mag.}}
+
+@string{ieee_m_sp = {{IEEE} Signal Process. Mag.}}
+
+@string{ieee_m_spect = {{IEEE} Spectr.}}
+
+@string{ieee_m_ssc = {{IEEE} Solid-State Circuits Mag.}}
+
+@string{ieee_m_today = {Today's Engineer}}
+
+@string{ieee_m_ts = {{IEEE} Technol. Soc. Mag.}}
+
+@string{ieee_m_vt = {{IEEE} Veh. Technol. Mag.}}
+
+@string{ieee_m_wc = {{IEEE} Wireless Commun.}}
+
+@string{ieee_o_acc = {{IEEE} Access}}
+
+@string{ieee_o_csto = {{IEEE} Commun. Surveys Tuts.}}
+
+@string{ieee_o_dso = {{IEEE} Distrib. Syst. Online}}
+
+@string{ieeepes = {IEEE Power Engineering Society}}
+
+@string{ieeese = {IEEE Transactions on Software Engineering}}
+
+@string{ieeetc = {IEEE Transactions on Computers}}
+
+@string{ieeetcad = {IEEE Transactions on Computer-Aided Design of Integrated Circuits}}
+
+@string{ieeetec = {IEEE Transactions on Energy Conversion}}
+
+@string{ieeetpd = {IEEE Transactions on Power Delivery}}
+
+@string{ieeetps = {IEEE Transactions on Power Systems}}
+
+@string{ieice_j_el = {IEICE T. Fund. Electr.}}
+
+@string{ipl = {Information Processing Letters}}
+
+@string{ire_j_proc = {Proc. IRE}}
+
+@string{j_acha = {Appl. Comput. Harmon. A.}}
+
+@string{j_ajm = {Am. J. Math.}}
+
+@string{j_am = {Acta Math.}}
+
+@string{j_aml = {Appl. Math. Lett.}}
+
+@string{j_annmath = {Annals Math.}}
+
+@string{j_annmstat = {Ann. Math. Statist.}}
+
+@string{j_annprob = {Ann. Prob.}}
+
+@string{j_annstat = {Ann. Statist.}}
+
+@string{j_aut = {Automatica}}
+
+@string{j_bams = {Bull. Am. Math. Soc.}}
+
+@string{j_bit = {BIT}}
+
+@string{j_blt = {Bell Labs Tech.~J.}}
+
+@string{j_bst = {Bell Syst. Tech.~J.}}
+
+@string{j_cacm = {Commun. ACM}}
+
+@string{j_cmp = {Commun. Math. Phys.}}
+
+@string{j_compam = {Commun. Pure Appl. Math.}}
+
+@string{j_cpam = {Commun. Pure Appl. Math.}}
+
+@string{j_ett = {Eur. Trans. Telecommun.}}
+
+@string{EU_J_ASP = {EURASIP J. Appl. Signal Process.}}
+
+@string{j_eusp = EU_J_ASP}
+
+@string{j_ic = {Inform. Contr.}}
+
+@string{j_ire = {Proc. IRE}}
+
+@string{j_jaes = {J. Audio Eng. Soc.}}
+
+@string{j_jams = {J. Am. Math. Soc.}}
+
+@string{j_jasa = {J. Acoust. Soc. Am.}}
+
+@string{j_jat = {J. Approx. Theory}}
+
+@string{j_jcam = {J. Comput. Appl. Math.}}
+
+@string{j_jcn = {J. Commun. Netw.}}
+
+@string{j_jcp = {J. Comput. Phys.}}
+
+@string{j_jfa = {J. Funct. Anal.}}
+
+@string{j_jfaa = {J. Fourier Anal. Appl.}}
+
+@string{j_jfi = {J. Franklin Inst.}}
+
+@string{j_jiee = {J. IEE}}
+
+@string{j_jmaa = {J. Math. Anal. Appl.}}
+
+@string{j_jmiv = {J. Math. Imag. Vision}}
+
+@string{j_jmp = {J. Math. Phys.}}
+
+@string{j_jmpa = {J. Math. Pure Appl.}}
+
+@string{j_jos = {J. Opt. Soc.}}
+
+@string{j_jroysa = {J. Roy. Statist. Soc. Ser. A}}
+
+@string{j_jroysb = {J. Roy. Statist. Soc. Ser. B}}
+
+@string{j_jroysc = {J. Roy. Statist. Soc. Ser. C}}
+
+@string{j_jsv = {J. Sound Vib.}}
+
+@string{j_linalg = {Lin. Algeb. Appl.}}
+
+@string{j_lnm = {Lecture Notes in Math.}}
+
+@string{j_mc = {Math. Comp.}}
+
+@string{j_mm = {Monatsh. Math.}}
+
+@string{j_mn = {Math. Nach.}}
+
+@string{j_ms = {Math. Scand.}}
+
+@string{j_mva = {J. Multivariate Anal.}}
+
+@string{j_na = {Numer. Algor.}}
+
+@string{j_nm = {Numer. Math.}}
+
+@string{j_oe = {Opt. Eng.}}
+
+@string{j_opt = {J. Optimization Theory Applicat.}}
+
+@string{j_pams = {Proc. Am. Math. Soc.}}
+
+@string{j_pjr = {Philips J. Research}}
+
+@string{j_pr = {Phys. Rev.}}
+
+@string{j_pra = {Phys. Rev. A}}
+
+@string{j_prl = {Phys. Rev. Lett.}}
+
+@string{j_prp = {Phys. Rep.}}
+
+@string{j_ptp = {Prog. Theor. Phys.}}
+
+@string{j_rmi = {Rev. Mat. Iberoamericana}}
+
+@string{j_spi = {J. Statist. Planning Inference}}
+
+@string{j_tams = {Trans. Am. Math. Soc.}}
+
+@string{j_wpc = {Wireless Personal Commun.}}
+
+@string{jacm = {Journal of the ACM}}
+
+@string{jan = {Jan.}}
+
+@string{jcss = {Journal of Computer and System Sciences}}
+
+@string{jul = {Jul.}}
+
+@string{jun = {Jun.}}
+
+@string{mar = {Mar.}}
+
+@string{may = {May}}
+
+@string{nov = {Nov.}}
+
+@string{now_j_ftcit = {Foundations and Trends Commun. Inf. Theory}}
+
+@string{now_j_ftnw = {Foundations and Trends Netw.}}
+
+@string{now_j_ftsp = {Foundations and Trends Signal Process.}}
+
+@string{oct = {Oct.}}
+
+@string{scp = {Science of Computer Programming}}
+
+@string{sep = {Sep.}}
+
+@string{siam_j_am = {SIAM J. Appl. Math.}}
+
+@string{siam_j_ma = {SIAM J. Math. Anal.}}
+
+@string{siam_j_maa = {SIAM J. Matrix Anal. Appl.}}
+
+@string{siam_j_na = {SIAM J. Numer. Anal.}}
+
+@string{siam_j_sc = {SIAM J. Sci. Comp.}}
+
+@string{siam_j_ssc = {SIAM J. Sci. Statist. Comp.}}
+
+@string{siam_jr = {SIAM Rev.}}
+
+@string{sicomp = {SIAM Journal on Computing}}
+
+@string{tcs = {Theoretical Computer Science}}
+
+@string{tocs = {ACM Transactions on Computer Systems}}
+
+@string{tods = {ACM Transactions on Database Systems}}
+
+@string{tog = {ACM Transactions on Graphics}}
+
+@string{toms = {ACM Transactions on Mathematical Software}}
+
+@string{toois = {ACM Transactions on Office Information Systems}}
+
+@string{toplas = {ACM Transactions on Programming Languages and Systems}}
+
+@string{wiley_wcmc = {Wirel. Commun. Mob. Comput.}}

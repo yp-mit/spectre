@@ -22,13 +22,13 @@ function R = p2p_han_converse(a, n_vals, eps)
         m = 0:n;
         log_Pr = m*log(a)+(n-m)*log(1/3*(1-a));  
         
-        % Search the range of gamma specified in r_vals
-        % The range of r_vals could be set smaller for large n to save computation time.
-        r_vals = 0.0001:0.00005:0.5;
+        % Search the range of gamma specified in gamma_vals
+        % The range of gamma_vals could be set smaller for large n to save computation time.
+        gamma_vals = 0.0001:0.00005:0.5;
         
-        R_r = zeros(1,length(r_vals));
-        for ri = 1:length(r_vals)
-            r = r_vals(ri);
+        R_gamma = zeros(1,length(gamma_vals));
+        for ri = 1:length(gamma_vals)
+            r = gamma_vals(ri);
             % [x, y]: initial range for the bisection algorithm
             x = 0;
             y = H + 2; 
@@ -63,10 +63,10 @@ function R = p2p_han_converse(a, n_vals, eps)
                 end
                 iter = iter + 1;
             end
-           R_r(ri) = c; 
+           R_gamma(ri) = c; 
         end
         % Optimize with respect to gamma
-        R(i) = max(R_r);
+        R(i) = max(R_gamma);
     end
 end
 

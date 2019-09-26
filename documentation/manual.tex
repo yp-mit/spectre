@@ -60,7 +60,7 @@ Short Packet Communication Toolbox\\[1cm]
 Version 2.0}
 
 \author{Contributors (alphabetic order):\\
-Austin Collins, Giuseppe Durisi, Tomaso Erseghe, Victoria Kostina, \\Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
+Shuqing Chen, Austin Collins, Giuseppe Durisi, Tomaso Erseghe, \\Victoria Kostina, Johan \"Ostman, Yury Polyanskiy, Ido Tal, Wei Yang\\[10pt]
 e-mail: \url{fblcode-list@mit.edu}}
 
 
@@ -1452,7 +1452,6 @@ where $C=(1-\delta)\log 2$ and $V=\delta(1-\delta)\log^2 2$.
 
 
 
-
 \chapter{The binary-AWGN channel (BI-AWGN)}
 
 General info:
@@ -1586,6 +1585,80 @@ and then the results is plotted by using
 \end{verbatim}
 The result is given in the plot on the right in Fig.~\ref{fig:biawgn_example}
 
+
+
+\chapter{Lossless source coding in point-to-point and Slepian-Wolf scenarios}
+
+General info:
+\begin{itemize}
+	\item Maintainer: S. Chen \url{<schen2@caltech.edu>}
+	
+	\item Main references: \cite{CEK19}, \cite{HAN03}, \cite{kostina2011fixed}
+	
+	\item Example: See Fig.~\ref{fig:lossless_sc_bounds} 
+	
+	\item Source model: binary symmetric $P_{X_1X_2}$ specified by
+	\begin{center}
+		\begin{tabular}[center]{ c | c  c }			
+		$x_1 \backslash x_2$ & 0 & 1 \\
+		\hline
+		& & \\
+		0 & $a$ & $\frac{1}{3}(1-a)$ \\ 
+		& & \\
+		1 & $\frac{1}{3}(1-a)$ & $\frac{1}{3}(1-a)$ \\
+		\end{tabular}
+	\end{center}
+	$a$: tuning parameter to define the joint distribution, should be in $[0.25, 1)$.
+
+	\item Common input/output arguments:
+	\begin{enumerate}
+		\item \verb|a| -- input argument; tuning parameter for the source distribution.
+		\item \verb|n_vals| -- input argument; vector specifying blocklengths of interest.
+		\item \verb|eps| -- input argument; target error probability.
+		\item \verb|R| -- output argument; vector of rates (base-$e$ information units) corresponding to the blocklengths in \verb|n_vals|. 
+	\end{enumerate}
+	\item \textit{Warning:} Some of the functions (e.g., \verb|sw_rcu()|, \verb|sw_han_converse()| and \verb|sw_ht_converse()|) perform heavy computations and could be very slow for large blocklengths. It is suggested to run them for different ranges of blocklengths in parallel. 
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[height=8.5cm]{plots/lossless_sc_bounds}
+\caption{Resulting plots for lossless source coding bounds. Information units in this figure are converted to bits.}\label{fig:lossless_sc_bounds}
+\end{figure}
+
+
+\section{Point-to-Point Bounds}
+We evaluate several finite-blocklength bounds for the sum rate at the symmetrical rate point (i.e., $R = R_1 + R_2$ where $R_1 = R_2$) for the binary symmetric source model when applying a point-to-point almost-lossless source code to vector source $(X_1, X_2)$ (with a joint encoder). 
+\begin{itemize}
+\item \verb|R = p2p_rcu(a, n_vals, eps)| returns the rates of interest given by the (achievability) RCU bound in \cite[Th.~4]{CEK19}. We use a bisection algorithm to find the optimal solution. One can tune the initial range of the algorithm for specific values of the input parameters. See inline comments in \verb|p2p_rcu.m|.
+\item \verb|R = p2p_han_converse(a, n_vals, eps)| returns the rates of interest given by Han's converse in \cite[Lemma~1.3.2]{HAN03}. We scan a range of $\gamma$ (the arbitrary constant in \cite[Lemma~1.3.2]{HAN03}), use a bisection algorithm to find the solution for each $\gamma$, and finally take the globally optimal solution. All initial ranges can be tuned. See inline comments in \verb|p2p_han_converse.m|.
+\item \verb|R = p2p_optimum(a, n_vals, eps)| returns the rates of interest given by the optimal almost-lossless source code.
+\item \verb|[R, log_c_binary] = p2p_ht_converse(a, n_vals, eps)| returns 
+\begin{enumerate}
+\item \verb|R| -- the rates of interest given by the binary hypothesis testing converse given in \cite[Appendix~A]{kostina2011fixed}, which are equivalent to the optimal rates computed by \verb|p2p_optimum()|
+\item \verb|log_c_binary| -- initial values for the parameters in composite hypothesis tests used by \verb|sw_ht_converse()| corresponding to the blocklengths in \verb|n_vals|
+\end{enumerate}
+\textit{Note:} This function serves as a helper function for \verb|sw_ht_converse()|. Since the binary hypothesis testing converse gives the optimal rates that can be computed by \verb|p2p_optimum()|, there is no need to use this function in producing the plots. 
+\end{itemize}
+
+\section{Slepian-Wolf Bounds}
+We evaluate several finite-blocklength bounds for the sum rate at the symmetrical rate point (i.e., $R = R_1 + R_2$ where $R_1 = R_2$) for the binary symmetric source model when applying a Slepian-Wolf source code to multiple sources $X_1$ and $X_2$ (with separate encoders). 
+\begin{itemize}
+\item \verb|R = sw_rcu(a, n_vals, eps)| returns the rate of interest given by the (achievability) SW RCU bound in \cite[Th.~18]{CEK19}. We use a bisection algorithm to find the optimal solution. One can tune the initial range of the algorithm for specific values of the input parameters. See inline comments in \verb|sw_rcu.m|.
+\item \verb|R = sw_han_converse(a, n_vals, eps)| returns the rate of interest given by Han's SW converse in \cite[Lemma~7.2.2]{HAN03}. We scan a range of $\gamma$ (the arbitrary constant in \cite[Lemma~7.2.2]{HAN03}), use a bisection algorithm to find the solution for each $\gamma$, and finally take the globally optimal solution. All initial ranges can be tuned. See inline comments in \verb|sw_han_converse.m|.
+\item \verb|R = sw_ht_converse(a, n_vals, eps)| returns the rate of interest given by the composite hypothesis testing converse given in \cite[Th.~19]{CEK19}. This function uses the values returned by \verb|p2p_ht_converse()| as the initial values for computing the optimal parameters in composite hypothesis testing. We primarily use a bisection algorithm to find the optimal solution; when bisection fails in the absence of a zero, which could happen in discrete spaces, we alternatively scan a range for the parameters to get the best result. During the runtime, this function will display whether zero exists for each blocklength in \verb|n_vals|. See inline comments in \verb|sw_ht_converse.m|.
+\textit{Warning:} This function could be very slow for blocklengths over 100.
+\end{itemize}
+
+\section{Gaussian Approximation}
+We evaluate the third-order Gaussian approximation of the optimal sum rate at the symmetrical rate point (i.e., $R = R_1 + R_2$ where $R_1 = R_2$) for the binary symmetric source model:
+$$
+\overline{R}^*(n, \epsilon) = H(X_1, X_2) + \sqrt{\frac{V(X_1, X_2)}{n}}Q^{-1}(\epsilon) - \frac{\log n}{2n}, $$
+where $H(X_1, X_2)$ and $V(X_1, X_2)$ are the joint entropy and varentropy of the source, respectively.
+
+\begin{itemize}
+\item \verb|R = gaussian_approx(a, n_vals, eps)| returns the rates of interest given by the third-order Gaussian approximation.
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{IEEEtran}

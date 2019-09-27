@@ -1,6 +1,6 @@
 This folder contains numerical evaluations of the finite-blocklength lossless source coding bounds for a binary symmetric source model. More details are given in the comments in each `.m` file.
 
-* Point-to-point bounds:
+* Point-to-point (almost-lossless) bounds:
     * `p2p_rcu`: (achievability) RCU bound [1, Th. 4]
     * `p2p_han_converse`: Han's converse [2, Lemma 1.3.2]
     * `p2p_ht_converse`: binary hypothesis testing converse [3, Appendix A]

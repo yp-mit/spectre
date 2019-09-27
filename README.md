@@ -21,6 +21,7 @@ Achievability bounds, converse bounds and approximation for the following source
 * Binary symmetric and binary erasure channels
 * Binary memoryless source and Hamming distortion
 * Gaussian memoryless source and quadratic distortion
+* Binary symmetric source in point-to-point and Slepian-Wolf source coding
 
 
 Getting started
@@ -45,6 +46,7 @@ For questions and access permissions: email <fblcode-list@mit.edu>
 
 Contributors (alphabetic order)
 ---------------------------------------
+* Shuqing Chen (Caltech)
 * [Austin Collins](http://www.mit.edu/~austinc/) (MIT)
 * [Giuseppe Durisi](https://sites.google.com/site/durisi/) (Chalmers)
 * [Tomaso Erseghe](http://www.dei.unipd.it/~erseghe/) (University of Padova)

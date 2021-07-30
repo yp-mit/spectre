@@ -23,8 +23,9 @@ function y = converse_mc(N, Pe, x2, x3, x4)
 %               region where 'On2' is a reliable solution, namely the 
 %               region where 'On2' and 'On3' closely match.
 %
-%   'full'    - (this option will be available soon) the full bound derived
-%               numerically from [1].
+%   'full'    - the full bound derived numerically as from [2].
+%               Be aware this is very slow to compute! It is also
+%               numerically less reliable where On2 and On3 closely agree.
 %
 % SNRdB = converse_mc(N, Pe, R, 'approx','error') for a codeword of length
 % N, and code rate R, the function returns the SNR (in dB) at which the
@@ -36,9 +37,14 @@ function y = converse_mc(N, Pe, x2, x3, x4)
 % All bounds were derived from:
 % [1] T. Erseghe, "Coding in the Finite-Blocklength Regime: Bounds
 %     based on Laplace Integrals and their Asymptotic Approximations",
+%     IEEE Transactions on Information Theory, 62(12), pp 6854-6883, 2016
 %     http://arxiv.org/abs/1511.04629
+% [2] T. Erseghe, N. Laurenti, M. Zecchin, "Coding Bounds in the 
+%     Finite-Block-Length Regime: an Application to Spread-Spectrum 
+%     Systems Design," 
+%     2019 AEIT International Annual Conference.
 %
-% Please give credits to [1] if you use this code for your research.
+% Please give credits to [1] & [2] if you use this code for your research.
 %
 % PS1: The function  is implemented in  MATLAB R2017a and extensively uses
 %      the 'fmincon' solver.  Different  MATLAB  versions may require some
@@ -48,7 +54,7 @@ function y = converse_mc(N, Pe, x2, x3, x4)
 %      the code fails on a particular choice of parameters, please drop an
 %      email to erseghe@dei.unipd.it and I will try to fix the bug.
 %
-% (c) T. Erseghe 2016
+% (c) T. Erseghe 2020
 %
 
 warning ('off','all');
@@ -80,12 +86,6 @@ switch x4
     case {'rate','error'}
     otherwise
         error(['Wrong input ',x4])
-end
-
-% override 'full' option which is not available at the moment
-if strcmp(x3,'full')
-    disp('Sorry, the "full" option is not available... switching to "On2" approximation')
-    x3 = 'On2';
 end
 
 
@@ -124,6 +124,16 @@ if strcmp(x4,'rate')
         pe = Pe(k); % packet error probability
         qe = Qe(k); % Q^(-1)(pe)
         om = 10^(x2(k)/10); % snr value
+
+        % define the saddle point starting point
+        if ~((n==inf)||strcmp(x3,'normal'))
+            if (k>2)&&(~isnan(y(k-2)))&&(~isnan(sb))
+                sb0 = sb;
+            else
+                [~, ~, V] = fun_HP(om,0);
+                sb0 = -qe/sqrt(V*n);
+            end
+        end
         
         try
             if (n==inf)||strcmp(x3,'normal')
@@ -132,9 +142,6 @@ if strcmp(x4,'rate')
                 
             elseif strcmp(x3,'On2')
                 % case 2: O(n^-2) approximation
-                % define the saddle point starting point
-                [~, ~, V] = fun_HP(om,0);
-                sb0 = -qe/sqrt(V*n);
                 % find saddle point
                 sb = fmincon(@(x)zero_obj(x),sb0,[],[],[],[],[],[],...
                              @(x)constr_om_on2_rate(x,om,pe,n),options2);
@@ -143,9 +150,6 @@ if strcmp(x4,'rate')
                 
             elseif strcmp(x3,'On3')
                 % case 3: O(n^-2) approximation
-                % define the saddle point starting point
-                [~, ~, V] = fun_HP(om,0);
-                sb0 = -qe/sqrt(V*n);
                 % find saddle point
                 sb = fmincon(@(x)zero_obj(x),sb0,[],[],[],[],[],[],...
                              @(x)constr_om_on3_rate(x,om,pe,n),options2);
@@ -153,7 +157,12 @@ if strcmp(x4,'rate')
                 y(k) = -logFA_on3(sb,om,n)/log(2);
                 
             elseif strcmp(x3,'full')
-                % case 4: full bound (numerical)
+                % case 4: full bound (numerical)                
+                % find saddle point
+                sb = fmincon(@(x)zero_obj(x),sb0,[],[],[],[],[],[],...
+                             @(x)constr_om_full_rate(x,om,pe,n),options2);
+                % calculate rate value
+                y(k) = -logFA_full(sb,om,n)/log(2)/n;
                 
             end
                     
@@ -192,10 +201,20 @@ elseif strcmp(x4,'error')
         % define the SNR starting point
         if k==1
             om0 = 1;
+            [~, ~, V] = fun_HP(om0,0);
+            sb0 = -qe/sqrt(V*n);
         elseif ~isnan(y(k-1)) % use previous value
             om0 = y(k-1);
         end
-        
+        if ~((n==inf)||strcmp(x3,'normal'))
+            if (k>2)&&(~isnan(y(k-2)))&&(~isnan(x(1)))
+                sb0 = x(1);
+            else
+                [~, ~, V] = fun_HP(om0,0);
+                sb0 = -qe/sqrt(V*n);
+            end
+        end
+            
         try 
             if (n==inf)||strcmp(x3,'normal')
                 % case 1: normal approximation
@@ -205,9 +224,6 @@ elseif strcmp(x4,'error')
 
             elseif strcmp(x3,'On2')
                 % case 2: O(n^-2) approximation
-                % define the saddle point starting point
-                [~, ~, V] = fun_HP(om0,0);
-                sb0 = -qe/sqrt(V*n);
                 % check that if starting point is feasible
                 [~, con] = constr_om_on2_error([sb0; om0],R,pe,n);
                 % find SNR/saddle point
@@ -217,9 +233,6 @@ elseif strcmp(x4,'error')
 
             elseif strcmp(x3,'On3')
                 % case 3: O(n^-3) approximation
-                % define the saddle point starting point
-                [~, ~, V] = fun_HP(om0,0);
-                sb0 = -qe/sqrt(V*n);
                 % check if the starting point is feasible
                 [~, con] = constr_om_on3_error([sb0; om0],R,pe,n);
                 % find SNR/saddle point
@@ -229,7 +242,13 @@ elseif strcmp(x4,'error')
 
             elseif strcmp(x3,'full')
                 % case 4: full bound (numerical)
-
+                % check if the starting point is feasible
+                [~, con] = constr_om_full_error([sb0; om0],R,pe,n);
+                % find SNR/saddle point
+                x = fmincon(@(x)zero_obj(x),[sb0; om0],[],[],[],[],[],[],...
+                            @(x)constr_om_full_error(x,R,pe,n),options2);
+                y(k) = x(2);
+                
             end
         
         % something did not work !
@@ -306,14 +325,6 @@ else
     R = C - qe*log2(exp(1))*sqrt(V/n) + log2(n)/2/n; % rate
 end
 
-% constraints for calculating the error rate bound under the normal
-% approximation
-function [c ceq gradc gradceq] = constr_om_normal(x,R,qe,n)
-c = [];
-gradc = [];
-ceq = [rate_normal(n,x,qe)-R];
-gradceq = []; % too long to derive !!!
-
 % log(FA) function under the O(n^-2) approximation
 function y = logFA_on2(sb,om,n)
 sa = sb+1;
@@ -324,6 +335,66 @@ y = la*sa + log(Hp/2)-log(2*pi*n*sa^2*a2)/2/n;
 function y = logMD_on2(sb,om,n)
 [Hp, la, a2] = fun_HP(om,sb);
 y = la.*sb + log(Hp) -log(2*pi*n*sb.^2.*a2)/2/n;
+
+% log(FA) function under the O(n^-3) approximation
+function y = logFA_on3(sb,om,n)
+sa = sb+1;
+[Hp, la, a2, a3, a4] = fun_HP(om,sb);
+y = la*sa + log(Hp/2)-log(2*pi*n*sa^2*a2)/2/n;
+g = (12*a2.*a4-15*a3.^2)./a2.^3/8 - 3*a3./(2*sa.*a2.^2)-1./(a2.*sa.^2);
+y = y + log(1+g/n)/n;
+
+% log(MD) function under the O(n^-3) approximation
+function y = logMD_on3(sb,om,n)
+[Hp, la, a2, a3, a4] = fun_HP(om,sb);
+y = la.*sb + log(Hp) -log(2*pi*n*sb.^2.*a2)/2/n;
+g = (12*a2.*a4-15*a3.^2)./a2.^3/8 - 3*a3./(2*sb.*a2.^2)-1./(a2.*sb.^2);
+y = y + log(1+g/n)/n;
+
+% log(FA) function under the full approximation
+function y = logFA_full(sb,om,n)
+[~, la, a2, a3] = fun_HP(om,sb);
+% integration path
+t0 = 1; % this is set heuristically
+pb = @(t) sb + 1i*t/sqrt(a2) + a3*((t<=t0).*t.^2+(t>t0)*t0^2)/(2*a2^2);
+pb1 = @(t) 1i/sqrt(a2) + a3*(t<=t0).*t/(a2^2);
+% integrals
+h = @(x) log(1+exp(-2*x));
+I1 = 40;
+H = @(s) (1/sqrt(2*pi*om))*quadl(@(x)exp((-1/(2*om))*(x-om).^2-s*h(x)),-I1,I1);
+Beta = @(s) 2*(la*s+log(H(s)));
+Alpha = @(s) Beta(s-1)-2*log(2)+2*la;
+I = 40; % this is set heuristically
+tol = 1e-12; % tolerance for integrations
+y = integral(@(u)imag(exp(Alpha(pb(u)+1)*n/2).*pb1(u)./(1+pb(u)))/pi,0,I,'AbsTol',tol,'ArrayValued',true);
+y = y + 1.0*(sb<-1.0) + 0.5*(sb==-1.0);
+y = log(y);
+
+% log(MD) function under the full approximation
+function y = logMD_full(sb,om,n)
+[~, la, a2, a3] = fun_HP(om,sb);
+% integration path
+t0 = 1; % this is set heuristically
+pb = @(t) sb + 1i*t/sqrt(a2) + a3*((t<=t0).*t.^2+(t>t0)*t0^2)/(2*a2^2);
+pb1 = @(t) 1i/sqrt(a2) + a3*(t<=t0).*t/(a2^2);
+% integrals
+h = @(x) log(1+exp(-2*x));
+I1 = 40;
+H = @(s) (1/sqrt(2*pi*om))*quadl(@(x)exp((-1/(2*om))*(x-om).^2-s*h(x)),-I1,I1);
+Beta = @(s) 2*(la*s+log(H(s)));
+I = 40; % this is set heuristically
+tol = 1e-12; % tolerance for integrations
+y = integral(@(u)imag(exp(Beta(pb(u))*n/2).*pb1(u)./(-pb(u)))/pi,0,I,'AbsTol',tol,'ArrayValued',true);
+y = y + 1.0*(sb>0.0) + 0.5*(sb==0.0);
+y = log(y);
+
+% constraints for calculating the error rate bound under the normal
+% approximation
+function [c ceq gradc gradceq] = constr_om_normal(x,R,qe,n)
+c = [];
+gradc = [];
+ceq = [rate_normal(n,x,qe)-R];
+gradceq = []; % too long to derive !!!
 
 % constraints for calculating the code rate bound under the O(n^-2)
 % approximation
@@ -342,21 +413,6 @@ ceq = [logMD_on2(x(1),x(2),n)-log(Pe)/n; ...
     logFA_on2(x(1),x(2),n)+R*log(2)];
 gradceq = []; % too long to derive !!!
 
-% log(FA) function under the O(n^-3) approximation
-function y = logFA_on3(sb,om,n)
-sa = sb+1;
-[Hp, la, a2, a3, a4] = fun_HP(om,sb);
-y = la*sa + log(Hp/2)-log(2*pi*n*sa^2*a2)/2/n;
-g = (12*a2.*a4-15*a3.^2)./a2.^3/8 - 3*a3./(2*sa.*a2.^2)-1./(a2.*sa.^2);
-y = y + log(1+g/n)/n;
-
-% log(MD) function under the O(n^-3) approximation
-function y = logMD_on3(sb,om,n)
-[Hp, la, a2, a3, a4] = fun_HP(om,sb);
-y = la.*sb + log(Hp) -log(2*pi*n*sb.^2.*a2)/2/n;
-g = (12*a2.*a4-15*a3.^2)./a2.^3/8 - 3*a3./(2*sb.*a2.^2)-1./(a2.*sb.^2);
-y = y + log(1+g/n)/n;
-
 % constraints for calculating the code rate bound under the O(n^-3)
 % approximation
 function [c ceq gradc gradceq] = constr_om_on3_rate(sb,om,Pe,n)
@@ -372,4 +428,21 @@ c = [];
 gradc = [];
 ceq = [logMD_on3(x(1),x(2),n)-log(Pe)/n; ...
     logFA_on3(x(1),x(2),n)+R*log(2)];
+gradceq = []; % too long to derive !!!
+
+% constraints for calculating the code rate bound under the full
+% approximation
+function [c ceq gradc gradceq] = constr_om_full_rate(sb,om,Pe,n)
+c = [];
+gradc = [];
+ceq = [logMD_full(sb,om,n)-log(Pe)];
+gradceq = []; % too long to derive !!!
+
+% constraints for calculating the error rate bound under the full
+% approximation
+function [c ceq gradc gradceq] = constr_om_full_error(x,R,Pe,n)
+c = [];
+gradc = [];
+ceq = [logMD_full(x(1),x(2),n)-log(Pe); ...
+    logFA_full(x(1),x(2),n)+n*R*log(2)];
 gradceq = []; % too long to derive !!!

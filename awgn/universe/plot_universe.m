@@ -119,7 +119,7 @@ for idx = 1:N_codes;
 		legend('Capacity', 'Normal approximation', ...
 				sprintf('Code: %s (%d, %d)', CODES(idx).name, CODES(idx).n, CODES(idx).k),...
 			       	'Location', 'SouthEast');
-		title(sprintf(['Channel: ' channel '(SNR=%.2f dB), \\epsilon = %g'],20*log10(A), epsil));
+		title(sprintf(['Channel: ' channel '(SNR=%.2f dB), \\epsilon = %g'],10*log10(P), epsil));
 		set(fig1, 'PaperPositionMode', 'manual');
 		set(fig1, 'PaperPosition', [0 0 12 9]);
 		figure(fig1); print('-depsc2', ['output/' CODES(idx).fname]);

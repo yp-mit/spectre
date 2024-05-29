@@ -27,7 +27,11 @@ close all
 figure(1)
 set(0,'defaulttextinterpreter','latex')
 semilogy(SNRdBPPV3,Pev,'-.',SNRdBPPV,Pev,'-',SNRdBPPV2,Pev,'--',SNRdBNA,Pev,'-.x')
-xlabel('SNR $E_b/N_0$')
+if R == 0.5
+    xlabel('SNR $E_b/N_0$') % for R = 1/2, SNR and Eb/N0 are the same
+else
+    xlabel('SNR')
+end
 ylabel('packet error probability $P_e$')
 title(['n = ' num2str(n) ', R = ', num2str(R)])
 legend({},'interpreter','latex')
